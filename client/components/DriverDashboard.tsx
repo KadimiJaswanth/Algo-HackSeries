@@ -19,6 +19,10 @@ interface RideRequest {
   distance: string;
   notes?: string;
   timestamp: string;
+  surge?: number;
+  passengerRating?: number;
+  tip?: number;
+  vehicleType: 'bike' | 'auto' | 'car' | 'premium';
 }
 
 // Mock data for available rides with enhanced details

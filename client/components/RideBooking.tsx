@@ -770,7 +770,7 @@ export default function RideBooking() {
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.4
                         ).toFixed(4)}{" "}
-                        AVAX
+                        TOKENS
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -780,7 +780,7 @@ export default function RideBooking() {
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.6
                         ).toFixed(4)}{" "}
-                        AVAX
+                        TOKENS
                       </span>
                     </div>
                     {surgeMultiplier > 1 && (
@@ -794,14 +794,14 @@ export default function RideBooking() {
                             bookingData.fareEstimate -
                             bookingData.fareEstimate / surgeMultiplier
                           ).toFixed(4)}{" "}
-                          AVAX
+                          TOKENS
                         </span>
                       </div>
                     )}
                     {bookingData.isRoundTrip && (
                       <div className="flex justify-between">
                         <span>Return trip</span>
-                        <span>+{bookingData.fareEstimate.toFixed(4)} AVAX</span>
+                        <span>+{bookingData.fareEstimate.toFixed(4)} TOKENS</span>
                       </div>
                     )}
                     <Separator />
@@ -812,7 +812,7 @@ export default function RideBooking() {
                           bookingData.fareEstimate *
                           (bookingData.isRoundTrip ? 2 : 1)
                         ).toFixed(4)}{" "}
-                        AVAX
+                        TOKENS
                       </span>
                     </div>
                   </div>
@@ -887,7 +887,7 @@ export default function RideBooking() {
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <Wallet className="mr-2 h-5 w-5 text-primary" />
-              Pay with AVAX Tokens
+              Pay with TOKENS Tokens
             </DialogTitle>
             <DialogDescription>
               Confirm your payment to book this ride
@@ -918,7 +918,7 @@ export default function RideBooking() {
                         bookingData.fareEstimate *
                         (bookingData.isRoundTrip ? 2 : 1)
                       ).toFixed(4)}{" "}
-                      AVAX
+                      TOKENS
                     </span>
                   </div>
                 </div>
@@ -948,7 +948,7 @@ export default function RideBooking() {
                 ) : (
                   <>
                     <Wallet className="mr-2 h-4 w-4" />
-                    Pay with AVAX
+                    Pay with TOKENS
                   </>
                 )}
               </Button>

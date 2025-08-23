@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { sha256, sha512, shake256 } from "@noble/hashes/sha2";
+import { sha256, sha512 } from "@noble/hashes/sha2";
+import { shake256 } from "@noble/hashes/sha3";
 import { randomBytes } from "@noble/hashes/utils";
 import { ml_dsa65 } from "@noble/post-quantum/ml-dsa";
 import { ml_kem768 } from "@noble/post-quantum/ml-kem";

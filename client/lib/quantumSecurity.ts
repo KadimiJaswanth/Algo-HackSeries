@@ -5,6 +5,20 @@ import { ml_dsa65 } from "@noble/post-quantum/ml-dsa";
 import { ml_kem768 } from "@noble/post-quantum/ml-kem";
 import { slh_dsa_shake_128s } from "@noble/post-quantum/slh-dsa";
 
+/**
+ * Quantum-Resistant Cryptography Implementation
+ *
+ * This implementation uses the @noble/post-quantum library which provides
+ * NIST-standardized post-quantum cryptographic algorithms. These algorithms
+ * are designed to be secure against attacks by both classical and quantum computers.
+ *
+ * The @noble libraries are:
+ * - Well-maintained and audited
+ * - TypeScript-native
+ * - Browser and Node.js compatible
+ * - Follow NIST standards exactly
+ */
+
 // Post-Quantum Cryptography Standards (NIST)
 export enum PQCAlgorithm {
   // Digital Signature Algorithms

@@ -3,6 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Navigation, Crosshair } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Location {
   lat: number;
@@ -44,15 +45,15 @@ export default function GoogleMaps({
     const initMap = async () => {
       try {
         const loader = new Loader({
-          apiKey: process.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key",
+          apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key",
           version: "weekly",
           libraries: ["places", "geometry"],
         });
 
         // For demo purposes, create a mock map if no API key
         if (
-          !process.env.VITE_GOOGLE_MAPS_API_KEY ||
-          process.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key"
+          !import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
+          import.meta.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key"
         ) {
           createDemoMap();
           return;
@@ -137,39 +138,66 @@ export default function GoogleMaps({
   const createDemoMap = () => {
     if (mapRef.current) {
       mapRef.current.innerHTML = `
-        <div class="w-full h-full bg-gradient-to-br from-blue-100 to-green-100 flex items-center justify-center relative overflow-hidden">
+        <div class="w-full h-full relative overflow-hidden rounded-lg" style="background: linear-gradient(135deg, hsl(225 25% 8%) 0%, hsl(240 15% 12%) 50%, hsl(280 15% 8%) 100%);">
+          <!-- Animated background effects -->
+          <div class="absolute inset-0" style="background: rgba(168, 85, 247, 0.1); backdrop-filter: blur(10px);"></div>
+
+          <!-- Grid pattern -->
           <div class="absolute inset-0 opacity-20">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#94a3b8" stroke-width="1"/>
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgb(168, 85, 247)" stroke-width="1"/>
                 </pattern>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
               </defs>
               <rect width="100%" height="100%" fill="url(#grid)" />
             </svg>
           </div>
-          <div class="text-center z-10">
-            <div class="mb-4">
-              <svg class="w-16 h-16 mx-auto text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Interactive Map Demo</h3>
-            <p class="text-sm text-gray-500 max-w-xs">
-              Live Google Maps integration with real-time location tracking
-            </p>
-            <div class="mt-4 text-xs text-gray-400">
-              Connect Google Maps API for full functionality
+
+          <!-- Floating orbs -->
+          <div class="absolute top-1/4 left-1/4 w-16 h-16 rounded-full" style="background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%); animation: float 3s ease-in-out infinite;"></div>
+          <div class="absolute bottom-1/3 right-1/3 w-12 h-12 rounded-full" style="background: radial-gradient(circle, rgba(34, 197, 94, 0.6) 0%, transparent 70%); animation: float 3s ease-in-out infinite; animation-delay: 1.5s;"></div>
+
+          <div class="flex items-center justify-center h-full">
+            <div class="text-center z-10 p-6" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 1rem;">
+              <div class="mb-4">
+                <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(168, 85, 247); filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold mb-2" style="color: rgb(168, 85, 247); text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">Futuristic Map Interface</h3>
+              <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">
+                Real-time location tracking with blockchain integration
+              </p>
+              <div class="text-xs px-3 py-1 rounded-full" style="background: rgba(168, 85, 247, 0.2); color: rgb(168, 85, 247); border: 1px solid rgba(168, 85, 247, 0.3);">
+                Connect Google Maps API for live functionality
+              </div>
             </div>
           </div>
-          
-          <!-- Demo markers -->
-          <div class="absolute top-1/4 left-1/3 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">P</div>
-          <div class="absolute bottom-1/3 right-1/4 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">D</div>
-          
-          <!-- Demo route line -->
+
+          <!-- Enhanced demo markers with glow -->
+          <div class="absolute top-1/4 left-1/3 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: linear-gradient(135deg, rgb(34, 197, 94), rgb(168, 85, 247)); box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); animation: pulse 2s ease-in-out infinite;">P</div>
+          <div class="absolute bottom-1/3 right-1/4 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: linear-gradient(135deg, rgb(239, 68, 68), rgb(168, 85, 247)); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 2s ease-in-out infinite; animation-delay: 1s;">D</div>
+
+          <!-- Animated route line -->
           <svg class="absolute inset-0 w-full h-full pointer-events-none">
-            <path d="M 33% 25% Q 50% 40% 75% 67%" stroke="#4F46E5" stroke-width="3" fill="none" stroke-dasharray="5,5" />
+            <defs>
+              <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:rgb(168, 85, 247);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgb(34, 197, 94);stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <path d="M 33% 25% Q 50% 40% 75% 67%" stroke="url(#routeGradient)" stroke-width="3" fill="none" stroke-dasharray="10,5" style="filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.5)); animation: dash 2s linear infinite;">
+              <animate attributeName="stroke-dashoffset" values="0;-15" dur="1s" repeatCount="indefinite"/>
+            </path>
           </svg>
         </div>
       `;
@@ -320,28 +348,28 @@ export default function GoogleMaps({
   };
 
   return (
-    <div className="relative">
-      <div ref={mapRef} className={className} />
+    <div className="relative rounded-lg overflow-hidden">
+      <div ref={mapRef} className={cn(className, "rounded-lg")} />
 
       {/* Control buttons for selection mode */}
       {mode === "select" && (
-        <div className="absolute top-4 left-4 space-y-2">
+        <div className="absolute top-4 left-4 space-y-2 animate-slide-in-left">
           <Button
             size="sm"
             variant={selectingFor === "pickup" ? "default" : "outline"}
             onClick={() => setSelectingFor("pickup")}
-            className="bg-white/90 backdrop-blur"
+            className="glass glass-hover glow-hover border-green-500/30"
           >
-            <MapPin className="mr-2 h-4 w-4 text-green-500" />
+            <MapPin className="mr-2 h-4 w-4 text-green-400 glow-accent" />
             Set Pickup
           </Button>
           <Button
             size="sm"
             variant={selectingFor === "dropoff" ? "default" : "outline"}
             onClick={() => setSelectingFor("dropoff")}
-            className="bg-white/90 backdrop-blur"
+            className="glass glass-hover glow-hover border-red-500/30"
           >
-            <MapPin className="mr-2 h-4 w-4 text-red-500" />
+            <MapPin className="mr-2 h-4 w-4 text-red-400 glow-accent" />
             Set Dropoff
           </Button>
         </div>
@@ -352,28 +380,28 @@ export default function GoogleMaps({
         size="sm"
         variant="outline"
         onClick={getCurrentLocation}
-        className="absolute bottom-4 right-4 bg-white/90 backdrop-blur"
+        className="absolute bottom-4 right-4 glass glass-hover glow animate-float"
       >
-        <Crosshair className="h-4 w-4" />
+        <Crosshair className="h-4 w-4 text-primary" />
       </Button>
 
       {/* Location indicators */}
       {mode !== "select" && (
-        <div className="absolute top-4 right-4 space-y-2">
+        <div className="absolute top-4 right-4 space-y-2 animate-slide-in-right">
           {pickup && (
-            <Badge className="bg-green-500 text-white">
+            <Badge className="glass bg-green-500/20 text-green-400 border-green-500/30 glow-accent">
               <MapPin className="mr-1 h-3 w-3" />
               Pickup Set
             </Badge>
           )}
           {dropoff && (
-            <Badge className="bg-red-500 text-white">
+            <Badge className="glass bg-red-500/20 text-red-400 border-red-500/30 glow-accent">
               <MapPin className="mr-1 h-3 w-3" />
               Dropoff Set
             </Badge>
           )}
           {driverLocation && (
-            <Badge className="bg-blue-500 text-white">
+            <Badge className="glass bg-blue-500/20 text-blue-400 border-blue-500/30 glow-accent">
               <Navigation className="mr-1 h-3 w-3" />
               Driver Tracking
             </Badge>
@@ -382,9 +410,10 @@ export default function GoogleMaps({
       )}
 
       {selectingFor && (
-        <div className="absolute bottom-4 left-4">
-          <Badge className="bg-primary text-white animate-pulse">
-            Tap on map to set {selectingFor} location
+        <div className="absolute bottom-4 left-4 animate-fade-in-up">
+          <Badge className="glass bg-primary/20 text-primary border-primary/30 animate-glow">
+            <span className="animate-pulse">🎯</span>
+            <span className="ml-2">Tap on map to set {selectingFor} location</span>
           </Badge>
         </div>
       )}

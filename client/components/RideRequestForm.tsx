@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Clock, DollarSign, Car, AlertCircle } from "lucide-react";
 import { useAccount } from "wagmi";
+import RideStatus from "./RideStatus";
 
 interface RideRequest {
   pickup: string;
@@ -17,6 +18,21 @@ interface RideRequest {
   notes: string;
   estimatedPrice: number;
   estimatedTime: number;
+}
+
+interface ActiveRide {
+  id: string;
+  status: 'searching' | 'matched' | 'pickup' | 'in_progress' | 'completed';
+  pickup: string;
+  dropoff: string;
+  price: number;
+  driver?: {
+    name: string;
+    rating: number;
+    carModel: string;
+    licensePlate: string;
+    eta: number;
+  };
 }
 
 export default function RideRequestForm() {

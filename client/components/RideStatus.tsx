@@ -1,15 +1,30 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Clock, DollarSign, User, Phone, MessageCircle, Car, Navigation } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  DollarSign,
+  User,
+  Phone,
+  MessageCircle,
+  Car,
+  Navigation,
+} from "lucide-react";
 
 interface RideStatusProps {
   ride: {
     id: string;
-    status: 'searching' | 'matched' | 'pickup' | 'in_progress' | 'completed';
+    status: "searching" | "matched" | "pickup" | "in_progress" | "completed";
     pickup: string;
     dropoff: string;
     price: number;
@@ -26,24 +41,29 @@ interface RideStatusProps {
   onRate?: (rating: number) => void;
 }
 
-export default function RideStatus({ ride, onCancel, onComplete, onRate }: RideStatusProps) {
+export default function RideStatus({
+  ride,
+  onCancel,
+  onComplete,
+  onRate,
+}: RideStatusProps) {
   const [progress, setProgress] = useState(0);
   const [timeElapsed, setTimeElapsed] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeElapsed(prev => prev + 1);
-      
+      setTimeElapsed((prev) => prev + 1);
+
       // Simulate progress based on ride status
-      if (ride.status === 'searching') {
-        setProgress(prev => Math.min(prev + 2, 25));
-      } else if (ride.status === 'matched') {
+      if (ride.status === "searching") {
+        setProgress((prev) => Math.min(prev + 2, 25));
+      } else if (ride.status === "matched") {
         setProgress(35);
-      } else if (ride.status === 'pickup') {
+      } else if (ride.status === "pickup") {
         setProgress(50);
-      } else if (ride.status === 'in_progress') {
-        setProgress(prev => Math.min(prev + 1, 90));
-      } else if (ride.status === 'completed') {
+      } else if (ride.status === "in_progress") {
+        setProgress((prev) => Math.min(prev + 1, 90));
+      } else if (ride.status === "completed") {
         setProgress(100);
       }
     }, 1000);
@@ -53,41 +73,41 @@ export default function RideStatus({ ride, onCancel, onComplete, onRate }: RideS
 
   const getStatusInfo = () => {
     switch (ride.status) {
-      case 'searching':
+      case "searching":
         return {
-          title: 'Searching for Driver',
-          description: 'Looking for nearby drivers...',
-          color: 'bg-yellow-500'
+          title: "Searching for Driver",
+          description: "Looking for nearby drivers...",
+          color: "bg-yellow-500",
         };
-      case 'matched':
+      case "matched":
         return {
-          title: 'Driver Found!',
-          description: 'Your driver is on the way to pick you up',
-          color: 'bg-blue-500'
+          title: "Driver Found!",
+          description: "Your driver is on the way to pick you up",
+          color: "bg-blue-500",
         };
-      case 'pickup':
+      case "pickup":
         return {
-          title: 'Driver Arriving',
-          description: 'Your driver is arriving at pickup location',
-          color: 'bg-orange-500'
+          title: "Driver Arriving",
+          description: "Your driver is arriving at pickup location",
+          color: "bg-orange-500",
         };
-      case 'in_progress':
+      case "in_progress":
         return {
-          title: 'On the Way',
-          description: 'Heading to your destination',
-          color: 'bg-green-500'
+          title: "On the Way",
+          description: "Heading to your destination",
+          color: "bg-green-500",
         };
-      case 'completed':
+      case "completed":
         return {
-          title: 'Ride Completed',
-          description: 'You have arrived at your destination',
-          color: 'bg-green-600'
+          title: "Ride Completed",
+          description: "You have arrived at your destination",
+          color: "bg-green-600",
         };
       default:
         return {
-          title: 'Unknown Status',
-          description: '',
-          color: 'bg-gray-500'
+          title: "Unknown Status",
+          description: "",
+          color: "bg-gray-500",
         };
     }
   };
@@ -108,7 +128,8 @@ export default function RideStatus({ ride, onCancel, onComplete, onRate }: RideS
           </div>
           <div className="text-right">
             <div className="text-sm text-muted-foreground">
-              {Math.floor(timeElapsed / 60)}:{(timeElapsed % 60).toString().padStart(2, '0')}
+              {Math.floor(timeElapsed / 60)}:
+              {(timeElapsed % 60).toString().padStart(2, "0")}
             </div>
           </div>
         </div>
@@ -158,14 +179,14 @@ export default function RideStatus({ ride, onCancel, onComplete, onRate }: RideS
               <div className="text-sm text-muted-foreground">
                 {ride.driver.carModel} • {ride.driver.licensePlate}
               </div>
-              {ride.status === 'matched' && (
+              {ride.status === "matched" && (
                 <div className="flex items-center space-x-2 text-sm">
                   <Clock className="h-4 w-4" />
                   <span>ETA: {ride.driver.eta} minutes</span>
                 </div>
               )}
             </div>
-            
+
             {/* Driver Actions */}
             <div className="flex space-x-2">
               <Button variant="outline" size="sm" className="flex-1">
@@ -187,25 +208,29 @@ export default function RideStatus({ ride, onCancel, onComplete, onRate }: RideS
             <span className="font-medium">${ride.price} USDC</span>
           </div>
           <div className="text-xs text-muted-foreground mt-1">
-            {ride.status === 'completed' ? 'Payment processed via smart contract' : 'Held in escrow until completion'}
+            {ride.status === "completed"
+              ? "Payment processed via smart contract"
+              : "Held in escrow until completion"}
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="space-y-2">
-          {ride.status === 'searching' && onCancel && (
+          {ride.status === "searching" && onCancel && (
             <Button variant="destructive" onClick={onCancel} className="w-full">
               Cancel Ride
             </Button>
           )}
-          
-          {ride.status === 'completed' && onRate && (
+
+          {ride.status === "completed" && onRate && (
             <div className="space-y-2">
               <Button onClick={onComplete} className="w-full">
                 Confirm Arrival
               </Button>
               <div className="text-center">
-                <span className="text-sm text-muted-foreground mr-2">Rate your driver:</span>
+                <span className="text-sm text-muted-foreground mr-2">
+                  Rate your driver:
+                </span>
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
@@ -218,8 +243,8 @@ export default function RideStatus({ ride, onCancel, onComplete, onRate }: RideS
               </div>
             </div>
           )}
-          
-          {ride.status === 'in_progress' && (
+
+          {ride.status === "in_progress" && (
             <Button variant="outline" className="w-full">
               <Navigation className="mr-2 h-4 w-4" />
               Track Location

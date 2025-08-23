@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,10 +14,25 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  MapPin, Clock, DollarSign, Car, AlertCircle, Plus, X, 
-  Calendar, Users, Shield, Share2, Phone, Heart, Star,
-  Navigation, Route, Timer, Zap
+import {
+  MapPin,
+  Clock,
+  DollarSign,
+  Car,
+  AlertCircle,
+  Plus,
+  X,
+  Calendar,
+  Users,
+  Shield,
+  Share2,
+  Phone,
+  Heart,
+  Star,
+  Navigation,
+  Route,
+  Timer,
+  Zap,
 } from "lucide-react";
 import { useAccount } from "wagmi";
 import VehicleSelection from "./VehicleSelection";
@@ -48,7 +69,7 @@ interface RideBookingData {
 
 interface ActiveRide {
   id: string;
-  status: 'searching' | 'matched' | 'pickup' | 'in_progress' | 'completed';
+  status: "searching" | "matched" | "pickup" | "in_progress" | "completed";
   pickup: string;
   dropoff: string;
   price: number;
@@ -67,21 +88,21 @@ export default function RideBooking() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
   const [surgeMultiplier, setSurgeMultiplier] = useState(1);
-  
+
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,
     dropoff: null,
     stops: [],
-    vehicleType: '',
-    scheduledTime: '',
+    vehicleType: "",
+    scheduledTime: "",
     isScheduled: false,
     passengers: 1,
-    notes: '',
+    notes: "",
     fareEstimate: 0,
     isRoundTrip: false,
-    emergencyContact: '',
+    emergencyContact: "",
     shareTrip: false,
-    promoCode: ''
+    promoCode: "",
   });
 
   // Simulate surge pricing
@@ -105,27 +126,33 @@ export default function RideBooking() {
   const calculateDistance = (pickup: Location, dropoff: Location): number => {
     // Simple distance calculation (in real app, use Google Maps Distance Matrix API)
     const R = 6371; // Earth's radius in km
-    const dLat = (dropoff.lat - pickup.lat) * Math.PI / 180;
-    const dLon = (dropoff.lng - pickup.lng) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(pickup.lat * Math.PI / 180) * Math.cos(dropoff.lat * Math.PI / 180) *
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const dLat = ((dropoff.lat - pickup.lat) * Math.PI) / 180;
+    const dLon = ((dropoff.lng - pickup.lng) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((pickup.lat * Math.PI) / 180) *
+        Math.cos((dropoff.lat * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
 
-  const handleLocationSelect = (location: Location, type: 'pickup' | 'dropoff') => {
-    setBookingData(prev => ({
+  const handleLocationSelect = (
+    location: Location,
+    type: "pickup" | "dropoff",
+  ) => {
+    setBookingData((prev) => ({
       ...prev,
-      [type]: location
+      [type]: location,
     }));
   };
 
   const handleVehicleSelect = (vehicleId: string, fareEstimate: number) => {
-    setBookingData(prev => ({
+    setBookingData((prev) => ({
       ...prev,
       vehicleType: vehicleId,
-      fareEstimate
+      fareEstimate,
     }));
   };
 
@@ -135,20 +162,20 @@ export default function RideBooking() {
       location: {
         lat: 0,
         lng: 0,
-        address: ''
+        address: "",
       },
-      duration: 3
+      duration: 3,
     };
-    setBookingData(prev => ({
+    setBookingData((prev) => ({
       ...prev,
-      stops: [...prev.stops, newStop]
+      stops: [...prev.stops, newStop],
     }));
   };
 
   const removeStop = (stopId: string) => {
-    setBookingData(prev => ({
+    setBookingData((prev) => ({
       ...prev,
-      stops: prev.stops.filter(stop => stop.id !== stopId)
+      stops: prev.stops.filter((stop) => stop.id !== stopId),
     }));
   };
 
@@ -158,31 +185,36 @@ export default function RideBooking() {
       return;
     }
 
-    if (!bookingData.pickup || !bookingData.dropoff || !bookingData.vehicleType) {
-      alert("Please select pickup location, dropoff location, and vehicle type");
+    if (
+      !bookingData.pickup ||
+      !bookingData.dropoff ||
+      !bookingData.vehicleType
+    ) {
+      alert(
+        "Please select pickup location, dropoff location, and vehicle type",
+      );
       return;
     }
 
     setIsLoading(true);
-    
+
     try {
       // Create ride with enhanced details
       const rideId = `ride-${Date.now()}`;
       const newRide: ActiveRide = {
         id: rideId,
-        status: 'searching',
+        status: "searching",
         pickup: bookingData.pickup.address,
         dropoff: bookingData.dropoff.address,
         price: bookingData.fareEstimate,
       };
-      
+
       setActiveRide(newRide);
       setActiveTab("track");
       setIsLoading(false);
-      
+
       // Simulate ride workflow
       simulateRideWorkflow(newRide);
-      
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
@@ -192,53 +224,76 @@ export default function RideBooking() {
 
   const simulateRideWorkflow = (ride: ActiveRide) => {
     // Find driver
-    setTimeout(() => {
-      const driver = {
-        name: getRandomDriverName(),
-        rating: 4.5 + Math.random() * 0.5,
-        carModel: getRandomCarModel(),
-        licensePlate: generateLicensePlate(),
-        eta: Math.floor(Math.random() * 8) + 3
-      };
-      
-      setActiveRide(prev => prev ? {
-        ...prev,
-        status: 'matched',
-        driver
-      } : null);
-    }, 3000 + Math.random() * 2000);
-    
+    setTimeout(
+      () => {
+        const driver = {
+          name: getRandomDriverName(),
+          rating: 4.5 + Math.random() * 0.5,
+          carModel: getRandomCarModel(),
+          licensePlate: generateLicensePlate(),
+          eta: Math.floor(Math.random() * 8) + 3,
+        };
+
+        setActiveRide((prev) =>
+          prev
+            ? {
+                ...prev,
+                status: "matched",
+                driver,
+              }
+            : null,
+        );
+      },
+      3000 + Math.random() * 2000,
+    );
+
     // Driver pickup
     setTimeout(() => {
-      setActiveRide(prev => prev ? { ...prev, status: 'pickup' } : null);
+      setActiveRide((prev) => (prev ? { ...prev, status: "pickup" } : null));
     }, 8000);
-    
+
     // Ride in progress
     setTimeout(() => {
-      setActiveRide(prev => prev ? { ...prev, status: 'in_progress' } : null);
+      setActiveRide((prev) =>
+        prev ? { ...prev, status: "in_progress" } : null,
+      );
     }, 15000);
-    
+
     // Ride completion
     setTimeout(() => {
-      setActiveRide(prev => prev ? { ...prev, status: 'completed' } : null);
+      setActiveRide((prev) => (prev ? { ...prev, status: "completed" } : null));
     }, 25000);
   };
 
   const isDemoMode = () => !isConnected;
 
   const getRandomDriverName = () => {
-    const names = ['John Smith', 'Sarah Johnson', 'Mike Brown', 'Lisa Davis', 'David Wilson', 'Emma Garcia'];
+    const names = [
+      "John Smith",
+      "Sarah Johnson",
+      "Mike Brown",
+      "Lisa Davis",
+      "David Wilson",
+      "Emma Garcia",
+    ];
     return names[Math.floor(Math.random() * names.length)];
   };
 
   const getRandomCarModel = () => {
-    const cars = ['Toyota Camry', 'Honda Civic', 'Nissan Altima', 'Ford Focus', 'Hyundai Elantra', 'Chevrolet Malibu'];
+    const cars = [
+      "Toyota Camry",
+      "Honda Civic",
+      "Nissan Altima",
+      "Ford Focus",
+      "Hyundai Elantra",
+      "Chevrolet Malibu",
+    ];
     return cars[Math.floor(Math.random() * cars.length)];
   };
 
   const generateLicensePlate = () => {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numbers = '0123456789';
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
     return `${letters[Math.floor(Math.random() * letters.length)]}${letters[Math.floor(Math.random() * letters.length)]}${letters[Math.floor(Math.random() * letters.length)]}-${numbers[Math.floor(Math.random() * numbers.length)]}${numbers[Math.floor(Math.random() * numbers.length)]}${numbers[Math.floor(Math.random() * numbers.length)]}`;
   };
 
@@ -269,7 +324,23 @@ export default function RideBooking() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button onClick={() => setBookingData(prev => ({ ...prev, pickup: { lat: 37.7749, lng: -122.4194, address: "Downtown San Francisco" }, dropoff: { lat: 37.6213, lng: -122.3790, address: "San Francisco Airport" } }))}>
+          <Button
+            onClick={() =>
+              setBookingData((prev) => ({
+                ...prev,
+                pickup: {
+                  lat: 37.7749,
+                  lng: -122.4194,
+                  address: "Downtown San Francisco",
+                },
+                dropoff: {
+                  lat: 37.6213,
+                  lng: -122.379,
+                  address: "San Francisco Airport",
+                },
+              }))
+            }
+          >
             🚀 Try Demo Mode
           </Button>
           <p className="text-sm text-muted-foreground">
@@ -285,7 +356,9 @@ export default function RideBooking() {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="book">Book Ride</TabsTrigger>
-          <TabsTrigger value="track" disabled={!activeRide}>Track Ride</TabsTrigger>
+          <TabsTrigger value="track" disabled={!activeRide}>
+            Track Ride
+          </TabsTrigger>
           <TabsTrigger value="scheduled">Scheduled</TabsTrigger>
         </TabsList>
 
@@ -323,24 +396,32 @@ export default function RideBooking() {
                   <Label htmlFor="pickup-address">Pickup Location</Label>
                   <Input
                     id="pickup-address"
-                    value={bookingData.pickup?.address || ''}
+                    value={bookingData.pickup?.address || ""}
                     placeholder="Enter pickup address"
-                    onChange={(e) => setBookingData(prev => ({
-                      ...prev,
-                      pickup: prev.pickup ? { ...prev.pickup, address: e.target.value } : null
-                    }))}
+                    onChange={(e) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        pickup: prev.pickup
+                          ? { ...prev.pickup, address: e.target.value }
+                          : null,
+                      }))
+                    }
                   />
                 </div>
                 <div>
                   <Label htmlFor="dropoff-address">Dropoff Location</Label>
                   <Input
                     id="dropoff-address"
-                    value={bookingData.dropoff?.address || ''}
+                    value={bookingData.dropoff?.address || ""}
                     placeholder="Enter destination address"
-                    onChange={(e) => setBookingData(prev => ({
-                      ...prev,
-                      dropoff: prev.dropoff ? { ...prev.dropoff, address: e.target.value } : null
-                    }))}
+                    onChange={(e) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        dropoff: prev.dropoff
+                          ? { ...prev.dropoff, address: e.target.value }
+                          : null,
+                      }))
+                    }
                   />
                 </div>
               </div>
@@ -355,15 +436,29 @@ export default function RideBooking() {
                   </Button>
                 </div>
                 {bookingData.stops.map((stop, index) => (
-                  <div key={stop.id} className="flex items-center space-x-2 mb-2">
+                  <div
+                    key={stop.id}
+                    className="flex items-center space-x-2 mb-2"
+                  >
                     <Input
                       placeholder={`Stop ${index + 1} address`}
                       value={stop.location.address}
                       onChange={(e) => {
-                        const updatedStops = bookingData.stops.map(s => 
-                          s.id === stop.id ? { ...s, location: { ...s.location, address: e.target.value } } : s
+                        const updatedStops = bookingData.stops.map((s) =>
+                          s.id === stop.id
+                            ? {
+                                ...s,
+                                location: {
+                                  ...s.location,
+                                  address: e.target.value,
+                                },
+                              }
+                            : s,
                         );
-                        setBookingData(prev => ({ ...prev, stops: updatedStops }));
+                        setBookingData((prev) => ({
+                          ...prev,
+                          stops: updatedStops,
+                        }));
                       }}
                     />
                     <Input
@@ -371,14 +466,23 @@ export default function RideBooking() {
                       placeholder="Wait time (min)"
                       value={stop.duration}
                       onChange={(e) => {
-                        const updatedStops = bookingData.stops.map(s => 
-                          s.id === stop.id ? { ...s, duration: parseInt(e.target.value) || 0 } : s
+                        const updatedStops = bookingData.stops.map((s) =>
+                          s.id === stop.id
+                            ? { ...s, duration: parseInt(e.target.value) || 0 }
+                            : s,
                         );
-                        setBookingData(prev => ({ ...prev, stops: updatedStops }));
+                        setBookingData((prev) => ({
+                          ...prev,
+                          stops: updatedStops,
+                        }));
                       }}
                       className="w-32"
                     />
-                    <Button variant="outline" size="sm" onClick={() => removeStop(stop.id)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeStop(stop.id)}
+                    >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
@@ -391,7 +495,12 @@ export default function RideBooking() {
                   <Switch
                     id="scheduled"
                     checked={bookingData.isScheduled}
-                    onCheckedChange={(checked) => setBookingData(prev => ({ ...prev, isScheduled: checked }))}
+                    onCheckedChange={(checked) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        isScheduled: checked,
+                      }))
+                    }
                   />
                   <Label htmlFor="scheduled">Schedule for later</Label>
                 </div>
@@ -399,7 +508,12 @@ export default function RideBooking() {
                   <Switch
                     id="round-trip"
                     checked={bookingData.isRoundTrip}
-                    onCheckedChange={(checked) => setBookingData(prev => ({ ...prev, isRoundTrip: checked }))}
+                    onCheckedChange={(checked) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        isRoundTrip: checked,
+                      }))
+                    }
                   />
                   <Label htmlFor="round-trip">Round trip</Label>
                 </div>
@@ -412,7 +526,12 @@ export default function RideBooking() {
                     id="scheduled-time"
                     type="datetime-local"
                     value={bookingData.scheduledTime}
-                    onChange={(e) => setBookingData(prev => ({ ...prev, scheduledTime: e.target.value }))}
+                    onChange={(e) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        scheduledTime: e.target.value,
+                      }))
+                    }
                   />
                 </div>
               )}
@@ -426,7 +545,12 @@ export default function RideBooking() {
                     min="1"
                     max="8"
                     value={bookingData.passengers}
-                    onChange={(e) => setBookingData(prev => ({ ...prev, passengers: parseInt(e.target.value) || 1 }))}
+                    onChange={(e) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        passengers: parseInt(e.target.value) || 1,
+                      }))
+                    }
                   />
                 </div>
                 <div>
@@ -435,7 +559,12 @@ export default function RideBooking() {
                     id="promo-code"
                     placeholder="Enter promo code"
                     value={bookingData.promoCode}
-                    onChange={(e) => setBookingData(prev => ({ ...prev, promoCode: e.target.value }))}
+                    onChange={(e) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        promoCode: e.target.value,
+                      }))
+                    }
                   />
                 </div>
               </div>
@@ -446,7 +575,12 @@ export default function RideBooking() {
                   id="notes"
                   placeholder="Any special instructions for the driver..."
                   value={bookingData.notes}
-                  onChange={(e) => setBookingData(prev => ({ ...prev, notes: e.target.value }))}
+                  onChange={(e) =>
+                    setBookingData((prev) => ({
+                      ...prev,
+                      notes: e.target.value,
+                    }))
+                  }
                   rows={3}
                 />
               </div>
@@ -469,8 +603,14 @@ export default function RideBooking() {
               </CardHeader>
               <CardContent>
                 <VehicleSelection
-                  distance={calculateDistance(bookingData.pickup, bookingData.dropoff)}
-                  duration={Math.round(calculateDistance(bookingData.pickup, bookingData.dropoff) * 2.5)}
+                  distance={calculateDistance(
+                    bookingData.pickup,
+                    bookingData.dropoff,
+                  )}
+                  duration={Math.round(
+                    calculateDistance(bookingData.pickup, bookingData.dropoff) *
+                      2.5,
+                  )}
                   selectedVehicle={bookingData.vehicleType}
                   onVehicleSelect={handleVehicleSelect}
                   surgeMultiplier={surgeMultiplier}
@@ -495,15 +635,25 @@ export default function RideBooking() {
                     id="emergency-contact"
                     placeholder="Phone number for emergency contact"
                     value={bookingData.emergencyContact}
-                    onChange={(e) => setBookingData(prev => ({ ...prev, emergencyContact: e.target.value }))}
+                    onChange={(e) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        emergencyContact: e.target.value,
+                      }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="share-trip"
                     checked={bookingData.shareTrip}
-                    onCheckedChange={(checked) => setBookingData(prev => ({ ...prev, shareTrip: checked }))}
+                    onCheckedChange={(checked) =>
+                      setBookingData((prev) => ({
+                        ...prev,
+                        shareTrip: checked,
+                      }))
+                    }
                   />
                   <Label htmlFor="share-trip" className="flex items-center">
                     <Share2 className="mr-2 h-4 w-4" />
@@ -518,16 +668,36 @@ export default function RideBooking() {
                   <div className="text-sm space-y-1">
                     <div className="flex justify-between">
                       <span>Base fare</span>
-                      <span>${(bookingData.fareEstimate / surgeMultiplier * 0.4).toFixed(2)}</span>
+                      <span>
+                        $
+                        {(
+                          (bookingData.fareEstimate / surgeMultiplier) *
+                          0.4
+                        ).toFixed(2)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Distance & time</span>
-                      <span>${(bookingData.fareEstimate / surgeMultiplier * 0.6).toFixed(2)}</span>
+                      <span>
+                        $
+                        {(
+                          (bookingData.fareEstimate / surgeMultiplier) *
+                          0.6
+                        ).toFixed(2)}
+                      </span>
                     </div>
                     {surgeMultiplier > 1 && (
                       <div className="flex justify-between text-red-600">
-                        <span>Surge pricing ({surgeMultiplier.toFixed(1)}x)</span>
-                        <span>+${(bookingData.fareEstimate - (bookingData.fareEstimate / surgeMultiplier)).toFixed(2)}</span>
+                        <span>
+                          Surge pricing ({surgeMultiplier.toFixed(1)}x)
+                        </span>
+                        <span>
+                          +$
+                          {(
+                            bookingData.fareEstimate -
+                            bookingData.fareEstimate / surgeMultiplier
+                          ).toFixed(2)}
+                        </span>
                       </div>
                     )}
                     {bookingData.isRoundTrip && (
@@ -539,7 +709,14 @@ export default function RideBooking() {
                     <Separator />
                     <div className="flex justify-between font-bold text-lg">
                       <span>Total</span>
-                      <span>${(bookingData.fareEstimate * (bookingData.isRoundTrip ? 2 : 1)).toFixed(2)} USDC</span>
+                      <span>
+                        $
+                        {(
+                          bookingData.fareEstimate *
+                          (bookingData.isRoundTrip ? 2 : 1)
+                        ).toFixed(2)}{" "}
+                        USDC
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -1,11 +1,30 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { MapPin, Clock, DollarSign, User, Navigation, CheckCircle, AlertCircle, Car, Bike, Truck, Zap, Star } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  DollarSign,
+  User,
+  Navigation,
+  CheckCircle,
+  AlertCircle,
+  Car,
+  Bike,
+  Truck,
+  Zap,
+  Star,
+} from "lucide-react";
 import { useAccount } from "wagmi";
 
 interface RideRequest {
@@ -22,7 +41,7 @@ interface RideRequest {
   surge?: number;
   passengerRating?: number;
   tip?: number;
-  vehicleType: 'bike' | 'auto' | 'car' | 'premium';
+  vehicleType: "bike" | "auto" | "car" | "premium";
 }
 
 // Mock data for available rides with enhanced details
@@ -33,7 +52,7 @@ const mockRides: RideRequest[] = [
     pickup: "Downtown Business District",
     dropoff: "International Airport",
     rideType: "Premium",
-    estimatedPrice: 45.50,
+    estimatedPrice: 45.5,
     estimatedTime: 35,
     distance: "12.3 km",
     notes: "Need to catch a flight, please be on time. Have 2 large suitcases.",
@@ -41,7 +60,7 @@ const mockRides: RideRequest[] = [
     surge: 1.5,
     passengerRating: 4.9,
     tip: 5.0,
-    vehicleType: "premium"
+    vehicleType: "premium",
   },
   {
     id: "ride-002",
@@ -56,7 +75,7 @@ const mockRides: RideRequest[] = [
     surge: 1.2,
     passengerRating: 4.7,
     tip: 2.0,
-    vehicleType: "bike"
+    vehicleType: "bike",
   },
   {
     id: "ride-003",
@@ -72,7 +91,7 @@ const mockRides: RideRequest[] = [
     surge: 1.0,
     passengerRating: 4.8,
     tip: 1.5,
-    vehicleType: "auto"
+    vehicleType: "auto",
   },
   {
     id: "ride-004",
@@ -80,7 +99,7 @@ const mockRides: RideRequest[] = [
     pickup: "Shopping Center",
     dropoff: "Residential Area",
     rideType: "RideGo",
-    estimatedPrice: 22.50,
+    estimatedPrice: 22.5,
     estimatedTime: 25,
     distance: "8.7 km",
     notes: "Elderly passenger, please drive carefully",
@@ -88,7 +107,7 @@ const mockRides: RideRequest[] = [
     surge: 1.8,
     passengerRating: 5.0,
     tip: 3.0,
-    vehicleType: "car"
+    vehicleType: "car",
   },
   {
     id: "ride-005",
@@ -96,24 +115,27 @@ const mockRides: RideRequest[] = [
     pickup: "Medical Center",
     dropoff: "Pharmacy",
     rideType: "RideComfort",
-    estimatedPrice: 12.00,
+    estimatedPrice: 12.0,
     estimatedTime: 15,
     distance: "4.5 km",
     timestamp: "9 minutes ago",
     surge: 1.0,
     passengerRating: 4.6,
     tip: 2.5,
-    vehicleType: "car"
-  }
+    vehicleType: "car",
+  },
 ];
 
 export default function DriverDashboard() {
   const { address, isConnected } = useAccount();
   const [isOnline, setIsOnline] = useState(false);
-  const [availableRides, setAvailableRides] = useState<RideRequest[]>(mockRides);
+  const [availableRides, setAvailableRides] =
+    useState<RideRequest[]>(mockRides);
   const [acceptingRide, setAcceptingRide] = useState<string | null>(null);
   const [activeRide, setActiveRide] = useState<RideRequest | null>(null);
-  const [rideStatus, setRideStatus] = useState<'pickup' | 'in_progress' | 'completed' | null>(null);
+  const [rideStatus, setRideStatus] = useState<
+    "pickup" | "in_progress" | "completed" | null
+  >(null);
 
   const handleAcceptRide = async (rideId: string) => {
     if (!isConnected) {
@@ -128,27 +150,26 @@ export default function DriverDashboard() {
       console.log("Driver address:", address);
 
       // Find the accepted ride
-      const acceptedRide = availableRides.find(ride => ride.id === rideId);
+      const acceptedRide = availableRides.find((ride) => ride.id === rideId);
       if (!acceptedRide) return;
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Set as active ride and start pickup process
       setActiveRide(acceptedRide);
-      setRideStatus('pickup');
+      setRideStatus("pickup");
 
       // Remove from available rides
-      setAvailableRides(prev => prev.filter(ride => ride.id !== rideId));
+      setAvailableRides((prev) => prev.filter((ride) => ride.id !== rideId));
 
       alert("Ride accepted! Navigate to pickup location.");
 
       // Simulate pickup completion after 8 seconds
       setTimeout(() => {
-        setRideStatus('in_progress');
+        setRideStatus("in_progress");
         alert("Rider picked up! Navigate to destination.");
       }, 8000);
-
     } catch (error) {
       console.error("Error accepting ride:", error);
       alert("Error accepting ride. Please try again.");
@@ -159,8 +180,10 @@ export default function DriverDashboard() {
 
   const handleCompleteRide = () => {
     if (activeRide) {
-      setRideStatus('completed');
-      alert(`Ride completed! You earned $${activeRide.estimatedPrice} USDC. Payment has been transferred to your wallet.`);
+      setRideStatus("completed");
+      alert(
+        `Ride completed! You earned $${activeRide.estimatedPrice} USDC. Payment has been transferred to your wallet.`,
+      );
 
       // Reset after completion
       setTimeout(() => {
@@ -172,10 +195,14 @@ export default function DriverDashboard() {
 
   const getRideTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'premium': return 'bg-yellow-500 text-white';
-      case 'comfort': return 'bg-blue-500 text-white';
-      case 'economy': return 'bg-green-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case "premium":
+        return "bg-yellow-500 text-white";
+      case "comfort":
+        return "bg-blue-500 text-white";
+      case "economy":
+        return "bg-green-500 text-white";
+      default:
+        return "bg-gray-500 text-white";
     }
   };
 
@@ -195,7 +222,9 @@ export default function DriverDashboard() {
             onClick={() => {
               // Demo mode - simulate wallet connection and going online
               setIsOnline(true);
-              alert("Demo mode activated! You're now online and can accept rides.");
+              alert(
+                "Demo mode activated! You're now online and can accept rides.",
+              );
             }}
             className="mt-4"
           >
@@ -219,14 +248,18 @@ export default function DriverDashboard() {
               </span>
               <Badge
                 className={
-                  rideStatus === 'pickup' ? 'bg-orange-500' :
-                  rideStatus === 'in_progress' ? 'bg-green-500' :
-                  'bg-blue-500'
+                  rideStatus === "pickup"
+                    ? "bg-orange-500"
+                    : rideStatus === "in_progress"
+                      ? "bg-green-500"
+                      : "bg-blue-500"
                 }
               >
-                {rideStatus === 'pickup' ? 'Going to Pickup' :
-                 rideStatus === 'in_progress' ? 'Ride in Progress' :
-                 'Completed'}
+                {rideStatus === "pickup"
+                  ? "Going to Pickup"
+                  : rideStatus === "in_progress"
+                    ? "Ride in Progress"
+                    : "Completed"}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -259,13 +292,16 @@ export default function DriverDashboard() {
             </div>
 
             {/* Action Button */}
-            {rideStatus === 'in_progress' && (
-              <Button onClick={handleCompleteRide} className="w-full bg-driver hover:bg-driver/90">
+            {rideStatus === "in_progress" && (
+              <Button
+                onClick={handleCompleteRide}
+                className="w-full bg-driver hover:bg-driver/90"
+              >
                 Complete Ride
               </Button>
             )}
 
-            {rideStatus === 'pickup' && (
+            {rideStatus === "pickup" && (
               <Button disabled className="w-full">
                 Navigating to Pickup...
               </Button>
@@ -284,7 +320,7 @@ export default function DriverDashboard() {
             </span>
             <div className="flex items-center space-x-2">
               <Label htmlFor="online-status" className="text-sm">
-                {isOnline ? 'Online' : 'Offline'}
+                {isOnline ? "Online" : "Offline"}
               </Label>
               <Switch
                 id="online-status"
@@ -294,10 +330,9 @@ export default function DriverDashboard() {
             </div>
           </CardTitle>
           <CardDescription>
-            {isOnline 
-              ? "You're online and visible to riders" 
-              : "Go online to start receiving ride requests"
-            }
+            {isOnline
+              ? "You're online and visible to riders"
+              : "Go online to start receiving ride requests"}
           </CardDescription>
         </CardHeader>
         {isOnline && (
@@ -320,7 +355,8 @@ export default function DriverDashboard() {
           <CardHeader>
             <CardTitle>Available Rides</CardTitle>
             <CardDescription>
-              {availableRides.length} ride{availableRides.length !== 1 ? 's' : ''} waiting for drivers
+              {availableRides.length} ride
+              {availableRides.length !== 1 ? "s" : ""} waiting for drivers
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -333,7 +369,10 @@ export default function DriverDashboard() {
             ) : (
               <div className="space-y-4">
                 {availableRides.map((ride) => (
-                  <div key={ride.id} className="border rounded-lg p-4 space-y-4 hover:shadow-md transition-shadow">
+                  <div
+                    key={ride.id}
+                    className="border rounded-lg p-4 space-y-4 hover:shadow-md transition-shadow"
+                  >
                     {/* Ride Header */}
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
@@ -342,12 +381,17 @@ export default function DriverDashboard() {
                             {ride.rideType}
                           </Badge>
                           {ride.surge && ride.surge > 1.2 && (
-                            <Badge variant="destructive" className="animate-pulse">
+                            <Badge
+                              variant="destructive"
+                              className="animate-pulse"
+                            >
                               <Zap className="mr-1 h-3 w-3" />
                               {ride.surge}x
                             </Badge>
                           )}
-                          <span className="text-sm text-muted-foreground">{ride.timestamp}</span>
+                          <span className="text-sm text-muted-foreground">
+                            {ride.timestamp}
+                          </span>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                           <div className="flex items-center space-x-1">
@@ -366,7 +410,9 @@ export default function DriverDashboard() {
                         <div className="text-2xl font-bold text-driver">
                           ${ride.estimatedPrice}
                         </div>
-                        <div className="text-sm text-muted-foreground">USDC</div>
+                        <div className="text-sm text-muted-foreground">
+                          USDC
+                        </div>
                         {ride.tip && ride.tip > 0 && (
                           <div className="text-sm text-green-600 font-medium">
                             +${ride.tip} tip
@@ -377,11 +423,21 @@ export default function DriverDashboard() {
 
                     {/* Vehicle Type Indicator */}
                     <div className="flex items-center space-x-2">
-                      {ride.vehicleType === 'bike' && <Bike className="h-4 w-4 text-green-500" />}
-                      {ride.vehicleType === 'auto' && <Truck className="h-4 w-4 text-yellow-500" />}
-                      {ride.vehicleType === 'car' && <Car className="h-4 w-4 text-blue-500" />}
-                      {ride.vehicleType === 'premium' && <Car className="h-4 w-4 text-purple-500" />}
-                      <span className="text-sm font-medium capitalize">{ride.vehicleType} Required</span>
+                      {ride.vehicleType === "bike" && (
+                        <Bike className="h-4 w-4 text-green-500" />
+                      )}
+                      {ride.vehicleType === "auto" && (
+                        <Truck className="h-4 w-4 text-yellow-500" />
+                      )}
+                      {ride.vehicleType === "car" && (
+                        <Car className="h-4 w-4 text-blue-500" />
+                      )}
+                      {ride.vehicleType === "premium" && (
+                        <Car className="h-4 w-4 text-purple-500" />
+                      )}
+                      <span className="text-sm font-medium capitalize">
+                        {ride.vehicleType} Required
+                      </span>
                     </div>
 
                     {/* Route */}
@@ -411,7 +467,14 @@ export default function DriverDashboard() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
-                        <span>${(ride.estimatedPrice / ride.estimatedTime * 60).toFixed(0)}/hr</span>
+                        <span>
+                          $
+                          {(
+                            (ride.estimatedPrice / ride.estimatedTime) *
+                            60
+                          ).toFixed(0)}
+                          /hr
+                        </span>
                       </div>
                     </div>
 
@@ -419,11 +482,20 @@ export default function DriverDashboard() {
                     {ride.surge && ride.surge > 1 && (
                       <div className="text-sm bg-red-50 border border-red-200 p-2 rounded-lg">
                         <div className="flex justify-between items-center">
-                          <span className="text-red-700 font-medium">Surge Pricing Active</span>
-                          <span className="text-red-700 font-bold">+${((ride.estimatedPrice * ride.surge) - ride.estimatedPrice).toFixed(2)}</span>
+                          <span className="text-red-700 font-medium">
+                            Surge Pricing Active
+                          </span>
+                          <span className="text-red-700 font-bold">
+                            +$
+                            {(
+                              ride.estimatedPrice * ride.surge -
+                              ride.estimatedPrice
+                            ).toFixed(2)}
+                          </span>
                         </div>
                         <div className="text-red-600 text-xs mt-1">
-                          High demand in this area • Total: ${(ride.estimatedPrice * ride.surge).toFixed(2)}
+                          High demand in this area • Total: $
+                          {(ride.estimatedPrice * ride.surge).toFixed(2)}
                         </div>
                       </div>
                     )}
@@ -434,7 +506,9 @@ export default function DriverDashboard() {
                         <Separator />
                         <div className="text-sm">
                           <span className="font-medium">Passenger Notes: </span>
-                          <span className="text-muted-foreground">{ride.notes}</span>
+                          <span className="text-muted-foreground">
+                            {ride.notes}
+                          </span>
                         </div>
                       </>
                     )}
@@ -472,7 +546,9 @@ export default function DriverDashboard() {
         <Card>
           <CardContent className="text-center py-8">
             <Navigation className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Go online to see available rides</p>
+            <p className="text-muted-foreground">
+              Go online to see available rides
+            </p>
           </CardContent>
         </Card>
       ) : null}

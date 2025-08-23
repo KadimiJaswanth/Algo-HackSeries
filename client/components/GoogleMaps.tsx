@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Loader } from '@googlemaps/js-api-loader';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MapPin, Navigation, Crosshair } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { Loader } from "@googlemaps/js-api-loader";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Navigation, Crosshair } from "lucide-react";
 
 interface Location {
   lat: number;
@@ -14,25 +14,29 @@ interface GoogleMapsProps {
   pickup?: Location;
   dropoff?: Location;
   driverLocation?: Location;
-  onLocationSelect?: (location: Location, type: 'pickup' | 'dropoff') => void;
-  mode?: 'select' | 'track' | 'view';
+  onLocationSelect?: (location: Location, type: "pickup" | "dropoff") => void;
+  mode?: "select" | "track" | "view";
   className?: string;
 }
 
-export default function GoogleMaps({ 
-  pickup, 
-  dropoff, 
+export default function GoogleMaps({
+  pickup,
+  dropoff,
   driverLocation,
   onLocationSelect,
-  mode = 'view',
-  className = 'w-full h-96'
+  mode = "view",
+  className = "w-full h-96",
 }: GoogleMapsProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [userLocation, setUserLocation] = useState<Location | null>(null);
-  const [selectingFor, setSelectingFor] = useState<'pickup' | 'dropoff' | null>(null);
-  const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService | null>(null);
-  const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
+  const [selectingFor, setSelectingFor] = useState<"pickup" | "dropoff" | null>(
+    null,
+  );
+  const [directionsService, setDirectionsService] =
+    useState<google.maps.DirectionsService | null>(null);
+  const [directionsRenderer, setDirectionsRenderer] =
+    useState<google.maps.DirectionsRenderer | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
 
   // Initialize Google Maps
@@ -40,43 +44,48 @@ export default function GoogleMaps({
     const initMap = async () => {
       try {
         const loader = new Loader({
-          apiKey: process.env.VITE_GOOGLE_MAPS_API_KEY || 'demo-key',
-          version: 'weekly',
-          libraries: ['places', 'geometry']
+          apiKey: process.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key",
+          version: "weekly",
+          libraries: ["places", "geometry"],
         });
 
         // For demo purposes, create a mock map if no API key
-        if (!process.env.VITE_GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY === 'demo-key') {
+        if (
+          !process.env.VITE_GOOGLE_MAPS_API_KEY ||
+          process.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key"
+        ) {
           createDemoMap();
           return;
         }
 
         await loader.load();
-        
+
         if (mapRef.current) {
           const mapInstance = new google.maps.Map(mapRef.current, {
             center: { lat: 37.7749, lng: -122.4194 }, // San Francisco default
             zoom: 13,
             styles: [
               {
-                featureType: 'poi',
-                elementType: 'labels',
-                stylers: [{ visibility: 'off' }]
-              }
-            ]
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }],
+              },
+            ],
           });
 
           const directionsServiceInstance = new google.maps.DirectionsService();
-          const directionsRendererInstance = new google.maps.DirectionsRenderer({
-            suppressMarkers: false,
-            polylineOptions: {
-              strokeColor: '#4F46E5',
-              strokeWeight: 4
-            }
-          });
+          const directionsRendererInstance = new google.maps.DirectionsRenderer(
+            {
+              suppressMarkers: false,
+              polylineOptions: {
+                strokeColor: "#4F46E5",
+                strokeWeight: 4,
+              },
+            },
+          );
 
           directionsRendererInstance.setMap(mapInstance);
-          
+
           setMap(mapInstance);
           setDirectionsService(directionsServiceInstance);
           setDirectionsRenderer(directionsRendererInstance);
@@ -87,33 +96,36 @@ export default function GoogleMaps({
               (position) => {
                 const location = {
                   lat: position.coords.latitude,
-                  lng: position.coords.longitude
+                  lng: position.coords.longitude,
                 };
                 setUserLocation(location);
                 mapInstance.setCenter(location);
               },
               (error) => {
-                console.warn('Geolocation error:', error);
-              }
+                console.warn("Geolocation error:", error);
+              },
             );
           }
 
           // Add click listener for location selection
-          if (mode === 'select') {
-            mapInstance.addListener('click', (event: google.maps.MapMouseEvent) => {
-              if (event.latLng && selectingFor && onLocationSelect) {
-                const location = {
-                  lat: event.latLng.lat(),
-                  lng: event.latLng.lng()
-                };
-                onLocationSelect(location, selectingFor);
-                setSelectingFor(null);
-              }
-            });
+          if (mode === "select") {
+            mapInstance.addListener(
+              "click",
+              (event: google.maps.MapMouseEvent) => {
+                if (event.latLng && selectingFor && onLocationSelect) {
+                  const location = {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng(),
+                  };
+                  onLocationSelect(location, selectingFor);
+                  setSelectingFor(null);
+                }
+              },
+            );
           }
         }
       } catch (error) {
-        console.error('Error loading Google Maps:', error);
+        console.error("Error loading Google Maps:", error);
         createDemoMap();
       }
     };
@@ -169,7 +181,7 @@ export default function GoogleMaps({
     if (!map) return;
 
     // Clear existing markers
-    markers.forEach(marker => marker.setMap(null));
+    markers.forEach((marker) => marker.setMap(null));
     setMarkers([]);
 
     const newMarkers: google.maps.Marker[] = [];
@@ -179,17 +191,19 @@ export default function GoogleMaps({
       const pickupMarker = new google.maps.Marker({
         position: pickup,
         map: map,
-        title: 'Pickup Location',
+        title: "Pickup Location",
         icon: {
-          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+          url:
+            "data:image/svg+xml;charset=UTF-8," +
+            encodeURIComponent(`
             <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 0C6.716 0 0 6.716 0 15c0 15 15 25 15 25s15-10 15-25C30 6.716 23.284 0 15 0z" fill="#10B981"/>
               <circle cx="15" cy="15" r="8" fill="white"/>
               <text x="15" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#10B981">P</text>
             </svg>
           `),
-          scaledSize: new google.maps.Size(30, 40)
-        }
+          scaledSize: new google.maps.Size(30, 40),
+        },
       });
       newMarkers.push(pickupMarker);
     }
@@ -199,16 +213,18 @@ export default function GoogleMaps({
       const dropoffMarker = new google.maps.Marker({
         position: dropoff,
         map: map,
-        title: 'Drop-off Location',
+        title: "Drop-off Location",
         icon: {
-          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+          url:
+            "data:image/svg+xml;charset=UTF-8," +
+            encodeURIComponent(`
             <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 0C6.716 0 0 6.716 0 15c0 15 15 25 15 25s15-10 15-25C30 6.716 23.284 0 15 0z" fill="#EF4444"/>
               <circle cx="15" cy="15" r="8" fill="white"/>
               <text x="15" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#EF4444">D</text>
             </svg>
-          `)
-        }
+          `),
+        },
       });
       newMarkers.push(dropoffMarker);
     }
@@ -218,16 +234,18 @@ export default function GoogleMaps({
       const driverMarker = new google.maps.Marker({
         position: driverLocation,
         map: map,
-        title: 'Driver Location',
+        title: "Driver Location",
         icon: {
-          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+          url:
+            "data:image/svg+xml;charset=UTF-8," +
+            encodeURIComponent(`
             <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 0C6.716 0 0 6.716 0 15c0 15 15 25 15 25s15-10 15-25C30 6.716 23.284 0 15 0z" fill="#3B82F6"/>
               <circle cx="15" cy="15" r="8" fill="white"/>
               <text x="15" y="20" text-anchor="middle" font-size="10" font-weight="bold" fill="#3B82F6">🚗</text>
             </svg>
-          `)
-        }
+          `),
+        },
       });
       newMarkers.push(driverMarker);
     }
@@ -240,33 +258,40 @@ export default function GoogleMaps({
         {
           origin: pickup,
           destination: dropoff,
-          travelMode: google.maps.TravelMode.DRIVING
+          travelMode: google.maps.TravelMode.DRIVING,
         },
         (result, status) => {
-          if (status === 'OK' && result) {
+          if (status === "OK" && result) {
             directionsRenderer.setDirections(result);
           }
-        }
+        },
       );
     }
 
     // Fit map to show all markers
     if (newMarkers.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      newMarkers.forEach(marker => {
+      newMarkers.forEach((marker) => {
         if (marker.getPosition()) {
           bounds.extend(marker.getPosition()!);
         }
       });
       map.fitBounds(bounds);
-      
+
       // Ensure minimum zoom level
-      const listener = google.maps.event.addListener(map, 'idle', () => {
+      const listener = google.maps.event.addListener(map, "idle", () => {
         if (map.getZoom()! > 16) map.setZoom(16);
         google.maps.event.removeListener(listener);
       });
     }
-  }, [map, pickup, dropoff, driverLocation, directionsService, directionsRenderer]);
+  }, [
+    map,
+    pickup,
+    dropoff,
+    driverLocation,
+    directionsService,
+    directionsRenderer,
+  ]);
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -274,7 +299,7 @@ export default function GoogleMaps({
         (position) => {
           const location = {
             lat: position.coords.latitude,
-            lng: position.coords.longitude
+            lng: position.coords.longitude,
           };
           setUserLocation(location);
           if (map) {
@@ -283,26 +308,28 @@ export default function GoogleMaps({
           }
         },
         (error) => {
-          console.error('Geolocation error:', error);
-          alert('Unable to get your location. Please check your browser permissions.');
-        }
+          console.error("Geolocation error:", error);
+          alert(
+            "Unable to get your location. Please check your browser permissions.",
+          );
+        },
       );
     } else {
-      alert('Geolocation is not supported by this browser.');
+      alert("Geolocation is not supported by this browser.");
     }
   };
 
   return (
     <div className="relative">
       <div ref={mapRef} className={className} />
-      
+
       {/* Control buttons for selection mode */}
-      {mode === 'select' && (
+      {mode === "select" && (
         <div className="absolute top-4 left-4 space-y-2">
           <Button
             size="sm"
-            variant={selectingFor === 'pickup' ? 'default' : 'outline'}
-            onClick={() => setSelectingFor('pickup')}
+            variant={selectingFor === "pickup" ? "default" : "outline"}
+            onClick={() => setSelectingFor("pickup")}
             className="bg-white/90 backdrop-blur"
           >
             <MapPin className="mr-2 h-4 w-4 text-green-500" />
@@ -310,8 +337,8 @@ export default function GoogleMaps({
           </Button>
           <Button
             size="sm"
-            variant={selectingFor === 'dropoff' ? 'default' : 'outline'}
-            onClick={() => setSelectingFor('dropoff')}
+            variant={selectingFor === "dropoff" ? "default" : "outline"}
+            onClick={() => setSelectingFor("dropoff")}
             className="bg-white/90 backdrop-blur"
           >
             <MapPin className="mr-2 h-4 w-4 text-red-500" />
@@ -331,7 +358,7 @@ export default function GoogleMaps({
       </Button>
 
       {/* Location indicators */}
-      {mode !== 'select' && (
+      {mode !== "select" && (
         <div className="absolute top-4 right-4 space-y-2">
           {pickup && (
             <Badge className="bg-green-500 text-white">

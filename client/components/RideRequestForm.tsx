@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Clock, DollarSign, Car, AlertCircle } from "lucide-react";
@@ -22,7 +34,7 @@ interface RideRequest {
 
 interface ActiveRide {
   id: string;
-  status: 'searching' | 'matched' | 'pickup' | 'in_progress' | 'completed';
+  status: "searching" | "matched" | "pickup" | "in_progress" | "completed";
   pickup: string;
   dropoff: string;
   price: number;
@@ -48,24 +60,27 @@ export default function RideRequestForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
 
-  const handleInputChange = (field: keyof RideRequest, value: string | number) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof RideRequest,
+    value: string | number,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
-    
+
     // Simple price estimation based on distance (mock calculation)
-    if (field === 'pickup' || field === 'dropoff') {
+    if (field === "pickup" || field === "dropoff") {
       if (formData.pickup && formData.dropoff) {
         const basePrice = 5; // Base price in USDC
         const distanceMultiplier = Math.random() * 20 + 5; // Mock distance calculation
         const estimatedPrice = basePrice + distanceMultiplier;
         const estimatedTime = Math.ceil(distanceMultiplier * 2); // Mock time calculation
-        
-        setFormData(prev => ({
+
+        setFormData((prev) => ({
           ...prev,
           estimatedPrice: Number(estimatedPrice.toFixed(2)),
-          estimatedTime
+          estimatedTime,
         }));
       }
     }
@@ -89,7 +104,7 @@ export default function RideRequestForm() {
       const rideId = `ride-${Date.now()}`;
       const newRide: ActiveRide = {
         id: rideId,
-        status: 'searching',
+        status: "searching",
         pickup: formData.pickup,
         dropoff: formData.dropoff,
         price: formData.estimatedPrice,
@@ -99,37 +114,47 @@ export default function RideRequestForm() {
       setIsLoading(false);
 
       // Simulate finding a driver after 3-5 seconds
-      setTimeout(() => {
-        const driver = {
-          name: "John Smith",
-          rating: 4.8,
-          carModel: "Toyota Camry",
-          licensePlate: "ABC-123",
-          eta: 5
-        };
+      setTimeout(
+        () => {
+          const driver = {
+            name: "John Smith",
+            rating: 4.8,
+            carModel: "Toyota Camry",
+            licensePlate: "ABC-123",
+            eta: 5,
+          };
 
-        setActiveRide(prev => prev ? {
-          ...prev,
-          status: 'matched',
-          driver
-        } : null);
-      }, Math.random() * 2000 + 3000);
+          setActiveRide((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  status: "matched",
+                  driver,
+                }
+              : null,
+          );
+        },
+        Math.random() * 2000 + 3000,
+      );
 
       // Simulate driver pickup process
       setTimeout(() => {
-        setActiveRide(prev => prev ? { ...prev, status: 'pickup' } : null);
+        setActiveRide((prev) => (prev ? { ...prev, status: "pickup" } : null));
       }, 8000);
 
       // Simulate ride in progress
       setTimeout(() => {
-        setActiveRide(prev => prev ? { ...prev, status: 'in_progress' } : null);
+        setActiveRide((prev) =>
+          prev ? { ...prev, status: "in_progress" } : null,
+        );
       }, 12000);
 
       // Simulate ride completion
       setTimeout(() => {
-        setActiveRide(prev => prev ? { ...prev, status: 'completed' } : null);
+        setActiveRide((prev) =>
+          prev ? { ...prev, status: "completed" } : null,
+        );
       }, 20000);
-
     } catch (error) {
       console.error("Error submitting ride request:", error);
       alert("Error submitting ride request. Please try again.");
@@ -165,7 +190,9 @@ export default function RideRequestForm() {
   };
 
   const handleRateDriver = (rating: number) => {
-    alert(`Thank you for rating your driver ${rating} stars! Your rating has been stored on the blockchain.`);
+    alert(
+      `Thank you for rating your driver ${rating} stars! Your rating has been stored on the blockchain.`,
+    );
     handleCompleteRide();
   };
 
@@ -201,7 +228,7 @@ export default function RideRequestForm() {
                 dropoff: "International Airport",
                 rideType: "premium",
                 notes: "Demo ride for testing",
-                estimatedPrice: 45.50,
+                estimatedPrice: 45.5,
                 estimatedTime: 35,
               });
 
@@ -209,39 +236,49 @@ export default function RideRequestForm() {
               const rideId = `demo-ride-${Date.now()}`;
               const demoRide = {
                 id: rideId,
-                status: 'searching' as const,
+                status: "searching" as const,
                 pickup: "Downtown Business District",
                 dropoff: "International Airport",
-                price: 45.50,
+                price: 45.5,
               };
 
               setActiveRide(demoRide);
 
               // Simulate the workflow in demo mode
               setTimeout(() => {
-                setActiveRide(prev => prev ? {
-                  ...prev,
-                  status: 'matched',
-                  driver: {
-                    name: "Demo Driver",
-                    rating: 4.9,
-                    carModel: "Tesla Model 3",
-                    licensePlate: "DEMO-123",
-                    eta: 3
-                  }
-                } : null);
+                setActiveRide((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        status: "matched",
+                        driver: {
+                          name: "Demo Driver",
+                          rating: 4.9,
+                          carModel: "Tesla Model 3",
+                          licensePlate: "DEMO-123",
+                          eta: 3,
+                        },
+                      }
+                    : null,
+                );
               }, 3000);
 
               setTimeout(() => {
-                setActiveRide(prev => prev ? { ...prev, status: 'pickup' } : null);
+                setActiveRide((prev) =>
+                  prev ? { ...prev, status: "pickup" } : null,
+                );
               }, 8000);
 
               setTimeout(() => {
-                setActiveRide(prev => prev ? { ...prev, status: 'in_progress' } : null);
+                setActiveRide((prev) =>
+                  prev ? { ...prev, status: "in_progress" } : null,
+                );
               }, 12000);
 
               setTimeout(() => {
-                setActiveRide(prev => prev ? { ...prev, status: 'completed' } : null);
+                setActiveRide((prev) =>
+                  prev ? { ...prev, status: "completed" } : null,
+                );
               }, 20000);
             }}
             className="mt-4"
@@ -274,18 +311,18 @@ export default function RideRequestForm() {
                 id="pickup"
                 placeholder="Enter pickup address or landmark"
                 value={formData.pickup}
-                onChange={(e) => handleInputChange('pickup', e.target.value)}
+                onChange={(e) => handleInputChange("pickup", e.target.value)}
                 required
               />
             </div>
-            
+
             <div>
               <Label htmlFor="dropoff">Destination</Label>
               <Input
                 id="dropoff"
                 placeholder="Enter destination address"
                 value={formData.dropoff}
-                onChange={(e) => handleInputChange('dropoff', e.target.value)}
+                onChange={(e) => handleInputChange("dropoff", e.target.value)}
                 required
               />
             </div>
@@ -294,7 +331,10 @@ export default function RideRequestForm() {
           {/* Ride Type */}
           <div>
             <Label htmlFor="rideType">Ride Type</Label>
-            <Select value={formData.rideType} onValueChange={(value) => handleInputChange('rideType', value)}>
+            <Select
+              value={formData.rideType}
+              onValueChange={(value) => handleInputChange("rideType", value)}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select ride type" />
               </SelectTrigger>
@@ -313,7 +353,7 @@ export default function RideRequestForm() {
               id="notes"
               placeholder="Any special instructions for the driver..."
               value={formData.notes}
-              onChange={(e) => handleInputChange('notes', e.target.value)}
+              onChange={(e) => handleInputChange("notes", e.target.value)}
               rows={3}
             />
           </div>
@@ -342,7 +382,8 @@ export default function RideRequestForm() {
               </div>
               <Separator />
               <div className="text-xs text-muted-foreground">
-                Price includes base fare + distance. Final amount will be held in escrow until ride completion.
+                Price includes base fare + distance. Final amount will be held
+                in escrow until ride completion.
               </div>
             </div>
           )}
@@ -358,10 +399,15 @@ export default function RideRequestForm() {
           </div>
 
           {/* Submit Button */}
-          <Button 
-            type="submit" 
-            className="w-full bg-rider hover:bg-rider/90" 
-            disabled={isLoading || !formData.pickup || !formData.dropoff || !formData.rideType}
+          <Button
+            type="submit"
+            className="w-full bg-rider hover:bg-rider/90"
+            disabled={
+              isLoading ||
+              !formData.pickup ||
+              !formData.dropoff ||
+              !formData.rideType
+            }
           >
             {isLoading ? (
               <>

@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Car, History, Star, MapPin, User } from "lucide-react";
 import WalletConnect from "@/components/WalletConnect";
@@ -36,17 +42,27 @@ export default function Rider() {
       </header>
 
       <div className="container py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-3 max-w-md">
             <TabsTrigger value="book" className="flex items-center space-x-2">
               <MapPin className="h-4 w-4" />
               <span>Book Ride</span>
             </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center space-x-2">
+            <TabsTrigger
+              value="history"
+              className="flex items-center space-x-2"
+            >
               <History className="h-4 w-4" />
               <span>History</span>
             </TabsTrigger>
-            <TabsTrigger value="profile" className="flex items-center space-x-2">
+            <TabsTrigger
+              value="profile"
+              className="flex items-center space-x-2"
+            >
               <User className="h-4 w-4" />
               <span>Profile</span>
             </TabsTrigger>
@@ -86,25 +102,37 @@ export default function Rider() {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold">Rider User</h3>
-                        <p className="text-muted-foreground">Member since January 2024</p>
+                        <p className="text-muted-foreground">
+                          Member since January 2024
+                        </p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-4">
                       <div>
                         <label className="text-sm font-medium">Email</label>
-                        <p className="text-muted-foreground">rider@example.com</p>
+                        <p className="text-muted-foreground">
+                          rider@example.com
+                        </p>
                       </div>
                       <div>
                         <label className="text-sm font-medium">Phone</label>
-                        <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                        <p className="text-muted-foreground">
+                          +1 (555) 123-4567
+                        </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium">Emergency Contact</label>
-                        <p className="text-muted-foreground">+1 (555) 987-6543</p>
+                        <label className="text-sm font-medium">
+                          Emergency Contact
+                        </label>
+                        <p className="text-muted-foreground">
+                          +1 (555) 987-6543
+                        </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium">Preferred Payment</label>
+                        <label className="text-sm font-medium">
+                          Preferred Payment
+                        </label>
                         <p className="text-muted-foreground">USDC Wallet</p>
                       </div>
                     </div>
@@ -128,10 +156,14 @@ export default function Rider() {
                           </div>
                           <div>
                             <div className="font-medium">Home</div>
-                            <div className="text-sm text-muted-foreground">123 Main Street, City</div>
+                            <div className="text-sm text-muted-foreground">
+                              123 Main Street, City
+                            </div>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">Edit</Button>
+                        <Button variant="outline" size="sm">
+                          Edit
+                        </Button>
                       </div>
 
                       <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
@@ -141,13 +173,19 @@ export default function Rider() {
                           </div>
                           <div>
                             <div className="font-medium">Work</div>
-                            <div className="text-sm text-muted-foreground">456 Business Ave, Downtown</div>
+                            <div className="text-sm text-muted-foreground">
+                              456 Business Ave, Downtown
+                            </div>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">Edit</Button>
+                        <Button variant="outline" size="sm">
+                          Edit
+                        </Button>
                       </div>
 
-                      <Button variant="outline" className="w-full">Add New Location</Button>
+                      <Button variant="outline" className="w-full">
+                        Add New Location
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -161,22 +199,30 @@ export default function Rider() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Total Rides</span>
+                      <span className="text-sm text-muted-foreground">
+                        Total Rides
+                      </span>
                       <span className="font-semibold">47</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Average Rating</span>
+                      <span className="text-sm text-muted-foreground">
+                        Average Rating
+                      </span>
                       <div className="flex items-center space-x-1">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                         <span className="font-semibold">4.8</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Total Spent</span>
+                      <span className="text-sm text-muted-foreground">
+                        Total Spent
+                      </span>
                       <span className="font-semibold">$1,248.50</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Distance Traveled</span>
+                      <span className="text-sm text-muted-foreground">
+                        Distance Traveled
+                      </span>
                       <span className="font-semibold">387 km</span>
                     </div>
                   </CardContent>
@@ -193,8 +239,12 @@ export default function Rider() {
                           ⭐
                         </div>
                         <div>
-                          <div className="font-medium text-sm">Excellent Rider</div>
-                          <div className="text-xs text-muted-foreground">Maintain 4.5+ rating</div>
+                          <div className="font-medium text-sm">
+                            Excellent Rider
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Maintain 4.5+ rating
+                          </div>
                         </div>
                       </div>
 
@@ -203,8 +253,12 @@ export default function Rider() {
                           🚗
                         </div>
                         <div>
-                          <div className="font-medium text-sm">Frequent Rider</div>
-                          <div className="text-xs text-muted-foreground">Complete 25+ rides</div>
+                          <div className="font-medium text-sm">
+                            Frequent Rider
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Complete 25+ rides
+                          </div>
                         </div>
                       </div>
 
@@ -214,7 +268,9 @@ export default function Rider() {
                         </div>
                         <div>
                           <div className="font-medium text-sm">Eco Warrior</div>
-                          <div className="text-xs text-muted-foreground">Use bike rides 10+ times</div>
+                          <div className="text-xs text-muted-foreground">
+                            Use bike rides 10+ times
+                          </div>
                         </div>
                       </div>
                     </div>

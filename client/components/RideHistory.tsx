@@ -1,13 +1,36 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Calendar, MapPin, Clock, DollarSign, Star, Download, 
-  Search, Filter, Car, Bike, Truck, User, Phone
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  DollarSign,
+  Star,
+  Download,
+  Search,
+  Filter,
+  Car,
+  Bike,
+  Truck,
+  User,
+  Phone,
 } from "lucide-react";
 
 interface RideHistoryItem {
@@ -16,7 +39,7 @@ interface RideHistoryItem {
   time: string;
   pickup: string;
   dropoff: string;
-  vehicleType: 'bike' | 'auto' | 'car' | 'premium';
+  vehicleType: "bike" | "auto" | "car" | "premium";
   duration: number;
   distance: string;
   fare: number;
@@ -26,7 +49,7 @@ interface RideHistoryItem {
     photo?: string;
   };
   rating: number;
-  status: 'completed' | 'cancelled' | 'refunded';
+  status: "completed" | "cancelled" | "refunded";
   paymentMethod: string;
   tripId: string;
 }
@@ -41,15 +64,15 @@ const mockRideHistory: RideHistoryItem[] = [
     vehicleType: "premium",
     duration: 35,
     distance: "12.3 km",
-    fare: 45.50,
+    fare: 45.5,
     driver: {
       name: "John Smith",
-      rating: 4.9
+      rating: 4.9,
     },
     rating: 5,
     status: "completed",
     paymentMethod: "USDC Wallet",
-    tripId: "TXN-789456123"
+    tripId: "TXN-789456123",
   },
   {
     id: "trip-002",
@@ -63,12 +86,12 @@ const mockRideHistory: RideHistoryItem[] = [
     fare: 18.25,
     driver: {
       name: "Sarah Johnson",
-      rating: 4.8
+      rating: 4.8,
     },
     rating: 4,
     status: "completed",
     paymentMethod: "USDC Wallet",
-    tripId: "TXN-789456122"
+    tripId: "TXN-789456122",
   },
   {
     id: "trip-003",
@@ -82,12 +105,12 @@ const mockRideHistory: RideHistoryItem[] = [
     fare: 8.75,
     driver: {
       name: "Mike Rodriguez",
-      rating: 4.7
+      rating: 4.7,
     },
     rating: 5,
     status: "completed",
     paymentMethod: "USDC Wallet",
-    tripId: "TXN-789456121"
+    tripId: "TXN-789456121",
   },
   {
     id: "trip-004",
@@ -101,12 +124,12 @@ const mockRideHistory: RideHistoryItem[] = [
     fare: 15.25,
     driver: {
       name: "Lisa Chen",
-      rating: 4.9
+      rating: 4.9,
     },
     rating: 0, // Not rated yet
     status: "completed",
     paymentMethod: "USDC Wallet",
-    tripId: "TXN-789456120"
+    tripId: "TXN-789456120",
   },
   {
     id: "trip-005",
@@ -117,60 +140,74 @@ const mockRideHistory: RideHistoryItem[] = [
     vehicleType: "car",
     duration: 22,
     distance: "7.1 km",
-    fare: 22.50,
+    fare: 22.5,
     driver: {
       name: "David Kim",
-      rating: 4.6
+      rating: 4.6,
     },
     rating: 3,
     status: "completed",
     paymentMethod: "USDC Wallet",
-    tripId: "TXN-789456119"
-  }
+    tripId: "TXN-789456119",
+  },
 ];
 
 export default function RideHistory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterVehicle, setFilterVehicle] = useState("all");
-  const [selectedTrip, setSelectedTrip] = useState<RideHistoryItem | null>(null);
+  const [selectedTrip, setSelectedTrip] = useState<RideHistoryItem | null>(
+    null,
+  );
 
-  const filteredHistory = mockRideHistory.filter(trip => {
-    const matchesSearch = trip.pickup.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         trip.dropoff.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         trip.driver.name.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = filterStatus === "all" || trip.status === filterStatus;
-    const matchesVehicle = filterVehicle === "all" || trip.vehicleType === filterVehicle;
-    
+  const filteredHistory = mockRideHistory.filter((trip) => {
+    const matchesSearch =
+      trip.pickup.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trip.dropoff.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trip.driver.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      filterStatus === "all" || trip.status === filterStatus;
+    const matchesVehicle =
+      filterVehicle === "all" || trip.vehicleType === filterVehicle;
+
     return matchesSearch && matchesStatus && matchesVehicle;
   });
 
   const getVehicleIcon = (type: string) => {
     switch (type) {
-      case 'bike': return <Bike className="h-4 w-4 text-green-500" />;
-      case 'auto': return <Truck className="h-4 w-4 text-yellow-500" />;
-      case 'car': return <Car className="h-4 w-4 text-blue-500" />;
-      case 'premium': return <Car className="h-4 w-4 text-purple-500" />;
-      default: return <Car className="h-4 w-4" />;
+      case "bike":
+        return <Bike className="h-4 w-4 text-green-500" />;
+      case "auto":
+        return <Truck className="h-4 w-4 text-yellow-500" />;
+      case "car":
+        return <Car className="h-4 w-4 text-blue-500" />;
+      case "premium":
+        return <Car className="h-4 w-4 text-purple-500" />;
+      default:
+        return <Car className="h-4 w-4" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-500';
-      case 'cancelled': return 'bg-red-500';
-      case 'refunded': return 'bg-orange-500';
-      default: return 'bg-gray-500';
+      case "completed":
+        return "bg-green-500";
+      case "cancelled":
+        return "bg-red-500";
+      case "refunded":
+        return "bg-orange-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -197,16 +234,16 @@ Fare: $${trip.fare.toFixed(2)} USDC
 Payment Method: ${trip.paymentMethod}
 Status: ${trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
 
-YOUR RATING: ${trip.rating > 0 ? `${trip.rating}/5 stars` : 'Not rated'}
+YOUR RATING: ${trip.rating > 0 ? `${trip.rating}/5 stars` : "Not rated"}
 
 Thank you for using RideChain!
 Powered by Avalanche Blockchain
 ================
     `;
-    
-    const blob = new Blob([receiptData], { type: 'text/plain' });
+
+    const blob = new Blob([receiptData], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `RideChain_Receipt_${trip.tripId}.txt`;
     a.click();
@@ -272,24 +309,34 @@ Powered by Avalanche Blockchain
           {/* Trip Summary */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-primary">{filteredHistory.length}</div>
+              <div className="text-2xl font-bold text-primary">
+                {filteredHistory.length}
+              </div>
               <div className="text-sm text-muted-foreground">Total Trips</div>
             </div>
             <div className="text-center p-4 bg-muted/50 rounded-lg">
               <div className="text-2xl font-bold text-green-600">
-                ${filteredHistory.reduce((sum, trip) => sum + trip.fare, 0).toFixed(2)}
+                $
+                {filteredHistory
+                  .reduce((sum, trip) => sum + trip.fare, 0)
+                  .toFixed(2)}
               </div>
               <div className="text-sm text-muted-foreground">Total Spent</div>
             </div>
             <div className="text-center p-4 bg-muted/50 rounded-lg">
               <div className="text-2xl font-bold text-blue-600">
-                {filteredHistory.reduce((sum, trip) => sum + trip.duration, 0)} min
+                {filteredHistory.reduce((sum, trip) => sum + trip.duration, 0)}{" "}
+                min
               </div>
               <div className="text-sm text-muted-foreground">Total Time</div>
             </div>
             <div className="text-center p-4 bg-muted/50 rounded-lg">
               <div className="text-2xl font-bold text-yellow-600">
-                {(filteredHistory.reduce((sum, trip) => sum + trip.rating, 0) / filteredHistory.filter(trip => trip.rating > 0).length || 0).toFixed(1)}
+                {(
+                  filteredHistory.reduce((sum, trip) => sum + trip.rating, 0) /
+                    filteredHistory.filter((trip) => trip.rating > 0).length ||
+                  0
+                ).toFixed(1)}
               </div>
               <div className="text-sm text-muted-foreground">Avg Rating</div>
             </div>
@@ -313,8 +360,11 @@ Powered by Avalanche Blockchain
                             Trip ID: {trip.tripId}
                           </div>
                         </div>
-                        <Badge className={`text-white ${getStatusColor(trip.status)}`}>
-                          {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
+                        <Badge
+                          className={`text-white ${getStatusColor(trip.status)}`}
+                        >
+                          {trip.status.charAt(0).toUpperCase() +
+                            trip.status.slice(1)}
                         </Badge>
                       </div>
 
@@ -341,17 +391,21 @@ Powered by Avalanche Blockchain
                             <User className="h-4 w-4" />
                           </div>
                           <div>
-                            <div className="font-medium text-sm">{trip.driver.name}</div>
+                            <div className="font-medium text-sm">
+                              {trip.driver.name}
+                            </div>
                             <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                               <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                               <span>{trip.driver.rating}</span>
                             </div>
                           </div>
                         </div>
-                        
+
                         {trip.rating === 0 ? (
                           <div className="flex items-center space-x-1">
-                            <span className="text-sm text-muted-foreground mr-2">Rate driver:</span>
+                            <span className="text-sm text-muted-foreground mr-2">
+                              Rate driver:
+                            </span>
                             {[1, 2, 3, 4, 5].map((rating) => (
                               <button
                                 key={rating}
@@ -364,13 +418,17 @@ Powered by Avalanche Blockchain
                           </div>
                         ) : (
                           <div className="flex items-center space-x-1">
-                            <span className="text-sm text-muted-foreground">You rated:</span>
+                            <span className="text-sm text-muted-foreground">
+                              You rated:
+                            </span>
                             <div className="flex">
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
                                   key={star}
                                   className={`h-4 w-4 ${
-                                    star <= trip.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                                    star <= trip.rating
+                                      ? "fill-yellow-400 text-yellow-400"
+                                      : "text-gray-300"
                                   }`}
                                 />
                               ))}
@@ -381,7 +439,9 @@ Powered by Avalanche Blockchain
                     </div>
 
                     <div className="text-right ml-4">
-                      <div className="text-2xl font-bold">${trip.fare.toFixed(2)}</div>
+                      <div className="text-2xl font-bold">
+                        ${trip.fare.toFixed(2)}
+                      </div>
                       <div className="text-sm text-muted-foreground">USDC</div>
                       <div className="mt-2 space-y-2">
                         <Button
@@ -393,11 +453,7 @@ Powered by Avalanche Blockchain
                           <Download className="mr-2 h-3 w-3" />
                           Receipt
                         </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full"
-                        >
+                        <Button variant="outline" size="sm" className="w-full">
                           <Phone className="mr-2 h-3 w-3" />
                           Support
                         </Button>

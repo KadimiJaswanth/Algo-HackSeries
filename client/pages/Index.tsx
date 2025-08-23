@@ -1,9 +1,23 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Car, MapPin, Shield, Zap, Users, Star, ChevronRight } from "lucide-react";
+import {
+  Car,
+  MapPin,
+  Shield,
+  Zap,
+  Users,
+  Star,
+  ChevronRight,
+} from "lucide-react";
 import WalletConnect from "@/components/WalletConnect";
 
 export default function Index() {
@@ -24,8 +38,18 @@ export default function Index() {
             </Badge>
           </div>
           <nav className="flex items-center space-x-6">
-            <Link to="/about" className="text-sm font-medium hover:text-primary">About</Link>
-            <Link to="/how-it-works" className="text-sm font-medium hover:text-primary">How it Works</Link>
+            <Link
+              to="/about"
+              className="text-sm font-medium hover:text-primary"
+            >
+              About
+            </Link>
+            <Link
+              to="/how-it-works"
+              className="text-sm font-medium hover:text-primary"
+            >
+              How it Works
+            </Link>
             <WalletConnect />
           </nav>
         </div>
@@ -43,10 +67,11 @@ export default function Index() {
             Ride Sharing
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            The future of transportation is here. Secure, transparent, and trustless ride-sharing 
-            powered by smart contracts and blockchain technology.
+            The future of transportation is here. Secure, transparent, and
+            trustless ride-sharing powered by smart contracts and blockchain
+            technology.
           </p>
-          
+
           {/* User Type Selection */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
             <Link to="/rider" className="block">
@@ -57,7 +82,8 @@ export default function Index() {
                   </div>
                   <CardTitle className="text-2xl">I Need a Ride</CardTitle>
                   <CardDescription>
-                    Book secure rides with crypto payments and on-chain reputation
+                    Book secure rides with crypto payments and on-chain
+                    reputation
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -124,12 +150,14 @@ export default function Index() {
       <section className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose RideChain?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Why Choose RideChain?
+            </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Experience the benefits of decentralized transportation
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -137,27 +165,32 @@ export default function Index() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Secure Escrow</h3>
               <p className="text-muted-foreground">
-                Smart contracts hold payments in escrow until ride completion, ensuring security for both parties.
+                Smart contracts hold payments in escrow until ride completion,
+                ensuring security for both parties.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent text-accent-foreground">
                 <Star className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">On-Chain Reputation</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                On-Chain Reputation
+              </h3>
               <p className="text-muted-foreground">
-                Ratings and reviews stored as NFTs, creating a permanent and verifiable reputation system.
+                Ratings and reviews stored as NFTs, creating a permanent and
+                verifiable reputation system.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground">
                 <Zap className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Instant Payments</h3>
               <p className="text-muted-foreground">
-                Automatic crypto payments powered by Avalanche's fast and low-cost transactions.
+                Automatic crypto payments powered by Avalanche's fast and
+                low-cost transactions.
               </p>
             </div>
           </div>
@@ -177,9 +210,15 @@ export default function Index() {
             Decentralized ride-sharing powered by Avalanche blockchain
           </p>
           <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-            <Link to="/privacy" className="hover:text-primary">Privacy</Link>
-            <Link to="/terms" className="hover:text-primary">Terms</Link>
-            <Link to="/support" className="hover:text-primary">Support</Link>
+            <Link to="/privacy" className="hover:text-primary">
+              Privacy
+            </Link>
+            <Link to="/terms" className="hover:text-primary">
+              Terms
+            </Link>
+            <Link to="/support" className="hover:text-primary">
+              Support
+            </Link>
           </div>
         </div>
       </footer>

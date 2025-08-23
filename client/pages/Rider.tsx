@@ -76,7 +76,6 @@ export default function Rider() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <SOSButton />
             <WalletConnect />
           </div>
         </div>
@@ -167,6 +166,7 @@ export default function Rider() {
                   }
                 />
                 <SplitFare totalFare={currentFare} rideId={activeRideId} />
+                <SOSButton />
               </div>
             </div>
           </TabsContent>

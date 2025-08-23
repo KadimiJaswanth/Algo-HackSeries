@@ -11,7 +11,9 @@ import { FaBug } from "react-icons/fa";
 import WalletConnect from "@/components/WalletConnect";
 import SecurityDashboard from "@/components/SecurityDashboard";
 import Web3SecurityValidator from "@/components/Web3SecurityValidator";
+import QuantumWallet from "@/components/QuantumWallet";
 import { useSecurityMonitoring } from "@/lib/security";
+import { useQuantumSecurity } from "@/lib/quantumSecurity";
 
 export default function Security() {
   const [activeTab, setActiveTab] = useState("overview");

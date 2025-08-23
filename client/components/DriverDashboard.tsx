@@ -75,24 +75,51 @@ export default function DriverDashboard() {
     }
 
     setAcceptingRide(rideId);
-    
+
     try {
-      // This would be replaced with actual smart contract interaction
       console.log("Accepting ride:", rideId);
       console.log("Driver address:", address);
-      
+
+      // Find the accepted ride
+      const acceptedRide = availableRides.find(ride => ride.id === rideId);
+      if (!acceptedRide) return;
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Remove the accepted ride from available rides
+
+      // Set as active ride and start pickup process
+      setActiveRide(acceptedRide);
+      setRideStatus('pickup');
+
+      // Remove from available rides
       setAvailableRides(prev => prev.filter(ride => ride.id !== rideId));
-      
-      alert("Ride accepted successfully! Rider has been notified.");
+
+      alert("Ride accepted! Navigate to pickup location.");
+
+      // Simulate pickup completion after 8 seconds
+      setTimeout(() => {
+        setRideStatus('in_progress');
+        alert("Rider picked up! Navigate to destination.");
+      }, 8000);
+
     } catch (error) {
       console.error("Error accepting ride:", error);
       alert("Error accepting ride. Please try again.");
     } finally {
       setAcceptingRide(null);
+    }
+  };
+
+  const handleCompleteRide = () => {
+    if (activeRide) {
+      setRideStatus('completed');
+      alert(`Ride completed! You earned $${activeRide.estimatedPrice} USDC. Payment has been transferred to your wallet.`);
+
+      // Reset after completion
+      setTimeout(() => {
+        setActiveRide(null);
+        setRideStatus(null);
+      }, 3000);
     }
   };
 

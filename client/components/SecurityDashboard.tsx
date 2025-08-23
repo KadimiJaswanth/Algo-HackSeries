@@ -85,7 +85,9 @@ export default function SecurityDashboard() {
   const [threats, setThreats] = useState<ThreatEvent[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [quantumEnabled, setQuantumEnabled] = useState(false);
   const { checkSecurity, reportSecurityEvent } = useSecurityMonitoring();
+  const { getMetrics: getQuantumMetrics, generateKeyPair, algorithms } = useQuantumSecurity();
 
   useEffect(() => {
     updateSecurityMetrics();

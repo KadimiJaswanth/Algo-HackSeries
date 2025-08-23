@@ -235,6 +235,34 @@ export default function DriverDashboard() {
 
   return (
     <div className="space-y-6">
+      {demoMode && (
+        <Card className="border-orange-500/50 bg-orange-500/10">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="bg-orange-500 text-white">
+                  🚀 Demo Mode
+                </Badge>
+                <span className="text-sm text-muted-foreground">
+                  Try driver features without wallet connection
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setDemoMode(false);
+                  setIsOnline(false);
+                  setActiveRide(null);
+                  setRideStatus(null);
+                }}
+              >
+                Exit Demo
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+      )}
       {/* Active Ride Status */}
       {activeRide && (
         <Card className="border-driver">

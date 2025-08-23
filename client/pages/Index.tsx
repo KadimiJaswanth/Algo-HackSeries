@@ -150,6 +150,40 @@ export default function Index() {
                 </CardContent>
               </Card>
             </Link>
+
+            <Link to="/security" className="block animate-slide-in-right" style={{ animationDelay: '0.8s' }}>
+              <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-primary/20">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-primary to-accent text-white glow group-hover:animate-float">
+                    <Shield className="h-8 w-8" />
+                  </div>
+                  <CardTitle className="text-2xl text-gradient">Security Center</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Enterprise-grade security monitoring and protection
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3 text-sm text-muted-foreground mb-6">
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Shield className="mr-3 h-5 w-5 text-primary glow-accent" />
+                      Real-time threat detection
+                    </li>
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Zap className="mr-3 h-5 w-5 text-primary glow-accent" />
+                      Instant security response
+                    </li>
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Star className="mr-3 h-5 w-5 text-primary glow-accent" />
+                      95% security score
+                    </li>
+                  </ul>
+                  <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary glow transition-all duration-300">
+                    View Security
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>

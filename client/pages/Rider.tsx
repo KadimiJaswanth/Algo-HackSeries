@@ -24,7 +24,7 @@ import {
   Crown,
   Shield,
   AlertTriangle,
-  Navigation
+  Navigation,
 } from "lucide-react";
 import WalletConnect from "@/components/WalletConnect";
 import RideBooking from "@/components/RideBooking";
@@ -43,7 +43,7 @@ import OnChainReview from "@/components/OnChainReview";
 export default function Rider() {
   const [activeTab, setActiveTab] = useState("book");
   const [activeRideId] = useState("ride-123");
-  const [currentFare] = useState(25.50);
+  const [currentFare] = useState(25.5);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -51,7 +51,10 @@ export default function Rider() {
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/10"></div>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        <div
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float"
+          style={{ animationDelay: "1s" }}
+        ></div>
       </div>
 
       {/* Header */}
@@ -86,39 +89,66 @@ export default function Rider() {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-9 max-w-6xl glass animate-fade-in-up">
-            <TabsTrigger value="book" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="book"
+              className="flex items-center space-x-1 text-xs"
+            >
               <MapPin className="h-3 w-3" />
               <span className="hidden sm:inline">Book</span>
             </TabsTrigger>
-            <TabsTrigger value="pool" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="pool"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Users className="h-3 w-3" />
               <span className="hidden sm:inline">Pool</span>
             </TabsTrigger>
-            <TabsTrigger value="voice" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="voice"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Volume2 className="h-3 w-3" />
               <span className="hidden sm:inline">Voice</span>
             </TabsTrigger>
-            <TabsTrigger value="schedule" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="schedule"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Calendar className="h-3 w-3" />
               <span className="hidden sm:inline">Schedule</span>
             </TabsTrigger>
-            <TabsTrigger value="subscription" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="subscription"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Crown className="h-3 w-3" />
               <span className="hidden sm:inline">Plans</span>
             </TabsTrigger>
-            <TabsTrigger value="tracking" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="tracking"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Navigation className="h-3 w-3" />
               <span className="hidden sm:inline">Track</span>
             </TabsTrigger>
-            <TabsTrigger value="rewards" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="rewards"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Gift className="h-3 w-3" />
               <span className="hidden sm:inline">Rewards</span>
             </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="history"
+              className="flex items-center space-x-1 text-xs"
+            >
               <History className="h-3 w-3" />
               <span className="hidden sm:inline">History</span>
             </TabsTrigger>
-            <TabsTrigger value="profile" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="profile"
+              className="flex items-center space-x-1 text-xs"
+            >
               <User className="h-3 w-3" />
               <span className="hidden sm:inline">Profile</span>
             </TabsTrigger>
@@ -132,7 +162,9 @@ export default function Rider() {
               <div className="space-y-4">
                 <AIFareNegotiation
                   basePrice={currentFare}
-                  onFareAgreed={(price) => console.log(`Fare agreed: $${price}`)}
+                  onFareAgreed={(price) =>
+                    console.log(`Fare agreed: $${price}`)
+                  }
                 />
                 <SplitFare totalFare={currentFare} rideId={activeRideId} />
               </div>
@@ -147,15 +179,24 @@ export default function Rider() {
             <VoiceToRide />
           </TabsContent>
 
-          <TabsContent value="schedule" className="space-y-0 animate-fade-in-up">
+          <TabsContent
+            value="schedule"
+            className="space-y-0 animate-fade-in-up"
+          >
             <ScheduledRides />
           </TabsContent>
 
-          <TabsContent value="subscription" className="space-y-0 animate-fade-in-up">
+          <TabsContent
+            value="subscription"
+            className="space-y-0 animate-fade-in-up"
+          >
             <SubscriptionRides />
           </TabsContent>
 
-          <TabsContent value="tracking" className="space-y-0 animate-fade-in-up">
+          <TabsContent
+            value="tracking"
+            className="space-y-0 animate-fade-in-up"
+          >
             <LiveTracking rideId={activeRideId} isActive={true} />
           </TabsContent>
 

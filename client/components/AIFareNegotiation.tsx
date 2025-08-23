@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Brain, 
-  DollarSign, 
-  TrendingUp, 
-  TrendingDown, 
-  Clock, 
+import {
+  Brain,
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Clock,
   Users,
   Zap,
   CheckCircle,
   XCircle,
   MessageSquare,
   Target,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 
 interface NegotiationOffer {
@@ -44,9 +44,14 @@ interface AIFareNegotiationProps {
   onFareAgreed?: (finalPrice: number) => void;
 }
 
-export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNegotiationProps) {
+export default function AIFareNegotiation({
+  basePrice,
+  onFareAgreed,
+}: AIFareNegotiationProps) {
   const [currentOffer, setCurrentOffer] = useState(basePrice);
-  const [negotiationHistory, setNegotiationHistory] = useState<NegotiationOffer[]>([]);
+  const [negotiationHistory, setNegotiationHistory] = useState<
+    NegotiationOffer[]
+  >([]);
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
   const [negotiationActive, setNegotiationActive] = useState(false);
   const [agreedPrice, setAgreedPrice] = useState<number | null>(null);
@@ -57,37 +62,42 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
     demandLevel: "medium",
     competitorPrices: [basePrice * 0.95, basePrice * 1.1, basePrice * 0.88],
     weatherImpact: 0.1,
-    eventPremium: 0.15
+    eventPremium: 0.15,
   };
 
   const aiPersonality = {
     name: "RideAI",
     avatar: "🤖",
     negotiationStyle: "data-driven",
-    acceptanceRate: 78
+    acceptanceRate: 78,
   };
 
   // AI Response Generator
   const generateAIResponse = (userOffer: number) => {
-    const priceDiff = ((userOffer - marketData.basePrice) / marketData.basePrice) * 100;
+    const priceDiff =
+      ((userOffer - marketData.basePrice) / marketData.basePrice) * 100;
     let reasoning = "";
     let confidence = 0;
     let counterOffer = userOffer;
 
     if (priceDiff < -20) {
-      reasoning = "Market analysis shows this price is below fair value considering current demand and operational costs.";
+      reasoning =
+        "Market analysis shows this price is below fair value considering current demand and operational costs.";
       confidence = 85;
       counterOffer = marketData.basePrice * 0.9;
     } else if (priceDiff < -10) {
-      reasoning = "Your offer is considered, but current surge pricing and demand suggest a slight increase.";
+      reasoning =
+        "Your offer is considered, but current surge pricing and demand suggest a slight increase.";
       confidence = 70;
       counterOffer = marketData.basePrice * 0.95;
     } else if (priceDiff < 5) {
-      reasoning = "This price aligns well with market conditions. I can accept this offer.";
+      reasoning =
+        "This price aligns well with market conditions. I can accept this offer.";
       confidence = 95;
       counterOffer = userOffer;
     } else {
-      reasoning = "Current market data suggests a lower price would be more appropriate.";
+      reasoning =
+        "Current market data suggests a lower price would be more appropriate.";
       confidence = 60;
       counterOffer = marketData.basePrice * 1.05;
     }
@@ -102,27 +112,27 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
       amount: offer,
       reasoning: "User submitted offer",
       timestamp: new Date(),
-      confidence: 100
+      confidence: 100,
     };
 
-    setNegotiationHistory(prev => [...prev, userOffer]);
+    setNegotiationHistory((prev) => [...prev, userOffer]);
     setAiAnalyzing(true);
 
     // Simulate AI processing time
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const aiResponse = generateAIResponse(offer);
-    
+
     const aiOffer: NegotiationOffer = {
       id: `ai-${Date.now()}`,
       from: "ai",
       amount: aiResponse.counterOffer,
       reasoning: aiResponse.reasoning,
       timestamp: new Date(),
-      confidence: aiResponse.confidence
+      confidence: aiResponse.confidence,
     };
 
-    setNegotiationHistory(prev => [...prev, aiOffer]);
+    setNegotiationHistory((prev) => [...prev, aiOffer]);
     setCurrentOffer(aiResponse.counterOffer);
     setAiAnalyzing(false);
 
@@ -144,9 +154,10 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
       id: "initial-ai",
       from: "ai",
       amount: basePrice,
-      reasoning: "Starting price based on current market conditions, demand, and distance.",
+      reasoning:
+        "Starting price based on current market conditions, demand, and distance.",
       timestamp: new Date(),
-      confidence: 90
+      confidence: 90,
     };
     setNegotiationHistory([initialAIOffer]);
   };
@@ -202,7 +213,9 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center glass p-3 rounded-lg">
               <Target className="h-5 w-5 mx-auto mb-1 text-green-400" />
-              <p className="text-sm font-medium">{aiPersonality.acceptanceRate}% Success</p>
+              <p className="text-sm font-medium">
+                {aiPersonality.acceptanceRate}% Success
+              </p>
             </div>
             <div className="text-center glass p-3 rounded-lg">
               <BarChart3 className="h-5 w-5 mx-auto mb-1 text-blue-400" />
@@ -225,28 +238,37 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm">Base Price</span>
-              <span className="font-medium">${marketData.basePrice.toFixed(2)}</span>
+              <span className="font-medium">
+                ${marketData.basePrice.toFixed(2)}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">Surge Multiplier</span>
-              <Badge className={`${marketData.surgeMultiplier > 1 ? 'bg-orange-500/20 text-orange-400' : 'bg-green-500/20 text-green-400'}`}>
+              <Badge
+                className={`${marketData.surgeMultiplier > 1 ? "bg-orange-500/20 text-orange-400" : "bg-green-500/20 text-green-400"}`}
+              >
                 {marketData.surgeMultiplier}x
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">Demand Level</span>
-              <Badge className={`${
-                marketData.demandLevel === 'high' ? 'bg-red-500/20 text-red-400' :
-                marketData.demandLevel === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                'bg-green-500/20 text-green-400'
-              }`}>
+              <Badge
+                className={`${
+                  marketData.demandLevel === "high"
+                    ? "bg-red-500/20 text-red-400"
+                    : marketData.demandLevel === "medium"
+                      ? "bg-yellow-500/20 text-yellow-400"
+                      : "bg-green-500/20 text-green-400"
+                }`}
+              >
                 {marketData.demandLevel}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">Competitor Range</span>
               <span className="font-medium">
-                ${Math.min(...marketData.competitorPrices).toFixed(2)} - ${Math.max(...marketData.competitorPrices).toFixed(2)}
+                ${Math.min(...marketData.competitorPrices).toFixed(2)} - $
+                {Math.max(...marketData.competitorPrices).toFixed(2)}
               </span>
             </div>
           </div>
@@ -267,14 +289,11 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
               Standard pricing based on distance and current conditions
             </p>
             <div className="grid grid-cols-2 gap-3">
-              <Button 
-                onClick={() => acceptOffer(basePrice)}
-                className="glow"
-              >
+              <Button onClick={() => acceptOffer(basePrice)} className="glow">
                 Accept Price
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={startNegotiation}
                 className="glass-hover"
               >
@@ -310,7 +329,7 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
                   <span>${(basePrice * 1.5).toFixed(2)}</span>
                 </div>
               </div>
-              <Button 
+              <Button
                 onClick={() => handleUserOffer(currentOffer)}
                 disabled={aiAnalyzing}
                 className="w-full glow"
@@ -321,7 +340,7 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
                     AI Analyzing...
                   </>
                 ) : (
-                  'Submit Offer'
+                  "Submit Offer"
                 )}
               </Button>
             </CardContent>
@@ -330,52 +349,62 @@ export default function AIFareNegotiation({ basePrice, onFareAgreed }: AIFareNeg
           {/* Negotiation History */}
           <Card className="glass">
             <CardHeader>
-              <CardTitle className="text-gradient">Negotiation History</CardTitle>
+              <CardTitle className="text-gradient">
+                Negotiation History
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {negotiationHistory.map((offer) => (
-                  <div 
+                  <div
                     key={offer.id}
                     className={`p-3 rounded-lg border ${
-                      offer.from === 'ai' 
-                        ? 'border-purple-500/30 bg-purple-500/10' 
-                        : 'border-blue-500/30 bg-blue-500/10'
+                      offer.from === "ai"
+                        ? "border-purple-500/30 bg-purple-500/10"
+                        : "border-blue-500/30 bg-blue-500/10"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <Avatar className="h-6 w-6">
-                          {offer.from === 'ai' ? (
-                            <AvatarFallback className="text-xs">🤖</AvatarFallback>
+                          {offer.from === "ai" ? (
+                            <AvatarFallback className="text-xs">
+                              🤖
+                            </AvatarFallback>
                           ) : (
-                            <AvatarFallback className="text-xs">👤</AvatarFallback>
+                            <AvatarFallback className="text-xs">
+                              👤
+                            </AvatarFallback>
                           )}
                         </Avatar>
                         <span className="text-sm font-medium">
-                          {offer.from === 'ai' ? 'RideAI' : 'You'}
+                          {offer.from === "ai" ? "RideAI" : "You"}
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold text-lg">${offer.amount.toFixed(2)}</span>
+                        <span className="font-bold text-lg">
+                          ${offer.amount.toFixed(2)}
+                        </span>
                         <Badge className="text-xs">
                           {offer.confidence}% confidence
                         </Badge>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">{offer.reasoning}</p>
-                    {offer.from === 'ai' && (
+                    <p className="text-sm text-muted-foreground">
+                      {offer.reasoning}
+                    </p>
+                    {offer.from === "ai" && (
                       <div className="flex space-x-2 mt-2">
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           onClick={() => acceptOffer(offer.amount)}
                           className="glow"
                         >
                           <CheckCircle className="mr-1 h-3 w-3" />
                           Accept
                         </Button>
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           variant="outline"
                           onClick={() => setCurrentOffer(offer.amount * 0.9)}
                         >

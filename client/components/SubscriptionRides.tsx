@@ -3,18 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Crown, 
-  DollarSign, 
-  Calendar, 
-  Zap, 
+import {
+  Crown,
+  DollarSign,
+  Calendar,
+  Zap,
   Car,
   MapPin,
   Clock,
   CheckCircle,
   Star,
   Gift,
-  Infinity
+  Infinity,
 } from "lucide-react";
 
 interface SubscriptionPlan {
@@ -37,13 +37,14 @@ interface ActiveSubscription {
 }
 
 export default function SubscriptionRides() {
-  const [activeSubscription, setActiveSubscription] = useState<ActiveSubscription>({
-    planId: "commuter-pro",
-    ridesUsed: 18,
-    ridesRemaining: 32,
-    renewalDate: new Date(Date.now() + 12 * 86400000), // 12 days from now
-    totalSavings: 245
-  });
+  const [activeSubscription, setActiveSubscription] =
+    useState<ActiveSubscription>({
+      planId: "commuter-pro",
+      ridesUsed: 18,
+      ridesRemaining: 32,
+      renewalDate: new Date(Date.now() + 12 * 86400000), // 12 days from now
+      totalSavings: 245,
+    });
 
   const subscriptionPlans: SubscriptionPlan[] = [
     {
@@ -56,10 +57,10 @@ export default function SubscriptionRides() {
         "20 rides per month",
         "Standard vehicles only",
         "10% additional savings",
-        "Basic support"
+        "Basic support",
       ],
       savings: 30,
-      popular: false
+      popular: false,
     },
     {
       id: "commuter-pro",
@@ -73,10 +74,10 @@ export default function SubscriptionRides() {
         "20% additional savings",
         "Priority booking",
         "24/7 support",
-        "Scheduled rides included"
+        "Scheduled rides included",
       ],
       savings: 80,
-      popular: true
+      popular: true,
     },
     {
       id: "unlimited",
@@ -91,14 +92,17 @@ export default function SubscriptionRides() {
         "VIP priority booking",
         "Concierge support",
         "Pool rides included",
-        "Emergency rides priority"
+        "Emergency rides priority",
       ],
       savings: 200,
-      popular: false
-    }
+      popular: false,
+    },
   ];
 
-  const usagePercentage = (activeSubscription.ridesUsed / (activeSubscription.ridesUsed + activeSubscription.ridesRemaining)) * 100;
+  const usagePercentage =
+    (activeSubscription.ridesUsed /
+      (activeSubscription.ridesUsed + activeSubscription.ridesRemaining)) *
+    100;
 
   return (
     <div className="space-y-6">
@@ -146,7 +150,11 @@ export default function SubscriptionRides() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-bold text-primary">
-                {subscriptionPlans.find(p => p.id === activeSubscription.planId)?.name}
+                {
+                  subscriptionPlans.find(
+                    (p) => p.id === activeSubscription.planId,
+                  )?.name
+                }
               </h3>
               <p className="text-sm text-muted-foreground">
                 Renews on {activeSubscription.renewalDate.toLocaleDateString()}
@@ -163,7 +171,11 @@ export default function SubscriptionRides() {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Rides Used This Month</span>
-              <span>{activeSubscription.ridesUsed} / {activeSubscription.ridesUsed + activeSubscription.ridesRemaining}</span>
+              <span>
+                {activeSubscription.ridesUsed} /{" "}
+                {activeSubscription.ridesUsed +
+                  activeSubscription.ridesRemaining}
+              </span>
             </div>
             <Progress value={usagePercentage} className="h-2" />
             <div className="flex justify-between text-xs text-muted-foreground">
@@ -188,12 +200,12 @@ export default function SubscriptionRides() {
       {/* Available Plans */}
       <div className="grid gap-6">
         <h3 className="text-lg font-semibold text-gradient">Available Plans</h3>
-        
+
         <div className="grid md:grid-cols-3 gap-4">
           {subscriptionPlans.map((plan) => (
-            <Card 
+            <Card
               key={plan.id}
-              className={`glass relative ${plan.popular ? 'border-primary/50 glow' : ''}`}
+              className={`glass relative ${plan.popular ? "border-primary/50 glow" : ""}`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -202,10 +214,12 @@ export default function SubscriptionRides() {
                   </Badge>
                 </div>
               )}
-              
+
               <CardHeader className="text-center pb-2">
                 <div className="flex justify-center mb-2">
-                  <div className={`p-3 rounded-lg ${plan.popular ? 'bg-primary/20' : 'bg-accent/20'}`}>
+                  <div
+                    className={`p-3 rounded-lg ${plan.popular ? "bg-primary/20" : "bg-accent/20"}`}
+                  >
                     {plan.icon}
                   </div>
                 </div>
@@ -217,7 +231,7 @@ export default function SubscriptionRides() {
                   <p className="text-sm text-muted-foreground">per month</p>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
                 <div className="text-center">
                   <div className="flex items-center justify-center space-x-1">
@@ -228,8 +242,12 @@ export default function SubscriptionRides() {
                       </>
                     ) : (
                       <>
-                        <span className="text-2xl font-bold">{plan.ridesIncluded}</span>
-                        <span className="text-sm text-muted-foreground">rides</span>
+                        <span className="text-2xl font-bold">
+                          {plan.ridesIncluded}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          rides
+                        </span>
                       </>
                     )}
                   </div>
@@ -247,18 +265,20 @@ export default function SubscriptionRides() {
                   ))}
                 </ul>
 
-                <Button 
+                <Button
                   className={`w-full ${
-                    plan.id === activeSubscription.planId 
-                      ? 'opacity-50 cursor-not-allowed' 
-                      : plan.popular 
-                      ? 'glow' 
-                      : 'glass-hover'
+                    plan.id === activeSubscription.planId
+                      ? "opacity-50 cursor-not-allowed"
+                      : plan.popular
+                        ? "glow"
+                        : "glass-hover"
                   }`}
                   disabled={plan.id === activeSubscription.planId}
                   variant={plan.popular ? "default" : "outline"}
                 >
-                  {plan.id === activeSubscription.planId ? 'Current Plan' : 'Select Plan'}
+                  {plan.id === activeSubscription.planId
+                    ? "Current Plan"
+                    : "Select Plan"}
                 </Button>
               </CardContent>
             </Card>

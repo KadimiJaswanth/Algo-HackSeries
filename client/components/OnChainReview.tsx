@@ -4,18 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Star, 
-  Shield, 
-  Heart, 
-  ThumbsUp, 
-  MessageSquare, 
+import {
+  Star,
+  Shield,
+  Heart,
+  ThumbsUp,
+  MessageSquare,
   Award,
   Zap,
   CheckCircle,
   Lock,
   Trophy,
-  Gem
+  Gem,
 } from "lucide-react";
 
 interface Review {
@@ -41,7 +41,12 @@ interface OnChainReviewProps {
   onReviewSubmitted?: (review: Review) => void;
 }
 
-export default function OnChainReview({ targetId, targetType, targetName, onReviewSubmitted }: OnChainReviewProps) {
+export default function OnChainReview({
+  targetId,
+  targetType,
+  targetName,
+  onReviewSubmitted,
+}: OnChainReviewProps) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -54,52 +59,69 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
       reviewerName: "Sarah Chen",
       reviewerWallet: "0x742d...89A3",
       rating: 5,
-      comment: "Excellent driver! Very professional, clean car, and smooth ride. Definitely recommend!",
+      comment:
+        "Excellent driver! Very professional, clean car, and smooth ride. Definitely recommend!",
       timestamp: new Date(Date.now() - 86400000), // 1 day ago
       rideId: "ride-123",
       nftTokenId: "rating-nft-456",
       verified: true,
       helpful: 12,
       reputationScore: 4.8,
-      tags: ["Professional", "Clean Vehicle", "Safe Driving"]
+      tags: ["Professional", "Clean Vehicle", "Safe Driving"],
     },
     {
-      id: "review-2", 
+      id: "review-2",
       reviewerName: "Mike Rodriguez",
       reviewerWallet: "0x123d...45B7",
       rating: 4,
-      comment: "Good experience overall. Driver was on time and friendly. Car could have been cleaner.",
+      comment:
+        "Good experience overall. Driver was on time and friendly. Car could have been cleaner.",
       timestamp: new Date(Date.now() - 172800000), // 2 days ago
       rideId: "ride-124",
       nftTokenId: "rating-nft-457",
       verified: true,
       helpful: 8,
       reputationScore: 4.2,
-      tags: ["On Time", "Friendly"]
+      tags: ["On Time", "Friendly"],
     },
     {
       id: "review-3",
-      reviewerName: "Emma Wilson", 
+      reviewerName: "Emma Wilson",
       reviewerWallet: "0x987f...21C4",
       rating: 5,
-      comment: "Amazing ride! Driver went above and beyond to help with my luggage. Highly recommended!",
+      comment:
+        "Amazing ride! Driver went above and beyond to help with my luggage. Highly recommended!",
       timestamp: new Date(Date.now() - 259200000), // 3 days ago
       rideId: "ride-125",
       nftTokenId: "rating-nft-458",
       verified: true,
       helpful: 15,
       reputationScore: 4.9,
-      tags: ["Helpful", "Professional", "Excellent Service"]
-    }
+      tags: ["Helpful", "Professional", "Excellent Service"],
+    },
   ];
 
   const availableTags = [
-    "Professional", "Friendly", "Clean Vehicle", "Safe Driving", "On Time",
-    "Helpful", "Excellent Service", "Good Music", "Comfortable", "Quiet",
-    "Talkative", "Knowledgeable", "Smooth Ride", "Fast Route", "Polite"
+    "Professional",
+    "Friendly",
+    "Clean Vehicle",
+    "Safe Driving",
+    "On Time",
+    "Helpful",
+    "Excellent Service",
+    "Good Music",
+    "Comfortable",
+    "Quiet",
+    "Talkative",
+    "Knowledgeable",
+    "Smooth Ride",
+    "Fast Route",
+    "Polite",
   ];
 
-  const averageRating = existingReviews.reduce((sum, review) => sum + review.rating, 0) / existingReviews.length;
+  const averageRating =
+    existingReviews.reduce((sum, review) => sum + review.rating, 0) /
+    existingReviews.length;
   const totalReviews = existingReviews.length;
 
   const handleStarClick = (selectedRating: number) => {
@@ -107,10 +129,8 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
   };
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 
@@ -123,7 +143,7 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
     setIsSubmitting(true);
 
     // Simulate blockchain transaction
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const newReview: Review = {
       id: `review-${Date.now()}`,
@@ -137,11 +157,11 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
       verified: true,
       helpful: 0,
       reputationScore: 4.5,
-      tags: selectedTags
+      tags: selectedTags,
     };
 
     onReviewSubmitted?.(newReview);
-    
+
     // Reset form
     setRating(0);
     setComment("");
@@ -195,15 +215,15 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
       {/* Rating Summary */}
       <Card className="glass">
         <CardHeader className="pb-3">
-          <CardTitle className="text-gradient">
-            {targetName}'s Rating
-          </CardTitle>
+          <CardTitle className="text-gradient">{targetName}'s Rating</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="text-center">
-                <div className={`text-4xl font-bold ${getRatingColor(averageRating)}`}>
+                <div
+                  className={`text-4xl font-bold ${getRatingColor(averageRating)}`}
+                >
                   {averageRating.toFixed(1)}
                 </div>
                 <div className="flex items-center justify-center">
@@ -211,7 +231,9 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
                     <Star
                       key={star}
                       className={`h-4 w-4 ${
-                        star <= averageRating ? 'text-yellow-400 fill-current' : 'text-gray-400'
+                        star <= averageRating
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-400"
                       }`}
                     />
                   ))}
@@ -253,16 +275,16 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
                 >
                   <Star
                     className={`h-8 w-8 ${
-                      star <= rating 
-                        ? 'text-yellow-400 fill-current' 
-                        : 'text-gray-400 hover:text-yellow-300'
+                      star <= rating
+                        ? "text-yellow-400 fill-current"
+                        : "text-gray-400 hover:text-yellow-300"
                     }`}
                   />
                 </button>
               ))}
               {rating > 0 && (
                 <span className="ml-2 text-sm text-muted-foreground">
-                  {rating} star{rating !== 1 ? 's' : ''}
+                  {rating} star{rating !== 1 ? "s" : ""}
                 </span>
               )}
             </div>
@@ -281,7 +303,9 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
 
           {/* Tags */}
           <div>
-            <label className="text-sm font-medium mb-2 block">Tags (Optional)</label>
+            <label className="text-sm font-medium mb-2 block">
+              Tags (Optional)
+            </label>
             <div className="flex flex-wrap gap-2">
               {availableTags.map((tag) => (
                 <Badge
@@ -289,8 +313,8 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
                   variant="outline"
                   className={`cursor-pointer transition-colors ${
                     selectedTags.includes(tag)
-                      ? 'bg-primary/20 text-primary border-primary/50'
-                      : 'hover:bg-primary/10'
+                      ? "bg-primary/20 text-primary border-primary/50"
+                      : "hover:bg-primary/10"
                   }`}
                   onClick={() => toggleTag(tag)}
                 >
@@ -300,13 +324,13 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
             </div>
             {selectedTags.length > 0 && (
               <p className="text-xs text-muted-foreground mt-2">
-                Selected: {selectedTags.join(', ')}
+                Selected: {selectedTags.join(", ")}
               </p>
             )}
           </div>
 
           {/* Submit Button */}
-          <Button 
+          <Button
             onClick={submitReview}
             disabled={isSubmitting || rating === 0}
             className="w-full glow"
@@ -323,7 +347,7 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
               </>
             )}
           </Button>
-          
+
           {isSubmitting && (
             <p className="text-xs text-muted-foreground text-center">
               Creating NFT certificate and storing on blockchain...
@@ -338,25 +362,31 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between text-gradient">
               <span>Recent Reviews</span>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => setShowReviews(!showReviews)}
               >
-                {showReviews ? 'Hide' : 'Show'} Reviews
+                {showReviews ? "Hide" : "Show"} Reviews
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4 max-h-96 overflow-y-auto">
               {existingReviews.map((review) => (
-                <div key={review.id} className="glass p-4 rounded-lg border border-border/50">
+                <div
+                  key={review.id}
+                  className="glass p-4 rounded-lg border border-border/50"
+                >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center space-x-3">
                       <Avatar className="border-2 border-primary/30">
                         <AvatarImage src={review.reviewerAvatar} />
                         <AvatarFallback>
-                          {review.reviewerName.split(' ').map(n => n[0]).join('')}
+                          {review.reviewerName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
@@ -381,7 +411,9 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
                           <Star
                             key={star}
                             className={`h-4 w-4 ${
-                              star <= review.rating ? 'text-yellow-400 fill-current' : 'text-gray-400'
+                              star <= review.rating
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-400"
                             }`}
                           />
                         ))}
@@ -391,19 +423,23 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
                       </p>
                     </div>
                   </div>
-                  
+
                   <p className="text-sm mb-3">{review.comment}</p>
-                  
+
                   {review.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-3">
                       {review.tags.map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {tag}
                         </Badge>
                       ))}
                     </div>
                   )}
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <button className="flex items-center space-x-1 text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -415,7 +451,7 @@ export default function OnChainReview({ targetId, targetType, targetName, onRevi
                         <span>Reply</span>
                       </button>
                     </div>
-                    
+
                     {review.nftTokenId && (
                       <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
                         <Gem className="mr-1 h-3 w-3" />

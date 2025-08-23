@@ -3,17 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  AlertTriangle, 
-  Phone, 
-  MapPin, 
-  Shield, 
-  Users, 
+import {
+  AlertTriangle,
+  Phone,
+  MapPin,
+  Shield,
+  Users,
   Clock,
   Camera,
   Mic,
   Navigation,
-  Zap
+  Zap,
 } from "lucide-react";
 
 interface EmergencyContact {
@@ -27,23 +27,30 @@ interface SOSButtonProps {
   onEmergencyActivated?: () => void;
 }
 
-export default function SOSButton({ isActive = false, onEmergencyActivated }: SOSButtonProps) {
+export default function SOSButton({
+  isActive = false,
+  onEmergencyActivated,
+}: SOSButtonProps) {
   const [emergencyActive, setEmergencyActive] = useState(isActive);
   const [countdown, setCountdown] = useState(0);
   const [isCountingDown, setIsCountingDown] = useState(false);
 
   const emergencyContacts: EmergencyContact[] = [
     { name: "Emergency Services", phone: "911", relationship: "Emergency" },
-    { name: "John Doe", phone: "+1 (555) 123-4567", relationship: "Emergency Contact" },
-    { name: "Jane Smith", phone: "+1 (555) 987-6543", relationship: "Family" }
+    {
+      name: "John Doe",
+      phone: "+1 (555) 123-4567",
+      relationship: "Emergency Contact",
+    },
+    { name: "Jane Smith", phone: "+1 (555) 987-6543", relationship: "Family" },
   ];
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isCountingDown && countdown > 0) {
       interval = setInterval(() => {
-        setCountdown(prev => {
+        setCountdown((prev) => {
           if (prev <= 1) {
             setIsCountingDown(false);
             activateEmergency();
@@ -72,7 +79,7 @@ export default function SOSButton({ isActive = false, onEmergencyActivated }: SO
   const activateEmergency = () => {
     setEmergencyActive(true);
     onEmergencyActivated?.();
-    
+
     // Simulate emergency actions
     console.log("🚨 EMERGENCY ACTIVATED:");
     console.log("- Sending location to emergency contacts");
@@ -132,9 +139,14 @@ export default function SOSButton({ isActive = false, onEmergencyActivated }: SO
 
             {/* Emergency Contacts Status */}
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Emergency Contacts Notified:</h4>
+              <h4 className="font-medium text-sm">
+                Emergency Contacts Notified:
+              </h4>
               {emergencyContacts.map((contact, index) => (
-                <div key={index} className="flex items-center justify-between text-sm bg-background/50 p-2 rounded">
+                <div
+                  key={index}
+                  className="flex items-center justify-between text-sm bg-background/50 p-2 rounded"
+                >
                   <span>{contact.name}</span>
                   <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                     Notified
@@ -145,18 +157,18 @@ export default function SOSButton({ isActive = false, onEmergencyActivated }: SO
 
             {/* Actions */}
             <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 className="flex-1 border-green-500/30 hover:bg-green-500/10"
-                onClick={() => window.open('tel:911')}
+                onClick={() => window.open("tel:911")}
               >
                 <Phone className="mr-2 h-4 w-4" />
                 Call 911
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 className="flex-1"
                 onClick={deactivateEmergency}
               >
@@ -179,9 +191,9 @@ export default function SOSButton({ isActive = false, onEmergencyActivated }: SO
             <span className="text-orange-500 font-medium">
               Emergency activating in {countdown}s
             </span>
-            <Button 
-              size="sm" 
-              variant="outline" 
+            <Button
+              size="sm"
+              variant="outline"
               onClick={cancelCountdown}
               className="border-orange-500/30 hover:bg-orange-500/10"
             >
@@ -198,9 +210,10 @@ export default function SOSButton({ isActive = false, onEmergencyActivated }: SO
           variant="destructive"
           className={`
             w-32 h-32 rounded-full text-lg font-bold
-            ${isCountingDown 
-              ? 'animate-pulse bg-orange-500 hover:bg-orange-600' 
-              : 'bg-red-500 hover:bg-red-600 shadow-lg hover:shadow-red-500/25'
+            ${
+              isCountingDown
+                ? "animate-pulse bg-orange-500 hover:bg-orange-600"
+                : "bg-red-500 hover:bg-red-600 shadow-lg hover:shadow-red-500/25"
             }
             transition-all duration-300 hover:scale-105
           `}
@@ -272,10 +285,12 @@ export default function SOSButton({ isActive = false, onEmergencyActivated }: SO
             <div key={index} className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-sm">{contact.name}</p>
-                <p className="text-xs text-muted-foreground">{contact.relationship}</p>
+                <p className="text-xs text-muted-foreground">
+                  {contact.relationship}
+                </p>
               </div>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 onClick={() => window.open(`tel:${contact.phone}`)}
                 className="glass-hover"

@@ -5,22 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import GoogleMaps from "@/components/GoogleMaps";
-import { 
-  Navigation, 
-  Clock, 
-  MapPin, 
-  Car, 
-  Route, 
+import {
+  Navigation,
+  Clock,
+  MapPin,
+  Car,
+  Route,
   Phone,
   MessageCircle,
   Share,
   Bell,
   Zap,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 
 interface RideStatus {
-  stage: "searching" | "driver_assigned" | "driver_en_route" | "driver_arrived" | "in_transit" | "completed";
+  stage:
+    | "searching"
+    | "driver_assigned"
+    | "driver_en_route"
+    | "driver_arrived"
+    | "in_transit"
+    | "completed";
   estimatedArrival: string;
   actualArrival?: string;
   progress: number;
@@ -51,11 +57,14 @@ interface LiveTrackingProps {
   isActive?: boolean;
 }
 
-export default function LiveTracking({ rideId, isActive = true }: LiveTrackingProps) {
+export default function LiveTracking({
+  rideId,
+  isActive = true,
+}: LiveTrackingProps) {
   const [rideStatus, setRideStatus] = useState<RideStatus>({
     stage: "driver_en_route",
     estimatedArrival: "3 mins",
-    progress: 65
+    progress: 65,
   });
 
   const [driver] = useState<Driver>({
@@ -68,14 +77,14 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
       model: "Model 3",
       year: 2023,
       color: "White",
-      licensePlate: "ECO-789"
+      licensePlate: "ECO-789",
     },
     location: {
       lat: 37.7749,
-      lng: -122.4194
+      lng: -122.4194,
     },
     eta: "3 mins",
-    distance: "0.8 km"
+    distance: "0.8 km",
   });
 
   const [shareLocation, setShareLocation] = useState(false);
@@ -86,10 +95,10 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
     if (!isActive) return;
 
     const interval = setInterval(() => {
-      setRideStatus(prev => {
+      setRideStatus((prev) => {
         const newProgress = Math.min(prev.progress + Math.random() * 5, 100);
         let newStage = prev.stage;
-        
+
         if (newProgress >= 100 && prev.stage === "driver_en_route") {
           newStage = "driver_arrived";
         } else if (newProgress >= 100 && prev.stage === "driver_arrived") {
@@ -99,7 +108,7 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
         return {
           ...prev,
           progress: newProgress,
-          stage: newStage
+          stage: newStage,
         };
       });
     }, 3000);
@@ -114,49 +123,49 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
           title: "Finding your driver...",
           description: "We're matching you with the best driver nearby",
           color: "text-blue-400",
-          bgColor: "bg-blue-500/20"
+          bgColor: "bg-blue-500/20",
         };
       case "driver_assigned":
         return {
           title: "Driver assigned!",
           description: `${driver.name} is preparing to pick you up`,
           color: "text-green-400",
-          bgColor: "bg-green-500/20"
+          bgColor: "bg-green-500/20",
         };
       case "driver_en_route":
         return {
           title: "Driver is on the way",
           description: `${driver.name} is heading to your location`,
-          color: "text-blue-400", 
-          bgColor: "bg-blue-500/20"
+          color: "text-blue-400",
+          bgColor: "bg-blue-500/20",
         };
       case "driver_arrived":
         return {
           title: "Driver has arrived!",
           description: "Your driver is waiting at the pickup location",
           color: "text-green-400",
-          bgColor: "bg-green-500/20"
+          bgColor: "bg-green-500/20",
         };
       case "in_transit":
         return {
           title: "Ride in progress",
           description: "Enjoy your ride to the destination",
           color: "text-purple-400",
-          bgColor: "bg-purple-500/20"
+          bgColor: "bg-purple-500/20",
         };
       case "completed":
         return {
           title: "Ride completed",
           description: "You have arrived at your destination",
           color: "text-green-400",
-          bgColor: "bg-green-500/20"
+          bgColor: "bg-green-500/20",
         };
       default:
         return {
           title: "Unknown status",
           description: "",
           color: "text-muted-foreground",
-          bgColor: "bg-muted/20"
+          bgColor: "bg-muted/20",
         };
     }
   };
@@ -175,11 +184,17 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
                 <Navigation className={`h-5 w-5 ${statusInfo.color}`} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gradient">{statusInfo.title}</h3>
-                <p className="text-sm text-muted-foreground">{statusInfo.description}</p>
+                <h3 className="text-lg font-bold text-gradient">
+                  {statusInfo.title}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {statusInfo.description}
+                </p>
               </div>
             </div>
-            <Badge className={`${statusInfo.bgColor} ${statusInfo.color} border-current/30`}>
+            <Badge
+              className={`${statusInfo.bgColor} ${statusInfo.color} border-current/30`}
+            >
               Live
             </Badge>
           </CardTitle>
@@ -187,7 +202,9 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
         <CardContent className="relative z-10 pt-0">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Progress</span>
-            <span className="text-sm text-muted-foreground">{Math.round(rideStatus.progress)}%</span>
+            <span className="text-sm text-muted-foreground">
+              {Math.round(rideStatus.progress)}%
+            </span>
           </div>
           <Progress value={rideStatus.progress} className="h-2 mb-3" />
           <div className="flex items-center justify-between text-sm">
@@ -213,16 +230,22 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
             <div className="flex items-center space-x-3">
               <Avatar className="border-2 border-primary/30">
                 <AvatarImage src={driver.avatar} />
-                <AvatarFallback>{driver.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback>
+                  {driver.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
               </Avatar>
               <div>
                 <h4 className="font-medium">{driver.name}</h4>
                 <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                  <span className="flex items-center">
-                    ⭐ {driver.rating}
-                  </span>
+                  <span className="flex items-center">⭐ {driver.rating}</span>
                   <span>•</span>
-                  <span>{driver.vehicle.color} {driver.vehicle.make} {driver.vehicle.model}</span>
+                  <span>
+                    {driver.vehicle.color} {driver.vehicle.make}{" "}
+                    {driver.vehicle.model}
+                  </span>
                 </div>
               </div>
             </div>
@@ -242,7 +265,8 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
               <div className="flex items-center space-x-2">
                 <Car className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">
-                  {driver.vehicle.year} {driver.vehicle.make} {driver.vehicle.model}
+                  {driver.vehicle.year} {driver.vehicle.make}{" "}
+                  {driver.vehicle.model}
                 </span>
               </div>
               <Badge className="bg-primary/20 text-primary border-primary/30">
@@ -285,21 +309,21 @@ export default function LiveTracking({ rideId, isActive = true }: LiveTrackingPr
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="glass-hover"
               onClick={() => setShareLocation(!shareLocation)}
             >
               <Share className="mr-2 h-4 w-4" />
-              {shareLocation ? 'Stop Sharing' : 'Share Location'}
+              {shareLocation ? "Stop Sharing" : "Share Location"}
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="glass-hover"
               onClick={() => setNotifications(!notifications)}
             >
               <Bell className="mr-2 h-4 w-4" />
-              {notifications ? 'Mute Alerts' : 'Enable Alerts'}
+              {notifications ? "Mute Alerts" : "Enable Alerts"}
             </Button>
           </div>
         </CardContent>

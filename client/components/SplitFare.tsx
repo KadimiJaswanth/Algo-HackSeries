@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Users, 
-  DollarSign, 
-  Plus, 
-  Minus, 
-  Send, 
+import {
+  Users,
+  DollarSign,
+  Plus,
+  Minus,
+  Send,
   CheckCircle,
   Clock,
   User,
@@ -20,7 +20,7 @@ import {
   Calculator,
   CreditCard,
   Link,
-  Copy
+  Copy,
 } from "lucide-react";
 
 interface Participant {
@@ -47,10 +47,10 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
       name: "You",
       amount: totalFare,
       paymentStatus: "pending",
-      paymentMethod: "Crypto Wallet"
-    }
+      paymentMethod: "Crypto Wallet",
+    },
   ]);
-  
+
   const [newParticipant, setNewParticipant] = useState("");
   const [splitMethod, setSplitMethod] = useState<"equal" | "custom">("equal");
   const [shareLink, setShareLink] = useState("");
@@ -63,12 +63,12 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
         id: newId,
         name: newParticipant.trim(),
         amount: 0,
-        paymentStatus: "pending"
+        paymentStatus: "pending",
       };
-      
-      setParticipants(prev => [...prev, newPerson]);
+
+      setParticipants((prev) => [...prev, newPerson]);
       setNewParticipant("");
-      
+
       // Recalculate split
       if (splitMethod === "equal") {
         calculateEqualSplit([...participants, newPerson]);
@@ -78,10 +78,10 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
 
   const removeParticipant = (id: string) => {
     if (id === "self") return; // Can't remove yourself
-    
-    const updatedParticipants = participants.filter(p => p.id !== id);
+
+    const updatedParticipants = participants.filter((p) => p.id !== id);
     setParticipants(updatedParticipants);
-    
+
     if (splitMethod === "equal") {
       calculateEqualSplit(updatedParticipants);
     }
@@ -89,16 +89,18 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
 
   const calculateEqualSplit = (currentParticipants: Participant[]) => {
     const splitAmount = totalFare / currentParticipants.length;
-    const updated = currentParticipants.map(p => ({
+    const updated = currentParticipants.map((p) => ({
       ...p,
-      amount: Math.round(splitAmount * 100) / 100
+      amount: Math.round(splitAmount * 100) / 100,
     }));
     setParticipants(updated);
   };
 
   const updateAmount = (id: string, amount: number) => {
-    setParticipants(prev =>
-      prev.map(p => p.id === id ? { ...p, amount: Math.max(0, amount) } : p)
+    setParticipants((prev) =>
+      prev.map((p) =>
+        p.id === id ? { ...p, amount: Math.max(0, amount) } : p,
+      ),
     );
   };
 
@@ -114,7 +116,9 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
 
   const sendInvitation = (participant: Participant) => {
     // In a real app, this would send an invitation via email/SMS
-    console.log(`Sending invitation to ${participant.name} for $${participant.amount}`);
+    console.log(
+      `Sending invitation to ${participant.name} for $${participant.amount}`,
+    );
   };
 
   const totalSplit = participants.reduce((sum, p) => sum + p.amount, 0);
@@ -122,9 +126,9 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
   const isBalanced = Math.abs(difference) < 0.01;
 
   const paidAmount = participants
-    .filter(p => p.paymentStatus === "paid")
+    .filter((p) => p.paymentStatus === "paid")
     .reduce((sum, p) => sum + p.amount, 0);
-  
+
   const paymentProgress = (paidAmount / totalFare) * 100;
 
   return (
@@ -150,11 +154,15 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center glass p-3 rounded-lg">
               <Users className="h-5 w-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-sm font-medium">{participants.length} People</p>
+              <p className="text-sm font-medium">
+                {participants.length} People
+              </p>
             </div>
             <div className="text-center glass p-3 rounded-lg">
               <DollarSign className="h-5 w-5 mx-auto mb-1 text-green-400" />
-              <p className="text-sm font-medium">${(totalFare / participants.length).toFixed(2)} Each</p>
+              <p className="text-sm font-medium">
+                ${(totalFare / participants.length).toFixed(2)} Each
+              </p>
             </div>
             <div className="text-center glass p-3 rounded-lg">
               <Wallet className="h-5 w-5 mx-auto mb-1 text-purple-400" />
@@ -242,7 +250,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
         <CardContent>
           <div className="space-y-3">
             {participants.map((participant) => (
-              <div 
+              <div
                 key={participant.id}
                 className="flex items-center justify-between p-3 glass rounded-lg border border-border/50"
               >
@@ -250,19 +258,24 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                   <Avatar className="border-2 border-primary/30">
                     <AvatarImage src={participant.avatar} />
                     <AvatarFallback>
-                      {participant.name.split(' ').map(n => n[0]).join('')}
+                      {participant.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <h4 className="font-medium">{participant.name}</h4>
                     <div className="flex items-center space-x-2">
-                      <Badge className={`text-xs ${
-                        participant.paymentStatus === 'paid' 
-                          ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                          : participant.paymentStatus === 'declined'
-                          ? 'bg-red-500/20 text-red-400 border-red-500/30'
-                          : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-                      }`}>
+                      <Badge
+                        className={`text-xs ${
+                          participant.paymentStatus === "paid"
+                            ? "bg-green-500/20 text-green-400 border-green-500/30"
+                            : participant.paymentStatus === "declined"
+                              ? "bg-red-500/20 text-red-400 border-red-500/30"
+                              : "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                        }`}
+                      >
                         {participant.paymentStatus}
                       </Badge>
                       {participant.paymentMethod && (
@@ -273,14 +286,16 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-3">
                   {splitMethod === "custom" ? (
                     <div className="flex items-center space-x-2">
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => updateAmount(participant.id, participant.amount - 1)}
+                        onClick={() =>
+                          updateAmount(participant.id, participant.amount - 1)
+                        }
                         className="h-8 w-8 p-0"
                       >
                         <Minus className="h-3 w-3" />
@@ -291,7 +306,9 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => updateAmount(participant.id, participant.amount + 1)}
+                        onClick={() =>
+                          updateAmount(participant.id, participant.amount + 1)
+                        }
                         className="h-8 w-8 p-0"
                       >
                         <Plus className="h-3 w-3" />
@@ -302,7 +319,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                       ${participant.amount.toFixed(2)}
                     </span>
                   )}
-                  
+
                   <div className="flex space-x-1">
                     {participant.id !== "self" && (
                       <>
@@ -329,16 +346,15 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               </div>
             ))}
           </div>
-          
+
           {/* Balance Check */}
           {!isBalanced && (
             <Alert className="mt-4">
               <Calculator className="h-4 w-4" />
               <AlertDescription>
-                {difference > 0 
+                {difference > 0
                   ? `Split total is $${difference.toFixed(2)} over the ride fare`
-                  : `Split total is $${Math.abs(difference).toFixed(2)} under the ride fare`
-                }
+                  : `Split total is $${Math.abs(difference).toFixed(2)} under the ride fare`}
               </AlertDescription>
             </Alert>
           )}
@@ -359,17 +375,22 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
           ) : (
             <div className="space-y-3">
               <div className="flex space-x-2">
-                <Input 
-                  value={shareLink} 
-                  readOnly 
+                <Input
+                  value={shareLink}
+                  readOnly
                   className="glass font-mono text-sm"
                 />
-                <Button onClick={copyLink} variant="outline" className="glass-hover">
+                <Button
+                  onClick={copyLink}
+                  variant="outline"
+                  className="glass-hover"
+                >
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Share this link with friends to let them join and pay their share
+                Share this link with friends to let them join and pay their
+                share
               </p>
             </div>
           )}
@@ -390,7 +411,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
             <div className="flex justify-between">
               <span>Your Share</span>
               <span className="font-medium text-primary">
-                ${participants.find(p => p.id === "self")?.amount.toFixed(2)}
+                ${participants.find((p) => p.id === "self")?.amount.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between">
@@ -401,13 +422,14 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               </Badge>
             </div>
             <div className="pt-2 border-t border-border/50">
-              <Button 
-                className="w-full glow" 
+              <Button
+                className="w-full glow"
                 disabled={!isBalanced}
                 onClick={() => console.log("Processing payment...")}
               >
                 <CreditCard className="mr-2 h-4 w-4" />
-                Pay Your Share (${participants.find(p => p.id === "self")?.amount.toFixed(2)})
+                Pay Your Share ($
+                {participants.find((p) => p.id === "self")?.amount.toFixed(2)})
               </Button>
             </div>
           </div>

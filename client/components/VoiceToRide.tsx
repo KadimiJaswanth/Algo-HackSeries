@@ -4,19 +4,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Mic, 
-  MicOff, 
-  Volume2, 
-  Brain, 
-  MapPin, 
+import {
+  Mic,
+  MicOff,
+  Volume2,
+  Brain,
+  MapPin,
   Clock,
   CheckCircle,
   AlertCircle,
   Zap,
   MessageSquare,
   Play,
-  Square
+  Square,
 } from "lucide-react";
 
 interface VoiceCommand {
@@ -24,7 +24,12 @@ interface VoiceCommand {
   transcript: string;
   confidence: number;
   timestamp: Date;
-  intent: "book_ride" | "cancel_ride" | "get_status" | "change_destination" | "unknown";
+  intent:
+    | "book_ride"
+    | "cancel_ride"
+    | "get_status"
+    | "change_destination"
+    | "unknown";
   entities: {
     pickup?: string;
     destination?: string;
@@ -44,7 +49,9 @@ export default function VoiceToRide() {
   const [confidence, setConfidence] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [commands, setCommands] = useState<VoiceCommand[]>([]);
-  const [currentResponse, setCurrentResponse] = useState<VoiceResponse | null>(null);
+  const [currentResponse, setCurrentResponse] = useState<VoiceResponse | null>(
+    null,
+  );
   const [isSupported, setIsSupported] = useState(false);
   const [permissionGranted, setPermissionGranted] = useState(false);
 
@@ -53,19 +60,21 @@ export default function VoiceToRide() {
 
   useEffect(() => {
     // Check if Web Speech API is supported
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
       setIsSupported(true);
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const SpeechRecognition =
+        (window as any).webkitSpeechRecognition ||
+        (window as any).SpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.lang = "en-US";
 
       recognitionRef.current.onresult = (event: any) => {
         const result = event.results[event.results.length - 1];
         setTranscript(result.transcript);
         setConfidence(result.confidence * 100 || 85);
-        
+
         if (result.isFinal) {
           processVoiceCommand(result.transcript, result.confidence * 100 || 85);
         }
@@ -76,34 +85,35 @@ export default function VoiceToRide() {
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        console.error("Speech recognition error:", event.error);
         setIsListening(false);
       };
     }
 
     // Check for speech synthesis
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       synthesisRef.current = window.speechSynthesis;
     }
 
     // Request microphone permission
-    navigator.mediaDevices?.getUserMedia({ audio: true })
+    navigator.mediaDevices
+      ?.getUserMedia({ audio: true })
       .then(() => setPermissionGranted(true))
       .catch(() => setPermissionGranted(false));
   }, []);
 
   const processVoiceCommand = async (text: string, confidence: number) => {
     setIsProcessing(true);
-    
+
     // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const command = analyzeVoiceCommand(text, confidence);
-    setCommands(prev => [command, ...prev.slice(0, 4)]); // Keep last 5 commands
+    setCommands((prev) => [command, ...prev.slice(0, 4)]); // Keep last 5 commands
 
     const response = generateResponse(command);
     setCurrentResponse(response);
-    
+
     // Speak the response
     if (synthesisRef.current && response.text) {
       const utterance = new SpeechSynthesisUtterance(response.text);
@@ -111,33 +121,51 @@ export default function VoiceToRide() {
       utterance.pitch = 1;
       synthesisRef.current.speak(utterance);
     }
-    
+
     setIsProcessing(false);
     setTranscript("");
   };
 
-  const analyzeVoiceCommand = (text: string, confidence: number): VoiceCommand => {
+  const analyzeVoiceCommand = (
+    text: string,
+    confidence: number,
+  ): VoiceCommand => {
     const lowerText = text.toLowerCase();
     let intent: VoiceCommand["intent"] = "unknown";
     const entities: VoiceCommand["entities"] = {};
 
     // Intent detection
-    if (lowerText.includes("book") || lowerText.includes("ride") || lowerText.includes("go to")) {
+    if (
+      lowerText.includes("book") ||
+      lowerText.includes("ride") ||
+      lowerText.includes("go to")
+    ) {
       intent = "book_ride";
     } else if (lowerText.includes("cancel")) {
       intent = "cancel_ride";
     } else if (lowerText.includes("status") || lowerText.includes("where")) {
       intent = "get_status";
-    } else if (lowerText.includes("change") && lowerText.includes("destination")) {
+    } else if (
+      lowerText.includes("change") &&
+      lowerText.includes("destination")
+    ) {
       intent = "change_destination";
     }
 
     // Entity extraction (simplified)
-    const locationWords = ["airport", "downtown", "mall", "home", "work", "office", "station"];
+    const locationWords = [
+      "airport",
+      "downtown",
+      "mall",
+      "home",
+      "work",
+      "office",
+      "station",
+    ];
     const timeWords = ["now", "asap", "morning", "evening", "tonight"];
     const vehicleWords = ["uber", "lyft", "taxi", "pool", "luxury"];
 
-    locationWords.forEach(location => {
+    locationWords.forEach((location) => {
       if (lowerText.includes(location)) {
         if (lowerText.indexOf("to") < lowerText.indexOf(location)) {
           entities.destination = location;
@@ -147,13 +175,13 @@ export default function VoiceToRide() {
       }
     });
 
-    timeWords.forEach(time => {
+    timeWords.forEach((time) => {
       if (lowerText.includes(time)) {
         entities.time = time;
       }
     });
 
-    vehicleWords.forEach(vehicle => {
+    vehicleWords.forEach((vehicle) => {
       if (lowerText.includes(vehicle)) {
         entities.vehicleType = vehicle;
       }
@@ -165,7 +193,7 @@ export default function VoiceToRide() {
       confidence,
       timestamp: new Date(),
       intent,
-      entities
+      entities,
     };
   };
 
@@ -175,33 +203,33 @@ export default function VoiceToRide() {
         if (command.entities.destination) {
           return {
             text: `I'll book a ride to ${command.entities.destination}. Let me find available drivers nearby.`,
-            action: "show_booking"
+            action: "show_booking",
           };
         } else {
           return {
-            text: "I'd be happy to book a ride for you. Where would you like to go?"
+            text: "I'd be happy to book a ride for you. Where would you like to go?",
           };
         }
-      
+
       case "get_status":
         return {
           text: "Your driver Alex is 3 minutes away in a white Tesla Model 3. License plate ECO-789.",
-          action: "show_status"
+          action: "show_status",
         };
-      
+
       case "cancel_ride":
         return {
-          text: "I've cancelled your current ride request. You won't be charged any cancellation fees."
+          text: "I've cancelled your current ride request. You won't be charged any cancellation fees.",
         };
-      
+
       case "change_destination":
         return {
-          text: "I can help you change your destination. Where would you like to go instead?"
+          text: "I can help you change your destination. Where would you like to go instead?",
         };
-      
+
       default:
         return {
-          text: "I didn't quite understand that. You can say things like 'book a ride to the airport' or 'check my ride status'."
+          text: "I didn't quite understand that. You can say things like 'book a ride to the airport' or 'check my ride status'.",
         };
     }
   };
@@ -233,7 +261,8 @@ export default function VoiceToRide() {
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Voice recognition is not supported in your browser. Please use Chrome, Safari, or Edge for the best experience.
+          Voice recognition is not supported in your browser. Please use Chrome,
+          Safari, or Edge for the best experience.
         </AlertDescription>
       </Alert>
     );
@@ -244,7 +273,8 @@ export default function VoiceToRide() {
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Microphone permission is required for voice commands. Please allow microphone access and refresh the page.
+          Microphone permission is required for voice commands. Please allow
+          microphone access and refresh the page.
         </AlertDescription>
       </Alert>
     );
@@ -261,7 +291,8 @@ export default function VoiceToRide() {
             Voice-to-Ride Assistant
           </CardTitle>
           <p className="text-muted-foreground">
-            Say commands like "Book a ride to the airport" or "Check my ride status"
+            Say commands like "Book a ride to the airport" or "Check my ride
+            status"
           </p>
         </CardHeader>
         <CardContent className="relative z-10">
@@ -302,9 +333,10 @@ export default function VoiceToRide() {
                 size="lg"
                 className={`
                   w-24 h-24 rounded-full text-lg font-bold
-                  ${isListening 
-                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
-                    : 'bg-green-500 hover:bg-green-600'
+                  ${
+                    isListening
+                      ? "bg-red-500 hover:bg-red-600 animate-pulse"
+                      : "bg-green-500 hover:bg-green-600"
                   }
                   transition-all duration-300 hover:scale-105 glow
                 `}
@@ -319,7 +351,7 @@ export default function VoiceToRide() {
                   <Mic className="h-8 w-8" />
                 )}
               </Button>
-              
+
               {isListening && (
                 <div className="absolute inset-0 rounded-full border-4 border-red-400 animate-ping"></div>
               )}
@@ -329,15 +361,21 @@ export default function VoiceToRide() {
             <div className="min-h-[60px] flex items-center justify-center">
               {isProcessing ? (
                 <div className="text-center">
-                  <p className="text-sm text-muted-foreground">Processing your command...</p>
+                  <p className="text-sm text-muted-foreground">
+                    Processing your command...
+                  </p>
                   <Progress value={75} className="w-48 h-2 mt-2 mx-auto" />
                 </div>
               ) : isListening ? (
                 <div className="text-center">
-                  <p className="text-lg font-medium text-primary">Listening...</p>
+                  <p className="text-lg font-medium text-primary">
+                    Listening...
+                  </p>
                   {transcript && (
                     <div className="mt-2">
-                      <p className="text-sm text-muted-foreground">"{transcript}"</p>
+                      <p className="text-sm text-muted-foreground">
+                        "{transcript}"
+                      </p>
                       {confidence > 0 && (
                         <Badge className="mt-1 bg-primary/20 text-primary border-primary/30">
                           {confidence.toFixed(0)}% confidence
@@ -396,7 +434,7 @@ export default function VoiceToRide() {
                 <p className="text-sm">{currentResponse.text}</p>
                 {currentResponse.action && (
                   <Badge className="mt-2 bg-green-500/20 text-green-400 border-green-500/30">
-                    Action: {currentResponse.action.replace('_', ' ')}
+                    Action: {currentResponse.action.replace("_", " ")}
                   </Badge>
                 )}
               </div>
@@ -414,15 +452,23 @@ export default function VoiceToRide() {
           <CardContent>
             <div className="space-y-3 max-h-48 overflow-y-auto">
               {commands.map((command) => (
-                <div key={command.id} className="glass p-3 rounded-lg border border-border/50">
+                <div
+                  key={command.id}
+                  className="glass p-3 rounded-lg border border-border/50"
+                >
                   <div className="flex items-center justify-between mb-2">
-                    <Badge className={`${
-                      command.intent === 'book_ride' ? 'bg-blue-500/20 text-blue-400' :
-                      command.intent === 'get_status' ? 'bg-green-500/20 text-green-400' :
-                      command.intent === 'cancel_ride' ? 'bg-red-500/20 text-red-400' :
-                      'bg-gray-500/20 text-gray-400'
-                    }`}>
-                      {command.intent.replace('_', ' ')}
+                    <Badge
+                      className={`${
+                        command.intent === "book_ride"
+                          ? "bg-blue-500/20 text-blue-400"
+                          : command.intent === "get_status"
+                            ? "bg-green-500/20 text-green-400"
+                            : command.intent === "cancel_ride"
+                              ? "bg-red-500/20 text-red-400"
+                              : "bg-gray-500/20 text-gray-400"
+                      }`}
+                    >
+                      {command.intent.replace("_", " ")}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
                       {command.confidence.toFixed(0)}% confidence
@@ -448,7 +494,9 @@ export default function VoiceToRide() {
       {/* Voice Commands Help */}
       <Card className="glass">
         <CardHeader>
-          <CardTitle className="text-gradient">Voice Commands Examples</CardTitle>
+          <CardTitle className="text-gradient">
+            Voice Commands Examples
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4">

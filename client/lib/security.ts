@@ -71,10 +71,14 @@ export class SecurityManager {
   private static instance: SecurityManager;
   private encryptionKey: string;
   private rateLimiter: RateLimiter;
+  private quantumEnabled: boolean;
+  private quantumKeyId: string | null;
 
   private constructor() {
     this.encryptionKey = this.generateEncryptionKey();
     this.rateLimiter = new RateLimiter();
+    this.quantumEnabled = false;
+    this.quantumKeyId = null;
   }
 
   static getInstance(): SecurityManager {
@@ -82,6 +86,57 @@ export class SecurityManager {
       SecurityManager.instance = new SecurityManager();
     }
     return SecurityManager.instance;
+  }
+
+  // Enable quantum-resistant security
+  async enableQuantumSecurity(): Promise<string> {
+    try {
+      const { QuantumSecurityManager, PQCAlgorithm, QuantumSecurityLevel } = await import('./quantumSecurity');
+      const quantumManager = QuantumSecurityManager.getInstance();
+
+      const keyPair = await quantumManager.generateKeyPair(
+        PQCAlgorithm.ML_DSA_65,
+        QuantumSecurityLevel.LEVEL_3
+      );
+
+      this.quantumEnabled = true;
+      this.quantumKeyId = keyPair.keyId;
+
+      SecurityAudit.log('quantum_security_enabled', 'low', {
+        algorithm: keyPair.algorithm,
+        securityLevel: keyPair.securityLevel,
+        keyId: keyPair.keyId
+      });
+
+      return keyPair.keyId;
+    } catch (error) {
+      SecurityAudit.log('quantum_security_enable_failed', 'high', { error: error.message });
+      throw new Error(`Failed to enable quantum security: ${error.message}`);
+    }
+  }
+
+  // Check if quantum security is enabled
+  isQuantumEnabled(): boolean {
+    return this.quantumEnabled && this.quantumKeyId !== null;
+  }
+
+  // Get quantum security status
+  getQuantumStatus(): { enabled: boolean; keyId: string | null; metrics?: any } {
+    return {
+      enabled: this.quantumEnabled,
+      keyId: this.quantumKeyId,
+      metrics: this.quantumEnabled ? this.getQuantumMetrics() : undefined
+    };
+  }
+
+  private async getQuantumMetrics(): Promise<any> {
+    try {
+      const { QuantumSecurityManager } = await import('./quantumSecurity');
+      const quantumManager = QuantumSecurityManager.getInstance();
+      return quantumManager.getQuantumSecurityMetrics();
+    } catch (error) {
+      return null;
+    }
   }
 
   private generateEncryptionKey(): string {

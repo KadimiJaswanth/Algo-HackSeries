@@ -62,6 +62,8 @@ export default function LiveTracking({
   rideId,
   isActive = true,
 }: LiveTrackingProps) {
+  const navigate = useNavigate();
+
   const [rideStatus, setRideStatus] = useState<RideStatus>({
     stage: "driver_en_route",
     estimatedArrival: "3 mins",

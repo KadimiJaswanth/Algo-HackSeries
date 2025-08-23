@@ -42,55 +42,85 @@ import OnChainReview from "@/components/OnChainReview";
 
 export default function Rider() {
   const [activeTab, setActiveTab] = useState("book");
+  const [activeRideId] = useState("ride-123");
+  const [currentFare] = useState(25.50);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-rider/5">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/10"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full glass border-b border-glass-border">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 animate-slide-in-left">
             <Link to="/">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="glass-hover">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
             </Link>
             <div className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-primary to-accent text-white glow">
                 <Car className="h-5 w-5" />
               </div>
-              <span className="text-xl font-bold">RideChain</span>
+              <span className="text-xl font-bold text-gradient">RideChain</span>
               <span className="text-sm text-muted-foreground">Rider</span>
             </div>
           </div>
-          <WalletConnect />
+          <div className="flex items-center space-x-4">
+            <SOSButton />
+            <WalletConnect />
+          </div>
         </div>
       </header>
 
-      <div className="container py-8">
+      <div className="container py-8 relative z-10">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3 max-w-md">
-            <TabsTrigger value="book" className="flex items-center space-x-2">
-              <MapPin className="h-4 w-4" />
-              <span>Book Ride</span>
+          <TabsList className="grid w-full grid-cols-9 max-w-6xl glass animate-fade-in-up">
+            <TabsTrigger value="book" className="flex items-center space-x-1 text-xs">
+              <MapPin className="h-3 w-3" />
+              <span className="hidden sm:inline">Book</span>
             </TabsTrigger>
-            <TabsTrigger
-              value="history"
-              className="flex items-center space-x-2"
-            >
-              <History className="h-4 w-4" />
-              <span>History</span>
+            <TabsTrigger value="pool" className="flex items-center space-x-1 text-xs">
+              <Users className="h-3 w-3" />
+              <span className="hidden sm:inline">Pool</span>
             </TabsTrigger>
-            <TabsTrigger
-              value="profile"
-              className="flex items-center space-x-2"
-            >
-              <User className="h-4 w-4" />
-              <span>Profile</span>
+            <TabsTrigger value="voice" className="flex items-center space-x-1 text-xs">
+              <Volume2 className="h-3 w-3" />
+              <span className="hidden sm:inline">Voice</span>
+            </TabsTrigger>
+            <TabsTrigger value="schedule" className="flex items-center space-x-1 text-xs">
+              <Calendar className="h-3 w-3" />
+              <span className="hidden sm:inline">Schedule</span>
+            </TabsTrigger>
+            <TabsTrigger value="subscription" className="flex items-center space-x-1 text-xs">
+              <Crown className="h-3 w-3" />
+              <span className="hidden sm:inline">Plans</span>
+            </TabsTrigger>
+            <TabsTrigger value="tracking" className="flex items-center space-x-1 text-xs">
+              <Navigation className="h-3 w-3" />
+              <span className="hidden sm:inline">Track</span>
+            </TabsTrigger>
+            <TabsTrigger value="rewards" className="flex items-center space-x-1 text-xs">
+              <Gift className="h-3 w-3" />
+              <span className="hidden sm:inline">Rewards</span>
+            </TabsTrigger>
+            <TabsTrigger value="history" className="flex items-center space-x-1 text-xs">
+              <History className="h-3 w-3" />
+              <span className="hidden sm:inline">History</span>
+            </TabsTrigger>
+            <TabsTrigger value="profile" className="flex items-center space-x-1 text-xs">
+              <User className="h-3 w-3" />
+              <span className="hidden sm:inline">Profile</span>
             </TabsTrigger>
           </TabsList>
 

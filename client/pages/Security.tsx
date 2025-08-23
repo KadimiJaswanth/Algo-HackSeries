@@ -106,6 +106,9 @@ export default function Security() {
   };
 
   const testSecurityEndpoint = async (endpoint: string, method: string = 'GET', includeCSRF: boolean = false) => {
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort(), 5000); // 5 second timeout
+
     try {
       const headers: HeadersInit = {
         'Content-Type': 'application/json',
@@ -120,20 +123,42 @@ export default function Security() {
         headers,
         credentials: 'include',
         body: method !== 'GET' ? JSON.stringify({ test: 'data' }) : undefined,
+        signal: abortController.signal,
       });
 
-      const data = await response.json();
-      
+      clearTimeout(timeoutId);
+
+      // Clone response to avoid stream consumption issues
+      const responseClone = response.clone();
+      let data;
+
+      try {
+        data = await responseClone.json();
+      } catch (jsonError) {
+        // Fallback to text if JSON parsing fails
+        data = await response.text();
+      }
+
       return {
         success: response.ok,
         status: response.status,
         data,
       };
     } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (error instanceof Error && error.name === 'AbortError') {
+        return {
+          success: false,
+          status: 0,
+          error: 'Request timeout',
+        };
+      }
+
       return {
         success: false,
         status: 0,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   };

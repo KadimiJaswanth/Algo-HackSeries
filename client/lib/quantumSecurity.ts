@@ -4,8 +4,6 @@ import { randomBytes } from "@noble/hashes/utils";
 import { ml_dsa65 } from "@noble/post-quantum/ml-dsa";
 import { ml_kem768 } from "@noble/post-quantum/ml-kem";
 import { slh_dsa_shake_128s } from "@noble/post-quantum/slh-dsa";
-import Kyber from "pqc-kyber";
-import Dilithium from "pqc-dilithium";
 
 // Post-Quantum Cryptography Standards (NIST)
 export enum PQCAlgorithm {

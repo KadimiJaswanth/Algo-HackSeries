@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,9 +9,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FiArrowLeft as ArrowLeft, FiGift as Gift, FiUsers as Users, FiVolume2 as Volume2, FiCalendar as Calendar, FiNavigation as Navigation, FiStar as Star, FiMapPin as MapPin, FiUser as User } from "react-icons/fi";
+import {
+  FiArrowLeft as ArrowLeft,
+  FiGift as Gift,
+  FiUsers as Users,
+  FiVolume2 as Volume2,
+  FiCalendar as Calendar,
+  FiNavigation as Navigation,
+  FiStar as Star,
+  FiMapPin as MapPin,
+  FiUser as User,
+} from "react-icons/fi";
 import { FaCar as Car, FaHistory as History } from "react-icons/fa";
-import { FiGift, FiUsers, FiVolume2, FiCalendar, FiNavigation } from "react-icons/fi";
+import {
+  FiGift,
+  FiUsers,
+  FiVolume2,
+  FiCalendar,
+  FiNavigation,
+} from "react-icons/fi";
 import { FaCrown as Crown } from "react-icons/fa";
 import WalletConnect from "@/components/WalletConnect";
 import RideBooking from "@/components/RideBooking";
@@ -28,9 +44,17 @@ import SplitFare from "@/components/SplitFare";
 import OnChainReview from "@/components/OnChainReview";
 
 export default function Rider() {
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("book");
   const [activeRideId] = useState("ride-123");
   const [currentFare] = useState(25.5);
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen relative overflow-hidden">

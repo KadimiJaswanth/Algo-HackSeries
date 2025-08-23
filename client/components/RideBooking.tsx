@@ -24,7 +24,6 @@ import {
 import {
   FiMapPin as MapPin,
   FiClock as Clock,
-  FiDollarSign as DollarSign,
   FiAlertCircle as AlertCircle,
   FiPlus as Plus,
   FiX as X,
@@ -100,6 +99,10 @@ export default function RideBooking() {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [rideConfirmed, setRideConfirmed] = useState(false);
+  const [quickBookConfirmation, setQuickBookConfirmation] = useState<{
+    vehicleName: string;
+    fare: number;
+  } | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,
@@ -166,6 +169,19 @@ export default function RideBooking() {
       vehicleType: vehicleId,
       fareEstimate,
     }));
+  };
+
+  const handleQuickBookRide = (
+    vehicleId: string,
+    vehicleName: string,
+    fare: number,
+  ) => {
+    setQuickBookConfirmation({ vehicleName, fare });
+
+    // Clear confirmation after 3 seconds
+    setTimeout(() => {
+      setQuickBookConfirmation(null);
+    }, 3000);
   };
 
   const addStop = () => {
@@ -656,13 +672,14 @@ export default function RideBooking() {
             <Card>
               <CardHeader>
                 <CardTitle>Choose Your Ride</CardTitle>
+                {surgeMultiplier > 1.2 && (
+                  <Badge variant="destructive" className="mb-2">
+                    <Zap className="mr-1 h-3 w-3" />
+                    High demand in your area
+                  </Badge>
+                )}
                 <CardDescription>
-                  {surgeMultiplier > 1.2 && (
-                    <Badge variant="destructive" className="mb-2">
-                      <Zap className="mr-1 h-3 w-3" />
-                      High demand in your area
-                    </Badge>
-                  )}
+                  Select your preferred vehicle type for this trip
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -677,8 +694,34 @@ export default function RideBooking() {
                   )}
                   selectedVehicle={bookingData.vehicleType}
                   onVehicleSelect={handleVehicleSelect}
+                  onBookRide={handleQuickBookRide}
                   surgeMultiplier={surgeMultiplier}
                 />
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Quick Book Confirmation */}
+          {quickBookConfirmation && (
+            <Card className="border-green-500/50 bg-green-500/10 animate-fade-in-up">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-full bg-green-500/20">
+                    <CheckCircle className="h-6 w-6 text-green-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-green-400">
+                      Your ride is confirmed!
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      {quickBookConfirmation.vehicleName} booked for{" "}
+                      {quickBookConfirmation.fare.toFixed(6)} TOKENS
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Driver will be assigned shortly...
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -737,7 +780,7 @@ export default function RideBooking() {
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.4
                         ).toFixed(4)}{" "}
-                        AVAX
+                        TOKENS
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -747,7 +790,7 @@ export default function RideBooking() {
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.6
                         ).toFixed(4)}{" "}
-                        AVAX
+                        TOKENS
                       </span>
                     </div>
                     {surgeMultiplier > 1 && (
@@ -761,14 +804,16 @@ export default function RideBooking() {
                             bookingData.fareEstimate -
                             bookingData.fareEstimate / surgeMultiplier
                           ).toFixed(4)}{" "}
-                          AVAX
+                          TOKENS
                         </span>
                       </div>
                     )}
                     {bookingData.isRoundTrip && (
                       <div className="flex justify-between">
                         <span>Return trip</span>
-                        <span>+{bookingData.fareEstimate.toFixed(4)} AVAX</span>
+                        <span>
+                          +{bookingData.fareEstimate.toFixed(4)} TOKENS
+                        </span>
                       </div>
                     )}
                     <Separator />
@@ -779,7 +824,7 @@ export default function RideBooking() {
                           bookingData.fareEstimate *
                           (bookingData.isRoundTrip ? 2 : 1)
                         ).toFixed(4)}{" "}
-                        AVAX
+                        TOKENS
                       </span>
                     </div>
                   </div>
@@ -854,7 +899,7 @@ export default function RideBooking() {
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <Wallet className="mr-2 h-5 w-5 text-primary" />
-              Pay with AVAX Tokens
+              Pay with TOKENS Tokens
             </DialogTitle>
             <DialogDescription>
               Confirm your payment to book this ride
@@ -885,7 +930,7 @@ export default function RideBooking() {
                         bookingData.fareEstimate *
                         (bookingData.isRoundTrip ? 2 : 1)
                       ).toFixed(4)}{" "}
-                      AVAX
+                      TOKENS
                     </span>
                   </div>
                 </div>
@@ -915,7 +960,7 @@ export default function RideBooking() {
                 ) : (
                   <>
                     <Wallet className="mr-2 h-4 w-4" />
-                    Pay with AVAX
+                    Pay with TOKENS
                   </>
                 )}
               </Button>

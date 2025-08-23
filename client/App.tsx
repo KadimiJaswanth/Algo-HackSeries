@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import Rider from "./pages/Rider";
 import Driver from "./pages/Driver";
 import Security from "./pages/Security";
+import BookRideConfirmation from "./pages/BookRideConfirmation";
+import DriverChat from "./pages/DriverChat";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -23,6 +25,11 @@ const App = () => (
           <Route path="/rider" element={<Rider />} />
           <Route path="/driver" element={<Driver />} />
           <Route path="/security" element={<Security />} />
+          <Route
+            path="/book-ride-confirmation"
+            element={<BookRideConfirmation />}
+          />
+          <Route path="/driver-chat" element={<DriverChat />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

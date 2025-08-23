@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,8 @@ export default function LiveTracking({
   rideId,
   isActive = true,
 }: LiveTrackingProps) {
+  const navigate = useNavigate();
+
   const [rideStatus, setRideStatus] = useState<RideStatus>({
     stage: "driver_en_route",
     estimatedArrival: "3 mins",
@@ -115,6 +118,21 @@ export default function LiveTracking({
 
     return () => clearInterval(interval);
   }, [isActive]);
+
+  const handleCall = () => {
+    alert(`Driver Number: 6301214658`);
+  };
+
+  const handleChat = () => {
+    // Navigate to chat page with driver details
+    const params = new URLSearchParams({
+      driverName: driver.name,
+      driverRating: driver.rating.toString(),
+      vehicle: `${driver.vehicle.make} ${driver.vehicle.model}`,
+      licensePlate: driver.vehicle.licensePlate,
+    });
+    navigate(`/driver-chat?${params.toString()}`);
+  };
 
   const getStatusInfo = (stage: RideStatus["stage"]) => {
     switch (stage) {
@@ -250,10 +268,20 @@ export default function LiveTracking({
               </div>
             </div>
             <div className="flex space-x-2">
-              <Button size="sm" variant="outline" className="glass-hover">
+              <Button
+                size="sm"
+                variant="outline"
+                className="glass-hover border-green-500/30 text-green-400 hover:bg-green-500/10"
+                onClick={handleCall}
+              >
                 <Phone className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="outline" className="glass-hover">
+              <Button
+                size="sm"
+                variant="outline"
+                className="glass-hover border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                onClick={handleChat}
+              >
                 <MessageCircle className="h-4 w-4" />
               </Button>
             </div>

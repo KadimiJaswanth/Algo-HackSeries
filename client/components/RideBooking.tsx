@@ -870,7 +870,22 @@ export default function RideBooking() {
         </TabsContent>
 
         <TabsContent value="track">
-          {activeRide ? (
+          {useEnhancedTracking && enhancedRideData ? (
+            <EnhancedRideTracking
+              rideData={enhancedRideData}
+              onCancel={() => {
+                setUseEnhancedTracking(false);
+                setEnhancedRideData(null);
+                setActiveTab("book");
+              }}
+              onComplete={() => {
+                alert("🎉 Ride completed successfully! Payment processed via smart contract.");
+                setUseEnhancedTracking(false);
+                setEnhancedRideData(null);
+                setActiveTab("book");
+              }}
+            />
+          ) : activeRide ? (
             <RideStatus
               ride={activeRide}
               onCancel={handleCancelRide}
@@ -882,6 +897,9 @@ export default function RideBooking() {
               <CardContent className="text-center py-8">
                 <Car className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No active ride</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Book a ride to start tracking
+                </p>
               </CardContent>
             </Card>
           )}

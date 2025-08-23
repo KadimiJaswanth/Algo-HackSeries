@@ -503,8 +503,15 @@ export default function Security() {
                     <div className="text-sm text-muted-foreground">
                       Current token: {csrfToken ? `${csrfToken.slice(0, 8)}...` : 'Not generated'}
                     </div>
-                    <Button size="sm" onClick={fetchCSRFToken}>
-                      Refresh Token
+                    <Button size="sm" onClick={fetchCSRFToken} disabled={isLoadingToken}>
+                      {isLoadingToken ? (
+                        <>
+                          <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                          Loading...
+                        </>
+                      ) : (
+                        'Refresh Token'
+                      )}
                     </Button>
                   </div>
                 </div>

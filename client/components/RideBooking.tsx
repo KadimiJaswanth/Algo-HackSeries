@@ -28,6 +28,7 @@ import {
   FiAlertCircle as AlertCircle,
   FiPlus as Plus,
   FiX as X,
+  FiCheckCircle as CheckCircle,
   FiCalendar as Calendar,
   FiUsers as Users,
   FiShield as Shield,

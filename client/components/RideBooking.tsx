@@ -106,11 +106,14 @@ export default function RideBooking() {
     vehicleName: string;
     fare: number;
   } | null>(null);
-  // SMS notification states
-  const [smsNotificationSent, setSmsNotificationSent] = useState(false);
-  const [currentRideId, setCurrentRideId] = useState<string | null>(null);
-  const [driverResponseStatus, setDriverResponseStatus] = useState<'pending' | 'accepted' | 'ignored' | null>(null);
-  const [smsNotificationDialog, setSmsNotificationDialog] = useState(false);
+  // Enhanced ride tracking states
+  const [useEnhancedTracking, setUseEnhancedTracking] = useState(false);
+  const [enhancedRideData, setEnhancedRideData] = useState<{
+    pickup: Location;
+    dropoff: Location;
+    estimatedFare: number;
+    riderName: string;
+  } | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,

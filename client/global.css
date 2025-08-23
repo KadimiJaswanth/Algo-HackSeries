@@ -9,44 +9,58 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 225 15% 13%;
+    /* Futuristic Background Gradient */
+    --background: 225 25% 8%;
+    --foreground: 280 20% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 225 15% 13%;
+    /* Glassmorphism Cards */
+    --card: 240 15% 12%;
+    --card-foreground: 280 20% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 225 15% 13%;
+    --popover: 240 15% 12%;
+    --popover-foreground: 280 20% 95%;
 
-    --primary: 217 91% 60%;
+    /* Cyberpunk Primary Colors */
+    --primary: 280 100% 70%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 20% 95%;
+    /* Neon Secondary */
+    --secondary: 200 100% 60%;
     --secondary-foreground: 225 15% 13%;
 
-    --muted: 217 20% 95%;
-    --muted-foreground: 225 8% 47%;
+    /* Muted Glass Effect */
+    --muted: 240 10% 15%;
+    --muted-foreground: 280 15% 70%;
 
-    --accent: 142 76% 36%;
+    /* Electric Accent */
+    --accent: 120 100% 50%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 20% 88%;
-    --input: 217 20% 88%;
-    --ring: 217 91% 60%;
+    /* Glass Borders */
+    --border: 240 15% 25%;
+    --input: 240 15% 15%;
+    --ring: 280 100% 70%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --warning: 45 93% 47%;
+    /* Enhanced Status Colors */
+    --warning: 45 100% 60%;
     --warning-foreground: 0 0% 100%;
 
-    --success: 142 76% 36%;
+    --success: 120 100% 50%;
     --success-foreground: 0 0% 100%;
 
-    --rider: 217 91% 60%;
-    --driver: 142 76% 36%;
+    /* Ride Type Colors */
+    --rider: 280 100% 70%;
+    --driver: 120 100% 50%;
+
+    /* Glass Effects */
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-hover: rgba(255, 255, 255, 0.15);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 225 15% 13%;

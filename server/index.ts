@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 import { handleDemo } from "./routes/demo";
+import { sendDriverNotification, handleSmsWebhook, getRideStatus } from "./routes/sms-notifications";
 
 // Security configuration
 const securityConfig = {

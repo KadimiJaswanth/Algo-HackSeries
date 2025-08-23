@@ -200,6 +200,35 @@ export default function RideBooking() {
       return;
     }
 
+    // Show payment dialog instead of immediately booking
+    setShowPaymentDialog(true);
+  };
+
+  const handleTokenPayment = async () => {
+    setPaymentProcessing(true);
+
+    try {
+      // Simulate token payment processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Payment successful - show confirmation
+      setRideConfirmed(true);
+      setPaymentProcessing(false);
+      setShowPaymentDialog(false);
+
+      // Wait a moment to show confirmation, then proceed with booking
+      setTimeout(() => {
+        proceedWithBooking();
+      }, 1500);
+
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed. Please try again.");
+      setPaymentProcessing(false);
+    }
+  };
+
+  const proceedWithBooking = () => {
     setIsLoading(true);
 
     try {
@@ -208,14 +237,15 @@ export default function RideBooking() {
       const newRide: ActiveRide = {
         id: rideId,
         status: "searching",
-        pickup: bookingData.pickup.address,
-        dropoff: bookingData.dropoff.address,
+        pickup: bookingData.pickup!.address,
+        dropoff: bookingData.dropoff!.address,
         price: bookingData.fareEstimate,
       };
 
       setActiveRide(newRide);
       setActiveTab("track");
       setIsLoading(false);
+      setRideConfirmed(false);
 
       // Simulate ride workflow
       simulateRideWorkflow(newRide);
@@ -223,6 +253,7 @@ export default function RideBooking() {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
       setIsLoading(false);
+      setRideConfirmed(false);
     }
   };
 

@@ -119,6 +119,21 @@ export default function LiveTracking({
     return () => clearInterval(interval);
   }, [isActive]);
 
+  const handleCall = () => {
+    alert(`Driver Number: 6307884689`);
+  };
+
+  const handleChat = () => {
+    // Navigate to chat page with driver details
+    const params = new URLSearchParams({
+      driverName: driver.name,
+      driverRating: driver.rating.toString(),
+      vehicle: `${driver.vehicle.make} ${driver.vehicle.model}`,
+      licensePlate: driver.vehicle.licensePlate,
+    });
+    navigate(`/driver-chat?${params.toString()}`);
+  };
+
   const getStatusInfo = (stage: RideStatus["stage"]) => {
     switch (stage) {
       case "searching":

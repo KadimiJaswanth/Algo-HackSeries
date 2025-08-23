@@ -60,6 +60,16 @@ export default function Driver() {
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [isEVDriver, setIsEVDriver] = useState(false);
 
+  // Driver notification system
+  const {
+    currentNotification,
+    showNotification,
+    addNotification,
+    handleAccept,
+    handleIgnore,
+    closeNotification,
+  } = useDriverNotifications();
+
   // Mock data
   const todayEarnings = 127.50;
   const weeklyEarnings = 839.25;

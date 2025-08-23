@@ -268,10 +268,20 @@ export default function LiveTracking({
               </div>
             </div>
             <div className="flex space-x-2">
-              <Button size="sm" variant="outline" className="glass-hover">
+              <Button
+                size="sm"
+                variant="outline"
+                className="glass-hover border-green-500/30 text-green-400 hover:bg-green-500/10"
+                onClick={handleCall}
+              >
                 <Phone className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="outline" className="glass-hover">
+              <Button
+                size="sm"
+                variant="outline"
+                className="glass-hover border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                onClick={handleChat}
+              >
                 <MessageCircle className="h-4 w-4" />
               </Button>
             </div>

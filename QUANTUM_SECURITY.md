@@ -75,11 +75,11 @@ vite.config.ts                   # WebAssembly support configuration
 
 ```json
 {
-  "@noble/post-quantum": "NIST-standardized PQC algorithms",
-  "@noble/hashes": "Quantum-resistant hash functions", 
+  "@noble/post-quantum": "NIST-standardized PQC algorithms (ML-DSA, ML-KEM, SLH-DSA)",
+  "@noble/hashes": "Quantum-resistant hash functions",
   "@noble/curves": "Elliptic curve cryptography",
-  "pqc-kyber": "Kyber key encapsulation",
-  "pqc-dilithium": "Dilithium digital signatures",
+  "@stablelib/ed25519": "Ed25519 signatures",
+  "@stablelib/x25519": "X25519 key exchange",
   "vite-plugin-wasm": "WebAssembly support for PQC"
 }
 ```

@@ -24,29 +24,37 @@ export default function Index() {
   const [userType, setUserType] = useState<"rider" | "driver" | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/10"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-secondary/15 rounded-full blur-2xl animate-pulse-slow"></div>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full glass border-b border-glass-border">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex items-center space-x-2 animate-slide-in-left">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-primary to-accent text-white glow">
               <Car className="h-5 w-5" />
             </div>
-            <span className="text-xl font-bold">RideChain</span>
-            <Badge variant="outline" className="ml-2 text-xs">
+            <span className="text-xl font-bold text-gradient">RideChain</span>
+            <Badge variant="outline" className="ml-2 text-xs glass-hover glow-accent">
               Avalanche
             </Badge>
           </div>
-          <nav className="flex items-center space-x-6">
+          <nav className="flex items-center space-x-6 animate-slide-in-right">
             <Link
               to="/about"
-              className="text-sm font-medium hover:text-primary"
+              className="text-sm font-medium hover:text-primary transition-all duration-300 glass-hover px-3 py-1 rounded-md"
             >
               About
             </Link>
             <Link
               to="/how-it-works"
-              className="text-sm font-medium hover:text-primary"
+              className="text-sm font-medium hover:text-primary transition-all duration-300 glass-hover px-3 py-1 rounded-md"
             >
               How it Works
             </Link>

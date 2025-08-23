@@ -282,13 +282,20 @@ export default function Security() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-5 max-w-3xl mx-auto glass animate-fade-in-up">
+          <TabsList className="grid w-full grid-cols-6 max-w-4xl mx-auto glass animate-fade-in-up">
             <TabsTrigger
               value="overview"
               className="flex items-center space-x-1 text-xs"
             >
               <Shield className="h-3 w-3" />
               <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="quantum"
+              className="flex items-center space-x-1 text-xs"
+            >
+              <Zap className="h-3 w-3" />
+              <span className="hidden sm:inline">Quantum</span>
             </TabsTrigger>
             <TabsTrigger
               value="features"

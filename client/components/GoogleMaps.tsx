@@ -44,15 +44,15 @@ export default function GoogleMaps({
     const initMap = async () => {
       try {
         const loader = new Loader({
-          apiKey: process.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key",
+          apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key",
           version: "weekly",
           libraries: ["places", "geometry"],
         });
 
         // For demo purposes, create a mock map if no API key
         if (
-          !process.env.VITE_GOOGLE_MAPS_API_KEY ||
-          process.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key"
+          !import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
+          import.meta.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key"
         ) {
           createDemoMap();
           return;

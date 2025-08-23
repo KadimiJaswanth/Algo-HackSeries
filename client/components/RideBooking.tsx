@@ -41,7 +41,7 @@ import {
   FiClock as Timer,
   FiZap as Zap,
 } from "react-icons/fi";
-import { FaCar as Car } from "react-icons/fa";
+import { FaCar as Car, FaWallet as Wallet } from "react-icons/fa";
 import { useAccount } from "wagmi";
 import VehicleSelection from "./VehicleSelection";
 import GoogleMaps from "./GoogleMaps";

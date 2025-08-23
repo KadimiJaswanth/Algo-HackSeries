@@ -255,7 +255,7 @@ export default function DriverDashboard() {
       </Card>
 
       {/* Available Rides */}
-      {isOnline ? (
+      {isOnline && !activeRide ? (
         <Card>
           <CardHeader>
             <CardTitle>Available Rides</CardTitle>

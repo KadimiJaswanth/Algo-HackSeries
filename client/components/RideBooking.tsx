@@ -695,6 +695,28 @@ export default function RideBooking() {
             </Card>
           )}
 
+          {/* Quick Book Confirmation */}
+          {quickBookConfirmation && (
+            <Card className="border-green-500/50 bg-green-500/10 animate-fade-in-up">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-full bg-green-500/20">
+                    <CheckCircle className="h-6 w-6 text-green-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-green-400">Your ride is confirmed!</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {quickBookConfirmation.vehicleName} booked for {quickBookConfirmation.fare.toFixed(6)} TOKENS
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Driver will be assigned shortly...
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Safety & Sharing Options */}
           {bookingData.vehicleType && (
             <Card>

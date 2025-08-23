@@ -70,6 +70,76 @@ export default function Driver() {
     closeNotification,
   } = useDriverNotifications();
 
+  // Simulate ride requests when driver goes online
+  useEffect(() => {
+    if (!isOnline) return;
+
+    const simulateRideRequest = () => {
+      const mockRequests = [
+        {
+          id: `ride-${Date.now()}`,
+          riderId: "rider-123",
+          riderName: "Sarah Johnson",
+          pickupLocation: "Downtown Business District, Main St & 5th Ave",
+          dropoffLocation: "Airport Terminal 2, Departure Level",
+          estimatedFare: 0.0008,
+          distance: 12.5,
+          estimatedDuration: 25,
+          vehicleType: "economy",
+          timestamp: new Date(),
+          urgency: "normal" as const,
+        },
+        {
+          id: `ride-${Date.now() + 1}`,
+          riderId: "rider-456",
+          riderName: "Mike Chen",
+          pickupLocation: "Central Shopping Mall, Parking Lot B",
+          dropoffLocation: "University Campus, Student Center",
+          estimatedFare: 0.0003,
+          distance: 5.8,
+          estimatedDuration: 15,
+          vehicleType: "bike",
+          timestamp: new Date(),
+          urgency: "high" as const,
+        },
+        {
+          id: `ride-${Date.now() + 2}`,
+          riderId: "rider-789",
+          riderName: "Emily Rodriguez",
+          pickupLocation: "Hospital Emergency Entrance",
+          dropoffLocation: "Pharmacy & Medical Center, Oak Street",
+          estimatedFare: 0.0002,
+          distance: 3.2,
+          estimatedDuration: 8,
+          vehicleType: "auto",
+          timestamp: new Date(),
+          urgency: "urgent" as const,
+        },
+      ];
+
+      const randomRequest = mockRequests[Math.floor(Math.random() * mockRequests.length)];
+      addNotification({
+        ...randomRequest,
+        id: `ride-${Date.now()}-${Math.random()}`,
+      });
+    };
+
+    // Simulate first request after 3 seconds of going online
+    const initialTimeout = setTimeout(simulateRideRequest, 3000);
+
+    // Then simulate random requests every 30-60 seconds
+    const interval = setInterval(() => {
+      if (Math.random() > 0.3) { // 70% chance of getting a request
+        simulateRideRequest();
+      }
+    }, Math.random() * 30000 + 30000); // 30-60 seconds
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, [isOnline, addNotification]);
+
   // Mock data
   const todayEarnings = 127.50;
   const weeklyEarnings = 839.25;

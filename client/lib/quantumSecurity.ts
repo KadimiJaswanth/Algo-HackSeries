@@ -229,14 +229,14 @@ export class QuantumSecurityManager {
     }
   }
 
-  // Falcon verification (using Dilithium fallback)
+  // Falcon verification (using ML-DSA fallback)
   private async verifyFalcon(quantumSig: QuantumSignature, publicKey: Uint8Array): Promise<boolean> {
     try {
-      // Use Dilithium verification as FALCON fallback
-      return Dilithium.verify(publicKey, quantumSig.message, quantumSig.signature);
-    } catch (error) {
-      // Final fallback to ML-DSA
+      // Use ML-DSA verification as FALCON fallback
       return ml_dsa65.verify(publicKey, quantumSig.message, quantumSig.signature);
+    } catch (error) {
+      console.error('Failed to verify FALCON signature:', error);
+      return false;
     }
   }
 

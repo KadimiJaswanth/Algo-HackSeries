@@ -32,9 +32,9 @@ export default function Rider() {
 
       <div className="container py-8">
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content - Ride Request Form */}
+          {/* Main Content - Enhanced Ride Booking */}
           <div className="lg:col-span-2">
-            <RideRequestForm />
+            <RideBooking />
           </div>
 
           {/* Sidebar */}
@@ -75,7 +75,7 @@ export default function Rider() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                     <div>
-                      <div className="font-medium">Downtown ��� Airport</div>
+                      <div className="font-medium">Downtown → Airport</div>
                       <div className="text-muted-foreground">2 hours ago</div>
                     </div>
                     <div className="text-right">

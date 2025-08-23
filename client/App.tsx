@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Rider from "./pages/Rider";
 import Driver from "./pages/Driver";
 import Security from "./pages/Security";
+import BookRideConfirmation from "./pages/BookRideConfirmation";
 import NotFound from "./pages/NotFound";
 
 const App = () => (

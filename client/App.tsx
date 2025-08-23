@@ -11,6 +11,7 @@ import Rider from "./pages/Rider";
 import Driver from "./pages/Driver";
 import Security from "./pages/Security";
 import BookRideConfirmation from "./pages/BookRideConfirmation";
+import DriverChat from "./pages/DriverChat";
 import NotFound from "./pages/NotFound";
 
 const App = () => (

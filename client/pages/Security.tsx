@@ -30,13 +30,35 @@ export default function Security() {
   const fetchCSRFToken = async () => {
     try {
       const response = await fetch('/api/csrf-token', {
+        method: 'GET',
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Check if response has content and is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Response is not JSON');
+      }
+
       const data = await response.json();
-      setCsrfToken(data.csrfToken);
+
+      if (data && data.csrfToken) {
+        setCsrfToken(data.csrfToken);
+      } else {
+        throw new Error('Invalid CSRF token response');
+      }
     } catch (error) {
       console.error('Failed to fetch CSRF token:', error);
-      reportSecurityEvent('csrf_token_fetch_failed', 'medium', { error: error.message });
+      reportSecurityEvent('csrf_token_fetch_failed', 'medium', {
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   };
 

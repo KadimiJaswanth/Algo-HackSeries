@@ -159,12 +159,12 @@ export default function BookRideConfirmation() {
   };
 
   const generatePhoneNumber = () => {
-    return "6307884689";
+    return "6301214658";
   };
 
   const handleCall = () => {
     if (driverInfo) {
-      alert(`Driver Number: ${driverInfo.phone}`);
+      alert(`Driver Number: 6301214658`);
     }
   };
 

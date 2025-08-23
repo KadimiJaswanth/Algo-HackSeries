@@ -444,7 +444,7 @@ export default function RideBooking() {
                         ...prev,
                         dropoff: prev.dropoff
                           ? { ...prev.dropoff, address: e.target.value }
-                          : null,
+                          : { lat: 0, lng: 0, address: e.target.value },
                       }))
                     }
                   />

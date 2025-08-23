@@ -230,6 +230,11 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // SMS notification routes
+  app.post("/api/sms/send-notification", sendDriverNotification);
+  app.post("/api/sms/webhook", handleSmsWebhook);
+  app.get("/api/sms/ride-status/:rideId", getRideStatus);
+
   // Stricter rate limiting for sensitive endpoints
   app.use('/api/auth', rateLimit(securityConfig.authLimit.windowMs, securityConfig.authLimit.max));
   app.use('/api/transaction', rateLimit(securityConfig.strictLimit.windowMs, securityConfig.strictLimit.max));

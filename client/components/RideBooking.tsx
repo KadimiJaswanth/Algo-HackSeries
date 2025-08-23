@@ -688,6 +688,7 @@ export default function RideBooking() {
                   )}
                   selectedVehicle={bookingData.vehicleType}
                   onVehicleSelect={handleVehicleSelect}
+                  onBookRide={handleQuickBookRide}
                   surgeMultiplier={surgeMultiplier}
                 />
               </CardContent>

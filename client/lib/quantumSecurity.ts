@@ -332,13 +332,18 @@ export class QuantumSecurityManager {
 
   // Quantum-resistant symmetric key derivation
   private async deriveSymmetricKey(sharedSecret: Uint8Array, sessionId: string): Promise<Uint8Array> {
-    // Use SHAKE256 for quantum-resistant key derivation
-    const context = new TextEncoder().encode(`quantum-session-${sessionId}`);
-    const input = new Uint8Array(sharedSecret.length + context.length);
-    input.set(sharedSecret);
-    input.set(context, sharedSecret.length);
-    
-    return shake256(input, { dkLen: 32 }); // 256-bit key
+    try {
+      // Use SHAKE256 for quantum-resistant key derivation
+      const context = new TextEncoder().encode(`quantum-session-${sessionId}`);
+      const input = new Uint8Array(sharedSecret.length + context.length);
+      input.set(sharedSecret);
+      input.set(context, sharedSecret.length);
+
+      return shake256(input, { dkLen: 32 }); // 256-bit key
+    } catch (error) {
+      console.error('SHAKE256 key derivation failed:', error);
+      throw new Error(`Quantum key derivation failed: ${error.message}`);
+    }
   }
 
   // Utility methods

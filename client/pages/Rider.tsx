@@ -134,6 +134,7 @@ export default function Rider() {
                   basePrice={currentFare}
                   onFareAgreed={(price) => console.log(`Fare agreed: $${price}`)}
                 />
+                <SplitFare totalFare={currentFare} rideId={activeRideId} />
               </div>
             </div>
           </TabsContent>

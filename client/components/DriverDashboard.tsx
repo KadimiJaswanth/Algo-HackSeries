@@ -138,7 +138,7 @@ export default function DriverDashboard() {
   const [demoMode, setDemoMode] = useState(false);
 
   const handleAcceptRide = async (rideId: string) => {
-    if (!isConnected) {
+    if (!isConnected && !demoMode) {
       alert("Please connect your wallet first");
       return;
     }
@@ -206,30 +206,28 @@ export default function DriverDashboard() {
     }
   };
 
-  if (!isConnected) {
+  const enableDemoMode = () => {
+    setDemoMode(true);
+    setIsOnline(true);
+  };
+
+  if (!isConnected && !demoMode) {
     return (
       <Card>
         <CardHeader className="text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <CardTitle>Wallet Required</CardTitle>
+          <CardTitle>Connect Wallet or Try Demo</CardTitle>
           <CardDescription>
-            Please connect your Web3 wallet to start driving
+            Connect your Web3 wallet to start driving or try our demo mode
           </CardDescription>
         </CardHeader>
-        <CardContent className="text-center">
-          <Button
-            variant="outline"
-            onClick={() => {
-              // Demo mode - simulate wallet connection and going online
-              setIsOnline(true);
-              alert(
-                "Demo mode activated! You're now online and can accept rides.",
-              );
-            }}
-            className="mt-4"
-          >
-            Try Demo Mode
+        <CardContent className="text-center space-y-4">
+          <Button onClick={enableDemoMode}>
+            🚀 Try Demo Mode
           </Button>
+          <p className="text-sm text-muted-foreground">
+            Experience driver features without wallet connection
+          </p>
         </CardContent>
       </Card>
     );

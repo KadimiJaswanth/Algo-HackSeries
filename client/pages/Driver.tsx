@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import WalletConnect from "@/components/WalletConnect";
 import DriverDashboard from "@/components/DriverDashboard";
+import DriverNotification, { useDriverNotifications } from "@/components/DriverNotification";
 
 export default function Driver() {
   const [activeTab, setActiveTab] = useState("dashboard");

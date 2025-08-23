@@ -9,10 +9,36 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Car, History, Star, MapPin, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Car,
+  History,
+  Star,
+  MapPin,
+  User,
+  Gift,
+  Users,
+  Brain,
+  Volume2,
+  Calendar,
+  Crown,
+  Shield,
+  AlertTriangle,
+  Navigation
+} from "lucide-react";
 import WalletConnect from "@/components/WalletConnect";
 import RideBooking from "@/components/RideBooking";
 import RideHistory from "@/components/RideHistory";
+import RewardsSystem from "@/components/RewardsSystem";
+import PoolRides from "@/components/PoolRides";
+import AIFareNegotiation from "@/components/AIFareNegotiation";
+import VoiceToRide from "@/components/VoiceToRide";
+import ScheduledRides from "@/components/ScheduledRides";
+import SubscriptionRides from "@/components/SubscriptionRides";
+import SOSButton from "@/components/SOSButton";
+import LiveTracking from "@/components/LiveTracking";
+import SplitFare from "@/components/SplitFare";
+import OnChainReview from "@/components/OnChainReview";
 
 export default function Rider() {
   const [activeTab, setActiveTab] = useState("book");

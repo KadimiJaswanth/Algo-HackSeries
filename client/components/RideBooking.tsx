@@ -656,13 +656,14 @@ export default function RideBooking() {
             <Card>
               <CardHeader>
                 <CardTitle>Choose Your Ride</CardTitle>
+                {surgeMultiplier > 1.2 && (
+                  <Badge variant="destructive" className="mb-2">
+                    <Zap className="mr-1 h-3 w-3" />
+                    High demand in your area
+                  </Badge>
+                )}
                 <CardDescription>
-                  {surgeMultiplier > 1.2 && (
-                    <Badge variant="destructive" className="mb-2">
-                      <Zap className="mr-1 h-3 w-3" />
-                      High demand in your area
-                    </Badge>
-                  )}
+                  Select your preferred vehicle type for this trip
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -15,10 +15,12 @@ const securityConfig = {
   corsOptions: {
     origin: process.env.NODE_ENV === 'development' ? true : [
       'https://yourdomain.com', // Add your production domains
+      'https://metamask.io',
+      'https://*.metamask.io',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With'],
   },
 
   // Session configuration

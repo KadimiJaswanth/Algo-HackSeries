@@ -1,12 +1,35 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { FiArrowLeft as ArrowLeft, FiShield as Shield, FiLock as Lock, FiKey as Key, FiEye as Eye, FiAlertTriangle as AlertTriangle, FiCheckCircle as CheckCircle, FiDatabase as Database, FiUsers as Users, FiBarChart2 as BarChart3, FiActivity, FiSettings, FiZap, FiServer, FiGlobe, FiFileText } from "react-icons/fi";
+import {
+  FiArrowLeft as ArrowLeft,
+  FiShield as Shield,
+  FiLock as Lock,
+  FiKey as Key,
+  FiEye as Eye,
+  FiAlertTriangle as AlertTriangle,
+  FiCheckCircle as CheckCircle,
+  FiDatabase as Database,
+  FiUsers as Users,
+  FiBarChart2 as BarChart3,
+  FiActivity,
+  FiSettings,
+  FiZap,
+  FiServer,
+  FiGlobe,
+  FiFileText,
+} from "react-icons/fi";
 import { FaBug } from "react-icons/fa";
 import WalletConnect from "@/components/WalletConnect";
 import SecurityDashboard from "@/components/SecurityDashboard";
@@ -32,7 +55,9 @@ export default function Security() {
 
     // Report security page access
     if (isMounted) {
-      reportSecurityEvent('security_page_accessed', 'low', { timestamp: Date.now() });
+      reportSecurityEvent("security_page_accessed", "low", {
+        timestamp: Date.now(),
+      });
     }
 
     return () => {
@@ -52,11 +77,11 @@ export default function Security() {
     const timeoutId = setTimeout(() => abortController.abort(), 10000); // 10 second timeout
 
     try {
-      const response = await fetch('/api/csrf-token', {
-        method: 'GET',
-        credentials: 'include',
+      const response = await fetch("/api/csrf-token", {
+        method: "GET",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         signal: abortController.signal,
       });
@@ -68,9 +93,9 @@ export default function Security() {
       }
 
       // Check if response has content and is JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Response is not JSON');
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Response is not JSON");
       }
 
       // Clone the response to avoid "body stream already read" error
@@ -87,44 +112,48 @@ export default function Security() {
       if (data && data.csrfToken) {
         setCsrfToken(data.csrfToken);
       } else {
-        throw new Error('Invalid CSRF token response');
+        throw new Error("Invalid CSRF token response");
       }
     } catch (error) {
       clearTimeout(timeoutId);
 
       // Don't log aborted requests as errors
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.log('CSRF token request was aborted');
+      if (error instanceof Error && error.name === "AbortError") {
+        console.log("CSRF token request was aborted");
         return;
       }
 
-      console.error('Failed to fetch CSRF token:', error);
-      reportSecurityEvent('csrf_token_fetch_failed', 'medium', {
-        error: error instanceof Error ? error.message : 'Unknown error'
+      console.error("Failed to fetch CSRF token:", error);
+      reportSecurityEvent("csrf_token_fetch_failed", "medium", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     } finally {
       setIsLoadingToken(false);
     }
   };
 
-  const testSecurityEndpoint = async (endpoint: string, method: string = 'GET', includeCSRF: boolean = false) => {
+  const testSecurityEndpoint = async (
+    endpoint: string,
+    method: string = "GET",
+    includeCSRF: boolean = false,
+  ) => {
     const abortController = new AbortController();
     const timeoutId = setTimeout(() => abortController.abort(), 5000); // 5 second timeout
 
     try {
       const headers: HeadersInit = {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       };
 
       if (includeCSRF && csrfToken) {
-        headers['X-CSRF-Token'] = csrfToken;
+        headers["X-CSRF-Token"] = csrfToken;
       }
 
       const response = await fetch(endpoint, {
         method,
         headers,
-        credentials: 'include',
-        body: method !== 'GET' ? JSON.stringify({ test: 'data' }) : undefined,
+        credentials: "include",
+        body: method !== "GET" ? JSON.stringify({ test: "data" }) : undefined,
         signal: abortController.signal,
       });
 
@@ -149,18 +178,18 @@ export default function Security() {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === "AbortError") {
         return {
           success: false,
           status: 0,
-          error: 'Request timeout',
+          error: "Request timeout",
         };
       }
 
       return {
         success: false,
         status: 0,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   };
@@ -169,52 +198,156 @@ export default function Security() {
     {
       category: "Web3 Security",
       features: [
-        { name: "Wallet Signature Validation", status: "active", description: "Validates all wallet signatures" },
-        { name: "Smart Contract Analysis", status: "active", description: "Analyzes contract security before interaction" },
-        { name: "Transaction Validation", status: "active", description: "Validates transaction parameters" },
-        { name: "RPC Security Check", status: "active", description: "Ensures secure RPC connections" },
-      ]
+        {
+          name: "Wallet Signature Validation",
+          status: "active",
+          description: "Validates all wallet signatures",
+        },
+        {
+          name: "Smart Contract Analysis",
+          status: "active",
+          description: "Analyzes contract security before interaction",
+        },
+        {
+          name: "Transaction Validation",
+          status: "active",
+          description: "Validates transaction parameters",
+        },
+        {
+          name: "RPC Security Check",
+          status: "active",
+          description: "Ensures secure RPC connections",
+        },
+      ],
     },
     {
       category: "API Security",
       features: [
-        { name: "Rate Limiting", status: "active", description: "Prevents API abuse and DDoS attacks" },
-        { name: "Input Sanitization", status: "active", description: "Cleans and validates all inputs" },
-        { name: "CSRF Protection", status: "active", description: "Prevents cross-site request forgery" },
-        { name: "Request Size Limiting", status: "active", description: "Limits request payload sizes" },
-      ]
+        {
+          name: "Rate Limiting",
+          status: "active",
+          description: "Prevents API abuse and DDoS attacks",
+        },
+        {
+          name: "Input Sanitization",
+          status: "active",
+          description: "Cleans and validates all inputs",
+        },
+        {
+          name: "CSRF Protection",
+          status: "active",
+          description: "Prevents cross-site request forgery",
+        },
+        {
+          name: "Request Size Limiting",
+          status: "active",
+          description: "Limits request payload sizes",
+        },
+      ],
     },
     {
       category: "Infrastructure Security",
       features: [
-        { name: "Security Headers", status: "active", description: "Comprehensive HTTP security headers" },
-        { name: "CORS Configuration", status: "active", description: "Secure cross-origin resource sharing" },
-        { name: "Session Management", status: "active", description: "Secure session handling" },
-        { name: "Error Handling", status: "active", description: "Secure error responses" },
-      ]
+        {
+          name: "Security Headers",
+          status: "active",
+          description: "Comprehensive HTTP security headers",
+        },
+        {
+          name: "CORS Configuration",
+          status: "active",
+          description: "Secure cross-origin resource sharing",
+        },
+        {
+          name: "Session Management",
+          status: "active",
+          description: "Secure session handling",
+        },
+        {
+          name: "Error Handling",
+          status: "active",
+          description: "Secure error responses",
+        },
+      ],
     },
     {
       category: "Monitoring & Audit",
       features: [
-        { name: "Security Audit Logging", status: "active", description: "Comprehensive security event logging" },
-        { name: "Threat Detection", status: "active", description: "Real-time threat identification" },
-        { name: "Performance Monitoring", status: "active", description: "Security performance tracking" },
-        { name: "Compliance Reporting", status: "active", description: "Security compliance reports" },
-      ]
-    }
+        {
+          name: "Security Audit Logging",
+          status: "active",
+          description: "Comprehensive security event logging",
+        },
+        {
+          name: "Threat Detection",
+          status: "active",
+          description: "Real-time threat identification",
+        },
+        {
+          name: "Performance Monitoring",
+          status: "active",
+          description: "Security performance tracking",
+        },
+        {
+          name: "Compliance Reporting",
+          status: "active",
+          description: "Security compliance reports",
+        },
+      ],
+    },
   ];
 
   const vulnerabilityProtections = [
-    { name: "SQL Injection", protection: "Input validation & parameterized queries", level: "High" },
-    { name: "XSS (Cross-Site Scripting)", protection: "Input sanitization & CSP headers", level: "High" },
-    { name: "CSRF (Cross-Site Request Forgery)", protection: "CSRF tokens & SameSite cookies", level: "High" },
-    { name: "DDoS/Rate Limiting", protection: "Advanced rate limiting algorithms", level: "High" },
-    { name: "Data Exposure", protection: "Encryption & access controls", level: "High" },
-    { name: "Session Hijacking", protection: "Secure session management", level: "High" },
-    { name: "Man-in-the-Middle", protection: "HTTPS/TLS & certificate pinning", level: "High" },
-    { name: "Replay Attacks", protection: "Nonces & timestamp validation", level: "Medium" },
-    { name: "Reentrancy", protection: "Smart contract security patterns", level: "High" },
-    { name: "Integer Overflow", protection: "SafeMath & Solidity 0.8+ protection", level: "High" },
+    {
+      name: "SQL Injection",
+      protection: "Input validation & parameterized queries",
+      level: "High",
+    },
+    {
+      name: "XSS (Cross-Site Scripting)",
+      protection: "Input sanitization & CSP headers",
+      level: "High",
+    },
+    {
+      name: "CSRF (Cross-Site Request Forgery)",
+      protection: "CSRF tokens & SameSite cookies",
+      level: "High",
+    },
+    {
+      name: "DDoS/Rate Limiting",
+      protection: "Advanced rate limiting algorithms",
+      level: "High",
+    },
+    {
+      name: "Data Exposure",
+      protection: "Encryption & access controls",
+      level: "High",
+    },
+    {
+      name: "Session Hijacking",
+      protection: "Secure session management",
+      level: "High",
+    },
+    {
+      name: "Man-in-the-Middle",
+      protection: "HTTPS/TLS & certificate pinning",
+      level: "High",
+    },
+    {
+      name: "Replay Attacks",
+      protection: "Nonces & timestamp validation",
+      level: "Medium",
+    },
+    {
+      name: "Reentrancy",
+      protection: "Smart contract security patterns",
+      level: "High",
+    },
+    {
+      name: "Integer Overflow",
+      protection: "SafeMath & Solidity 0.8+ protection",
+      level: "High",
+    },
   ];
 
   return (
@@ -244,7 +377,9 @@ export default function Security() {
                 <Shield className="h-5 w-5" />
               </div>
               <span className="text-xl font-bold text-gradient">RideChain</span>
-              <span className="text-sm text-muted-foreground">Security Center</span>
+              <span className="text-sm text-muted-foreground">
+                Security Center
+              </span>
             </div>
           </div>
           <WalletConnect />
@@ -258,15 +393,18 @@ export default function Security() {
             Enterprise-Grade Security
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            RideChain implements comprehensive cybersecurity measures to protect against all known vulnerabilities 
-            and ensure the highest level of security for our decentralized ride-sharing platform.
+            RideChain implements comprehensive cybersecurity measures to protect
+            against all known vulnerabilities and ensure the highest level of
+            security for our decentralized ride-sharing platform.
           </p>
-          
+
           {/* Security Score */}
           <div className="mt-8 max-w-md mx-auto">
             <Card className="glass">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-green-500 mb-2">{securityScore}</div>
+                <div className="text-4xl font-bold text-green-500 mb-2">
+                  {securityScore}
+                </div>
                 <div className="text-lg font-medium mb-2">Security Score</div>
                 <Progress value={securityScore} className="mb-2" />
                 <div className="text-sm text-muted-foreground">
@@ -328,7 +466,10 @@ export default function Security() {
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6 animate-fade-in-up">
+          <TabsContent
+            value="overview"
+            className="space-y-6 animate-fade-in-up"
+          >
             {/* Security Highlights */}
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="glass">
@@ -336,7 +477,9 @@ export default function Security() {
                   <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-green-500/20 flex items-center justify-center">
                     <CheckCircle className="h-6 w-6 text-green-500" />
                   </div>
-                  <h3 className="font-semibold mb-2">Zero Known Vulnerabilities</h3>
+                  <h3 className="font-semibold mb-2">
+                    Zero Known Vulnerabilities
+                  </h3>
                   <p className="text-sm text-muted-foreground">
                     Our platform is protected against all known security threats
                   </p>
@@ -379,7 +522,8 @@ export default function Security() {
                   Security Architecture
                 </CardTitle>
                 <CardDescription>
-                  Multi-layered security approach protecting every aspect of the platform
+                  Multi-layered security approach protecting every aspect of the
+                  platform
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -440,7 +584,8 @@ export default function Security() {
                   Post-Quantum Cryptography
                 </CardTitle>
                 <CardDescription>
-                  Advanced quantum-resistant security using NIST-standardized algorithms
+                  Advanced quantum-resistant security using NIST-standardized
+                  algorithms
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -449,31 +594,44 @@ export default function Security() {
                     <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white glow animate-float">
                       <Shield className="h-8 w-8" />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2 text-gradient">NIST Standards</h3>
+                    <h3 className="text-xl font-semibold mb-2 text-gradient">
+                      NIST Standards
+                    </h3>
                     <p className="text-muted-foreground">
-                      Implements ML-DSA (Dilithium), SLH-DSA (SPHINCS+), and ML-KEM (Kyber) algorithms
+                      Implements ML-DSA (Dilithium), SLH-DSA (SPHINCS+), and
+                      ML-KEM (Kyber) algorithms
                     </p>
                   </div>
 
                   <div className="text-center glass glass-hover p-6 rounded-xl">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent to-warning text-white glow animate-float" style={{ animationDelay: '1s' }}>
+                    <div
+                      className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent to-warning text-white glow animate-float"
+                      style={{ animationDelay: "1s" }}
+                    >
                       <Key className="h-8 w-8" />
                     </div>
                     <h3 className="text-xl font-semibold mb-2 text-gradient">
                       Quantum Wallets
                     </h3>
                     <p className="text-muted-foreground">
-                      Generate and manage quantum-resistant key pairs for secure transactions
+                      Generate and manage quantum-resistant key pairs for secure
+                      transactions
                     </p>
                   </div>
 
                   <div className="text-center glass glass-hover p-6 rounded-xl">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-warning to-primary text-white glow animate-float" style={{ animationDelay: '2s' }}>
+                    <div
+                      className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-warning to-primary text-white glow animate-float"
+                      style={{ animationDelay: "2s" }}
+                    >
                       <Lock className="h-8 w-8" />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2 text-gradient">Future-Proof</h3>
+                    <h3 className="text-xl font-semibold mb-2 text-gradient">
+                      Future-Proof
+                    </h3>
                     <p className="text-muted-foreground">
-                      Protection against both classical and quantum computer attacks
+                      Protection against both classical and quantum computer
+                      attacks
                     </p>
                   </div>
                 </div>
@@ -483,32 +641,48 @@ export default function Security() {
             {/* Quantum Wallet Component */}
             <QuantumWallet
               onWalletCreated={(keyId) => {
-                console.log('Quantum wallet created:', keyId);
+                console.log("Quantum wallet created:", keyId);
               }}
               onSignature={(signature) => {
-                console.log('Quantum signature generated:', signature);
+                console.log("Quantum signature generated:", signature);
               }}
             />
           </TabsContent>
 
           {/* Features Tab */}
-          <TabsContent value="features" className="space-y-6 animate-fade-in-up">
+          <TabsContent
+            value="features"
+            className="space-y-6 animate-fade-in-up"
+          >
             {securityFeatures.map((category, categoryIndex) => (
               <Card key={categoryIndex} className="glass">
                 <CardHeader>
-                  <CardTitle className="text-gradient">{category.category}</CardTitle>
+                  <CardTitle className="text-gradient">
+                    {category.category}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-4">
                     {category.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="p-4 rounded-lg border glass-hover">
+                      <div
+                        key={featureIndex}
+                        className="p-4 rounded-lg border glass-hover"
+                      >
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-medium">{feature.name}</h4>
-                          <Badge variant={feature.status === 'active' ? 'default' : 'secondary'}>
+                          <Badge
+                            variant={
+                              feature.status === "active"
+                                ? "default"
+                                : "secondary"
+                            }
+                          >
                             {feature.status}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">{feature.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {feature.description}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -518,7 +692,10 @@ export default function Security() {
           </TabsContent>
 
           {/* Protection Tab */}
-          <TabsContent value="protection" className="space-y-6 animate-fade-in-up">
+          <TabsContent
+            value="protection"
+            className="space-y-6 animate-fade-in-up"
+          >
             <Card className="glass">
               <CardHeader>
                 <CardTitle className="flex items-center text-gradient">
@@ -526,18 +703,28 @@ export default function Security() {
                   Vulnerability Protection Matrix
                 </CardTitle>
                 <CardDescription>
-                  Comprehensive protection against known security vulnerabilities
+                  Comprehensive protection against known security
+                  vulnerabilities
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {vulnerabilityProtections.map((vuln, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 rounded-lg border">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 rounded-lg border"
+                    >
                       <div className="space-y-1">
                         <h4 className="font-medium">{vuln.name}</h4>
-                        <p className="text-sm text-muted-foreground">{vuln.protection}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {vuln.protection}
+                        </p>
                       </div>
-                      <Badge variant={vuln.level === 'High' ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={
+                          vuln.level === "High" ? "default" : "secondary"
+                        }
+                      >
                         {vuln.level} Protection
                       </Badge>
                     </div>
@@ -548,7 +735,10 @@ export default function Security() {
           </TabsContent>
 
           {/* Monitoring Tab */}
-          <TabsContent value="monitoring" className="space-y-6 animate-fade-in-up">
+          <TabsContent
+            value="monitoring"
+            className="space-y-6 animate-fade-in-up"
+          >
             <SecurityDashboard />
           </TabsContent>
 
@@ -570,16 +760,23 @@ export default function Security() {
                   <h4 className="font-medium mb-2">CSRF Token</h4>
                   <div className="flex items-center space-x-4">
                     <div className="text-sm text-muted-foreground">
-                      Current token: {csrfToken ? `${csrfToken.slice(0, 8)}...` : 'Not generated'}
+                      Current token:{" "}
+                      {csrfToken
+                        ? `${csrfToken.slice(0, 8)}...`
+                        : "Not generated"}
                     </div>
-                    <Button size="sm" onClick={fetchCSRFToken} disabled={isLoadingToken}>
+                    <Button
+                      size="sm"
+                      onClick={fetchCSRFToken}
+                      disabled={isLoadingToken}
+                    >
                       {isLoadingToken ? (
                         <>
                           <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                           Loading...
                         </>
                       ) : (
-                        'Refresh Token'
+                        "Refresh Token"
                       )}
                     </Button>
                   </div>
@@ -591,7 +788,7 @@ export default function Security() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <Button
                       variant="outline"
-                      onClick={() => testSecurityEndpoint('/api/ping')}
+                      onClick={() => testSecurityEndpoint("/api/ping")}
                       className="justify-start"
                     >
                       <FiGlobe className="mr-2 h-4 w-4" />
@@ -599,7 +796,7 @@ export default function Security() {
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => testSecurityEndpoint('/api/health')}
+                      onClick={() => testSecurityEndpoint("/api/health")}
                       className="justify-start"
                     >
                       <FiActivity className="mr-2 h-4 w-4" />
@@ -607,7 +804,13 @@ export default function Security() {
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => testSecurityEndpoint('/api/transaction/submit', 'POST', true)}
+                      onClick={() =>
+                        testSecurityEndpoint(
+                          "/api/transaction/submit",
+                          "POST",
+                          true,
+                        )
+                      }
                       className="justify-start"
                     >
                       <Lock className="mr-2 h-4 w-4" />
@@ -615,7 +818,7 @@ export default function Security() {
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => testSecurityEndpoint('/api/security/test')}
+                      onClick={() => testSecurityEndpoint("/api/security/test")}
                       className="justify-start"
                     >
                       <FiFileText className="mr-2 h-4 w-4" />
@@ -628,8 +831,9 @@ export default function Security() {
                 <Alert>
                   <CheckCircle className="h-4 w-4" />
                   <AlertDescription>
-                    All security features are operational and continuously monitored. 
-                    Regular security audits ensure the platform remains protected against emerging threats.
+                    All security features are operational and continuously
+                    monitored. Regular security audits ensure the platform
+                    remains protected against emerging threats.
                   </AlertDescription>
                 </Alert>
               </CardContent>

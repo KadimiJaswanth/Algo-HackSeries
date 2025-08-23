@@ -5,21 +5,26 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Shield, 
-  Key, 
-  Lock, 
-  Zap, 
-  CheckCircle, 
-  AlertTriangle, 
-  Copy, 
+import {
+  Shield,
+  Key,
+  Lock,
+  Zap,
+  CheckCircle,
+  AlertTriangle,
+  Copy,
   Download,
   Upload,
   RefreshCw,
   Eye,
-  EyeOff
+  EyeOff,
 } from "lucide-react";
-import { useQuantumSecurity, PQCAlgorithm, QuantumSecurityLevel, QuantumKeyPair } from "@/lib/quantumSecurity";
+import {
+  useQuantumSecurity,
+  PQCAlgorithm,
+  QuantumSecurityLevel,
+  QuantumKeyPair,
+} from "@/lib/quantumSecurity";
 import { SecurityAudit } from "@/lib/security";
 
 interface QuantumWalletProps {
@@ -27,7 +32,10 @@ interface QuantumWalletProps {
   onSignature?: (signature: any) => void;
 }
 
-export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumWalletProps) {
+export default function QuantumWallet({
+  onWalletCreated,
+  onSignature,
+}: QuantumWalletProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [wallets, setWallets] = useState<QuantumKeyPair[]>([]);
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
@@ -44,7 +52,7 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
     getMetrics,
     getKeyPair,
     algorithms,
-    securityLevels
+    securityLevels,
   } = useQuantumSecurity();
 
   useEffect(() => {
@@ -54,20 +62,20 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
 
   const loadWallets = () => {
     // In a real implementation, this would load from secure storage
-    const storedWallets = localStorage.getItem('quantum-wallets');
+    const storedWallets = localStorage.getItem("quantum-wallets");
     if (storedWallets) {
       try {
         const parsed = JSON.parse(storedWallets);
         setWallets(parsed);
       } catch (error) {
-        console.error('Failed to load wallets:', error);
+        console.error("Failed to load wallets:", error);
       }
     }
   };
 
   const saveWallets = (walletsToSave: QuantumKeyPair[]) => {
     // In a real implementation, this would use secure storage
-    localStorage.setItem('quantum-wallets', JSON.stringify(walletsToSave));
+    localStorage.setItem("quantum-wallets", JSON.stringify(walletsToSave));
     setWallets(walletsToSave);
   };
 
@@ -76,31 +84,34 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
       const currentMetrics = getMetrics();
       setMetrics(currentMetrics);
     } catch (error) {
-      console.error('Failed to update metrics:', error);
+      console.error("Failed to update metrics:", error);
     }
   };
 
   const createQuantumWallet = async (algorithm: PQCAlgorithm) => {
     setIsCreating(true);
     try {
-      const keyPair = await generateKeyPair(algorithm, QuantumSecurityLevel.LEVEL_3);
-      
+      const keyPair = await generateKeyPair(
+        algorithm,
+        QuantumSecurityLevel.LEVEL_3,
+      );
+
       const updatedWallets = [...wallets, keyPair];
       saveWallets(updatedWallets);
       setSelectedWallet(keyPair.keyId);
-      
-      SecurityAudit.log('quantum_wallet_created', 'low', { 
+
+      SecurityAudit.log("quantum_wallet_created", "low", {
         algorithm,
-        keyId: keyPair.keyId 
+        keyId: keyPair.keyId,
       });
-      
+
       onWalletCreated?.(keyPair.keyId);
       await updateMetrics();
     } catch (error) {
-      console.error('Failed to create quantum wallet:', error);
-      SecurityAudit.log('quantum_wallet_creation_failed', 'medium', { 
-        algorithm, 
-        error: error.message 
+      console.error("Failed to create quantum wallet:", error);
+      SecurityAudit.log("quantum_wallet_creation_failed", "medium", {
+        algorithm,
+        error: error.message,
       });
     } finally {
       setIsCreating(false);
@@ -109,24 +120,24 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
 
   const signWithQuantumWallet = async () => {
     if (!selectedWallet || !signMessage.trim()) return;
-    
+
     setIsSigning(true);
     try {
       const message = new TextEncoder().encode(signMessage);
       const signature = await sign(message, selectedWallet);
-      
-      SecurityAudit.log('quantum_signature_created', 'low', { 
+
+      SecurityAudit.log("quantum_signature_created", "low", {
         keyId: selectedWallet,
-        algorithm: signature.algorithm 
+        algorithm: signature.algorithm,
       });
-      
+
       onSignature?.(signature);
       setSignMessage("");
     } catch (error) {
-      console.error('Failed to sign message:', error);
-      SecurityAudit.log('quantum_signing_failed', 'medium', { 
-        keyId: selectedWallet, 
-        error: error.message 
+      console.error("Failed to sign message:", error);
+      SecurityAudit.log("quantum_signing_failed", "medium", {
+        keyId: selectedWallet,
+        error: error.message,
       });
     } finally {
       setIsSigning(false);
@@ -146,13 +157,13 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
       // Note: In production, never export private keys
       // This is for demonstration only
     };
-    
+
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-      type: 'application/json',
+      type: "application/json",
     });
-    
+
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `quantum-wallet-${wallet.keyId}.json`;
     document.body.appendChild(a);
@@ -168,48 +179,52 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
         type: "Lattice-based Digital Signature",
         security: "NIST Level 3",
         description: "NIST standard post-quantum digital signature algorithm",
-        color: "bg-blue-500"
+        color: "bg-blue-500",
       },
       [PQCAlgorithm.SLH_DSA_SHAKE_128S]: {
         name: "SPHINCS+ (SLH-DSA-SHAKE-128s)",
         type: "Hash-based Digital Signature",
         security: "NIST Level 1",
         description: "NIST standard stateless hash-based signature scheme",
-        color: "bg-green-500"
+        color: "bg-green-500",
       },
       [PQCAlgorithm.FALCON_512]: {
         name: "Falcon-512",
         type: "Lattice-based Digital Signature",
         security: "NIST Level 1",
         description: "Compact lattice-based signature with fast verification",
-        color: "bg-purple-500"
+        color: "bg-purple-500",
       },
       [PQCAlgorithm.FALCON_1024]: {
         name: "Falcon-1024",
         type: "Lattice-based Digital Signature",
         security: "NIST Level 5",
         description: "High-security lattice-based signature scheme",
-        color: "bg-red-500"
+        color: "bg-red-500",
       },
       [PQCAlgorithm.ML_KEM_768]: {
         name: "Kyber (ML-KEM-768)",
         type: "Key Encapsulation Mechanism",
         security: "NIST Level 3",
         description: "NIST standard post-quantum key exchange",
-        color: "bg-yellow-500"
+        color: "bg-yellow-500",
       },
     };
-    
-    return info[algorithm] || {
-      name: algorithm,
-      type: "Unknown",
-      security: "Unknown",
-      description: "Unknown algorithm",
-      color: "bg-gray-500"
-    };
+
+    return (
+      info[algorithm] || {
+        name: algorithm,
+        type: "Unknown",
+        security: "Unknown",
+        description: "Unknown algorithm",
+        color: "bg-gray-500",
+      }
+    );
   };
 
-  const selectedWalletData = selectedWallet ? wallets.find(w => w.keyId === selectedWallet) : null;
+  const selectedWalletData = selectedWallet
+    ? wallets.find((w) => w.keyId === selectedWallet)
+    : null;
 
   return (
     <div className="space-y-6">
@@ -217,13 +232,17 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Shield className="h-6 w-6 text-primary" />
-          <h2 className="text-2xl font-bold text-gradient">Quantum-Resistant Wallet</h2>
+          <h2 className="text-2xl font-bold text-gradient">
+            Quantum-Resistant Wallet
+          </h2>
           <Badge variant="secondary" className="glass">
             Post-Quantum Cryptography
           </Badge>
         </div>
         <div className="flex items-center space-x-2">
-          <Badge variant={metrics?.quantumResistant ? "default" : "destructive"}>
+          <Badge
+            variant={metrics?.quantumResistant ? "default" : "destructive"}
+          >
             {metrics?.quantumResistant ? "Quantum-Safe" : "Quantum-Vulnerable"}
           </Badge>
           <Button variant="outline" size="sm" onClick={updateMetrics}>
@@ -236,8 +255,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
       <Alert className="border-amber-500 bg-amber-500/10">
         <AlertTriangle className="h-4 w-4 text-amber-500" />
         <AlertDescription>
-          <strong>Quantum Threat Protection:</strong> This wallet uses NIST-standardized post-quantum 
-          cryptographic algorithms (Dilithium, SPHINCS+, Kyber) to protect against future quantum computer attacks.
+          <strong>Quantum Threat Protection:</strong> This wallet uses
+          NIST-standardized post-quantum cryptographic algorithms (Dilithium,
+          SPHINCS+, Kyber) to protect against future quantum computer attacks.
         </AlertDescription>
       </Alert>
 
@@ -257,7 +277,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                 <div className="text-3xl font-bold text-primary mb-2">
                   {metrics?.activeKeys || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">Active Quantum Keys</div>
+                <div className="text-sm text-muted-foreground">
+                  Active Quantum Keys
+                </div>
               </CardContent>
             </Card>
 
@@ -266,7 +288,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                 <div className="text-3xl font-bold text-accent mb-2">
                   {metrics?.supportedAlgorithms?.length || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">PQC Algorithms</div>
+                <div className="text-sm text-muted-foreground">
+                  PQC Algorithms
+                </div>
               </CardContent>
             </Card>
 
@@ -275,7 +299,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                 <div className="text-3xl font-bold text-green-500 mb-2">
                   100%
                 </div>
-                <div className="text-sm text-muted-foreground">Quantum Resistant</div>
+                <div className="text-sm text-muted-foreground">
+                  Quantum Resistant
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -293,16 +319,25 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                 {Object.values(PQCAlgorithm).map((algorithm) => {
                   const info = getAlgorithmInfo(algorithm);
                   return (
-                    <div key={algorithm} className="p-4 rounded-lg border glass-hover">
+                    <div
+                      key={algorithm}
+                      className="p-4 rounded-lg border glass-hover"
+                    >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
-                          <div className={`w-3 h-3 rounded ${info.color}`}></div>
+                          <div
+                            className={`w-3 h-3 rounded ${info.color}`}
+                          ></div>
                           <span className="font-medium">{info.name}</span>
                         </div>
                         <Badge variant="outline">{info.security}</Badge>
                       </div>
-                      <div className="text-sm text-muted-foreground mb-1">{info.type}</div>
-                      <div className="text-xs text-muted-foreground">{info.description}</div>
+                      <div className="text-sm text-muted-foreground mb-1">
+                        {info.type}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {info.description}
+                      </div>
                     </div>
                   );
                 })}
@@ -317,7 +352,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
             <Card className="glass">
               <CardContent className="p-12 text-center">
                 <Shield className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No Quantum Wallets</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  No Quantum Wallets
+                </h3>
                 <p className="text-muted-foreground mb-4">
                   Create your first quantum-resistant wallet to get started
                 </p>
@@ -332,12 +369,12 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
               {wallets.map((wallet) => {
                 const info = getAlgorithmInfo(wallet.algorithm);
                 const isSelected = selectedWallet === wallet.keyId;
-                
+
                 return (
-                  <Card 
-                    key={wallet.keyId} 
+                  <Card
+                    key={wallet.keyId}
                     className={`glass cursor-pointer transition-all ${
-                      isSelected ? 'ring-2 ring-primary' : ''
+                      isSelected ? "ring-2 ring-primary" : ""
                     }`}
                     onClick={() => setSelectedWallet(wallet.keyId)}
                   >
@@ -345,7 +382,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                       <div className="flex items-center justify-between">
                         <div className="space-y-2">
                           <div className="flex items-center space-x-2">
-                            <div className={`w-3 h-3 rounded ${info.color}`}></div>
+                            <div
+                              className={`w-3 h-3 rounded ${info.color}`}
+                            ></div>
                             <span className="font-medium">{info.name}</span>
                             <Badge variant="outline">{info.security}</Badge>
                             {isSelected && <Badge>Selected</Badge>}
@@ -354,7 +393,8 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                             Key ID: {wallet.keyId}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            Created: {new Date(wallet.createdAt).toLocaleDateString()}
+                            Created:{" "}
+                            {new Date(wallet.createdAt).toLocaleDateString()}
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -363,7 +403,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              copyToClipboard(Array.from(wallet.publicKey).join(','));
+                              copyToClipboard(
+                                Array.from(wallet.publicKey).join(","),
+                              );
                             }}
                           >
                             <Copy className="h-4 w-4" />
@@ -403,22 +445,28 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                   PQCAlgorithm.ML_DSA_65,
                   PQCAlgorithm.SLH_DSA_SHAKE_128S,
                   PQCAlgorithm.FALCON_512,
-                  PQCAlgorithm.FALCON_1024
+                  PQCAlgorithm.FALCON_1024,
                 ].map((algorithm) => {
                   const info = getAlgorithmInfo(algorithm);
-                  
+
                   return (
-                    <Card 
-                      key={algorithm} 
+                    <Card
+                      key={algorithm}
                       className="glass-hover cursor-pointer border-2 hover:border-primary/50"
-                      onClick={() => !isCreating && createQuantumWallet(algorithm)}
+                      onClick={() =>
+                        !isCreating && createQuantumWallet(algorithm)
+                      }
                     >
                       <CardContent className="p-6 text-center">
-                        <div className={`w-12 h-12 rounded-lg ${info.color} flex items-center justify-center mx-auto mb-4`}>
+                        <div
+                          className={`w-12 h-12 rounded-lg ${info.color} flex items-center justify-center mx-auto mb-4`}
+                        >
                           <Shield className="h-6 w-6 text-white" />
                         </div>
                         <h3 className="font-semibold mb-2">{info.name}</h3>
-                        <p className="text-sm text-muted-foreground mb-3">{info.description}</p>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {info.description}
+                        </p>
                         <Badge variant="outline">{info.security}</Badge>
                       </CardContent>
                     </Card>
@@ -429,7 +477,9 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
               {isCreating && (
                 <div className="text-center p-6">
                   <div className="animate-spin mx-auto h-8 w-8 rounded-full border-4 border-primary border-t-transparent mb-4"></div>
-                  <p className="text-muted-foreground">Generating quantum-resistant key pair...</p>
+                  <p className="text-muted-foreground">
+                    Generating quantum-resistant key pair...
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -450,7 +500,8 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                 <Alert>
                   <AlertTriangle className="h-4 w-4" />
                   <AlertDescription>
-                    Please select a wallet from the Wallets tab to sign messages.
+                    Please select a wallet from the Wallets tab to sign
+                    messages.
                   </AlertDescription>
                 </Alert>
               ) : (
@@ -462,13 +513,16 @@ export default function QuantumWallet({ onWalletCreated, onSignature }: QuantumW
                         <span className="font-medium">Selected Wallet</span>
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        {getAlgorithmInfo(selectedWalletData.algorithm).name} • {selectedWalletData.keyId}
+                        {getAlgorithmInfo(selectedWalletData.algorithm).name} •{" "}
+                        {selectedWalletData.keyId}
                       </div>
                     </div>
                   )}
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Message to Sign</label>
+                    <label className="text-sm font-medium">
+                      Message to Sign
+                    </label>
                     <textarea
                       value={signMessage}
                       onChange={(e) => setSignMessage(e.target.value)}

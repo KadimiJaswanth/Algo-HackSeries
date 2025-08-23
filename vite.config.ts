@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => ({
       "@noble/hashes/sha2",
       "@noble/hashes/sha3",
       "@noble/hashes/utils",
-      "@noble/curves"
+      "@noble/curves",
     ],
   },
   resolve: {

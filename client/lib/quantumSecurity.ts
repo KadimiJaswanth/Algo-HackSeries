@@ -27,21 +27,21 @@ export enum PQCAlgorithm {
   SLH_DSA_SHAKE_128S = "SLH-DSA-SHAKE-128s", // SPHINCS+ (NIST standard)
   FALCON_512 = "Falcon-512", // Alternative implementation
   FALCON_1024 = "Falcon-1024", // Alternative implementation
-  
+
   // Key Encapsulation Mechanisms
   ML_KEM_768 = "ML-KEM-768", // Kyber (NIST standard)
   ML_KEM_1024 = "ML-KEM-1024", // Kyber 1024
-  
+
   // Hash-based signatures (additional)
   XMSS = "XMSS",
-  LMS = "LMS"
+  LMS = "LMS",
 }
 
 // Quantum security levels (NIST categories)
 export enum QuantumSecurityLevel {
   LEVEL_1 = 1, // Equivalent to AES-128, SHA-256
-  LEVEL_3 = 3, // Equivalent to AES-192, SHA-384  
-  LEVEL_5 = 5  // Equivalent to AES-256, SHA-512
+  LEVEL_3 = 3, // Equivalent to AES-192, SHA-384
+  LEVEL_5 = 5, // Equivalent to AES-256, SHA-512
 }
 
 // Validation schemas
@@ -94,11 +94,11 @@ export class QuantumSecurityManager {
   // Generate quantum-resistant key pairs
   async generateKeyPair(
     algorithm: PQCAlgorithm,
-    securityLevel: QuantumSecurityLevel = QuantumSecurityLevel.LEVEL_3
+    securityLevel: QuantumSecurityLevel = QuantumSecurityLevel.LEVEL_3,
   ): Promise<QuantumKeyPair> {
     const keyId = this.generateKeyId();
     const createdAt = Date.now();
-    const expiresAt = createdAt + (365 * 24 * 60 * 60 * 1000); // 1 year
+    const expiresAt = createdAt + 365 * 24 * 60 * 60 * 1000; // 1 year
 
     let keyPair: { publicKey: Uint8Array; privateKey: Uint8Array };
 
@@ -144,12 +144,16 @@ export class QuantumSecurityManager {
 
       return quantumKeyPair;
     } catch (error) {
-      throw new Error(`Failed to generate ${algorithm} key pair: ${error.message}`);
+      throw new Error(
+        `Failed to generate ${algorithm} key pair: ${error.message}`,
+      );
     }
   }
 
   // FALCON key generation (using ML-DSA as a fallback for demonstration)
-  private async generateFalconKeyPair(algorithm: PQCAlgorithm): Promise<{ publicKey: Uint8Array; privateKey: Uint8Array }> {
+  private async generateFalconKeyPair(
+    algorithm: PQCAlgorithm,
+  ): Promise<{ publicKey: Uint8Array; privateKey: Uint8Array }> {
     // Note: This is a simplified implementation. In production, you would use
     // a proper FALCON implementation like pqcrypto-falcon or similar
 
@@ -157,7 +161,7 @@ export class QuantumSecurityManager {
       // Use ML-DSA as fallback for FALCON (both are lattice-based signatures)
       return ml_dsa65.keygen();
     } catch (error) {
-      console.error('Failed to generate FALCON key pair:', error);
+      console.error("Failed to generate FALCON key pair:", error);
       throw new Error(`FALCON key generation failed: ${error.message}`);
     }
   }
@@ -191,11 +195,17 @@ export class QuantumSecurityManager {
         case PQCAlgorithm.FALCON_512:
         case PQCAlgorithm.FALCON_1024:
           // Falcon signature (using Dilithium fallback)
-          signature = await this.signWithFalcon(message, keyPair.privateKey, keyPair.algorithm);
+          signature = await this.signWithFalcon(
+            message,
+            keyPair.privateKey,
+            keyPair.algorithm,
+          );
           break;
 
         default:
-          throw new Error(`Signing not supported for algorithm: ${keyPair.algorithm}`);
+          throw new Error(
+            `Signing not supported for algorithm: ${keyPair.algorithm}`,
+          );
       }
 
       return {
@@ -206,37 +216,56 @@ export class QuantumSecurityManager {
         message,
       };
     } catch (error) {
-      throw new Error(`Failed to sign with ${keyPair.algorithm}: ${error.message}`);
+      throw new Error(
+        `Failed to sign with ${keyPair.algorithm}: ${error.message}`,
+      );
     }
   }
 
   // Falcon signing (using ML-DSA fallback)
-  private async signWithFalcon(message: Uint8Array, privateKey: Uint8Array, algorithm: PQCAlgorithm): Promise<Uint8Array> {
+  private async signWithFalcon(
+    message: Uint8Array,
+    privateKey: Uint8Array,
+    algorithm: PQCAlgorithm,
+  ): Promise<Uint8Array> {
     try {
       // Use ML-DSA signing as FALCON fallback
       return ml_dsa65.sign(privateKey, message);
     } catch (error) {
-      console.error('Failed to sign with FALCON fallback:', error);
+      console.error("Failed to sign with FALCON fallback:", error);
       throw new Error(`FALCON signing failed: ${error.message}`);
     }
   }
 
   // Quantum-resistant signature verification
-  async verify(quantumSig: QuantumSignature, publicKey: Uint8Array): Promise<boolean> {
+  async verify(
+    quantumSig: QuantumSignature,
+    publicKey: Uint8Array,
+  ): Promise<boolean> {
     try {
       switch (quantumSig.algorithm) {
         case PQCAlgorithm.ML_DSA_65:
-          return ml_dsa65.verify(publicKey, quantumSig.message, quantumSig.signature);
+          return ml_dsa65.verify(
+            publicKey,
+            quantumSig.message,
+            quantumSig.signature,
+          );
 
         case PQCAlgorithm.SLH_DSA_SHAKE_128S:
-          return slh_dsa_shake_128s.verify(publicKey, quantumSig.message, quantumSig.signature);
+          return slh_dsa_shake_128s.verify(
+            publicKey,
+            quantumSig.message,
+            quantumSig.signature,
+          );
 
         case PQCAlgorithm.FALCON_512:
         case PQCAlgorithm.FALCON_1024:
           return await this.verifyFalcon(quantumSig, publicKey);
 
         default:
-          throw new Error(`Verification not supported for algorithm: ${quantumSig.algorithm}`);
+          throw new Error(
+            `Verification not supported for algorithm: ${quantumSig.algorithm}`,
+          );
       }
     } catch (error) {
       console.error(`Signature verification failed: ${error.message}`);
@@ -245,18 +274,28 @@ export class QuantumSecurityManager {
   }
 
   // Falcon verification (using ML-DSA fallback)
-  private async verifyFalcon(quantumSig: QuantumSignature, publicKey: Uint8Array): Promise<boolean> {
+  private async verifyFalcon(
+    quantumSig: QuantumSignature,
+    publicKey: Uint8Array,
+  ): Promise<boolean> {
     try {
       // Use ML-DSA verification as FALCON fallback
-      return ml_dsa65.verify(publicKey, quantumSig.message, quantumSig.signature);
+      return ml_dsa65.verify(
+        publicKey,
+        quantumSig.message,
+        quantumSig.signature,
+      );
     } catch (error) {
-      console.error('Failed to verify FALCON signature:', error);
+      console.error("Failed to verify FALCON signature:", error);
       return false;
     }
   }
 
   // Quantum-resistant key encapsulation (Kyber/ML-KEM)
-  async encapsulate(publicKey: Uint8Array, algorithm: PQCAlgorithm): Promise<{
+  async encapsulate(
+    publicKey: Uint8Array,
+    algorithm: PQCAlgorithm,
+  ): Promise<{
     ciphertext: Uint8Array;
     sharedSecret: Uint8Array;
   }> {
@@ -270,7 +309,9 @@ export class QuantumSecurityManager {
           };
 
         default:
-          throw new Error(`Key encapsulation not supported for algorithm: ${algorithm}`);
+          throw new Error(
+            `Key encapsulation not supported for algorithm: ${algorithm}`,
+          );
       }
     } catch (error) {
       throw new Error(`Key encapsulation failed: ${error.message}`);
@@ -281,7 +322,7 @@ export class QuantumSecurityManager {
   async decapsulate(
     privateKey: Uint8Array,
     ciphertext: Uint8Array,
-    algorithm: PQCAlgorithm
+    algorithm: PQCAlgorithm,
   ): Promise<Uint8Array> {
     try {
       switch (algorithm) {
@@ -289,7 +330,9 @@ export class QuantumSecurityManager {
           return ml_kem768.decapsulate(ciphertext, privateKey);
 
         default:
-          throw new Error(`Key decapsulation not supported for algorithm: ${algorithm}`);
+          throw new Error(
+            `Key decapsulation not supported for algorithm: ${algorithm}`,
+          );
       }
     } catch (error) {
       throw new Error(`Key decapsulation failed: ${error.message}`);
@@ -300,18 +343,24 @@ export class QuantumSecurityManager {
   async establishQuantumSession(
     peerPublicKey: Uint8Array,
     algorithm: PQCAlgorithm = PQCAlgorithm.ML_KEM_768,
-    securityLevel: QuantumSecurityLevel = QuantumSecurityLevel.LEVEL_3
+    securityLevel: QuantumSecurityLevel = QuantumSecurityLevel.LEVEL_3,
   ): Promise<QuantumSession> {
     const sessionId = this.generateSessionId();
     const createdAt = Date.now();
-    const expiresAt = createdAt + (24 * 60 * 60 * 1000); // 24 hours
+    const expiresAt = createdAt + 24 * 60 * 60 * 1000; // 24 hours
 
     try {
       // Perform key encapsulation
-      const { ciphertext, sharedSecret } = await this.encapsulate(peerPublicKey, algorithm);
-      
+      const { ciphertext, sharedSecret } = await this.encapsulate(
+        peerPublicKey,
+        algorithm,
+      );
+
       // Derive symmetric key from shared secret
-      const symmetricKey = await this.deriveSymmetricKey(sharedSecret, sessionId);
+      const symmetricKey = await this.deriveSymmetricKey(
+        sharedSecret,
+        sessionId,
+      );
 
       const session: QuantumSession = {
         sessionId,
@@ -331,7 +380,10 @@ export class QuantumSecurityManager {
   }
 
   // Quantum-resistant symmetric key derivation
-  private async deriveSymmetricKey(sharedSecret: Uint8Array, sessionId: string): Promise<Uint8Array> {
+  private async deriveSymmetricKey(
+    sharedSecret: Uint8Array,
+    sessionId: string,
+  ): Promise<Uint8Array> {
     try {
       // Use SHAKE256 for quantum-resistant key derivation
       const context = new TextEncoder().encode(`quantum-session-${sessionId}`);
@@ -341,7 +393,7 @@ export class QuantumSecurityManager {
 
       return shake256(input, { dkLen: 32 }); // 256-bit key
     } catch (error) {
-      console.error('SHAKE256 key derivation failed:', error);
+      console.error("SHAKE256 key derivation failed:", error);
       throw new Error(`Quantum key derivation failed: ${error.message}`);
     }
   }
@@ -349,12 +401,12 @@ export class QuantumSecurityManager {
   // Utility methods
   private generateKeyId(): string {
     const bytes = randomBytes(16);
-    return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
   }
 
   private generateSessionId(): string {
     const bytes = randomBytes(32);
-    return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
   }
 
   // Get quantum security metrics
@@ -367,11 +419,11 @@ export class QuantumSecurityManager {
   } {
     const now = Date.now();
     const activeKeys = Array.from(this.keyStore.values()).filter(
-      key => !key.expiresAt || key.expiresAt > now
+      (key) => !key.expiresAt || key.expiresAt > now,
     ).length;
-    
+
     const activeSessions = Array.from(this.sessionStore.values()).filter(
-      session => session.expiresAt > now
+      (session) => session.expiresAt > now,
     ).length;
 
     return {
@@ -408,14 +460,14 @@ export class QuantumSecurityManager {
   // Clean up expired keys and sessions
   cleanup(): void {
     const now = Date.now();
-    
+
     // Clean expired keys
     for (const [keyId, keyPair] of this.keyStore.entries()) {
       if (keyPair.expiresAt && keyPair.expiresAt <= now) {
         this.keyStore.delete(keyId);
       }
     }
-    
+
     // Clean expired sessions
     for (const [sessionId, session] of this.sessionStore.entries()) {
       if (session.expiresAt <= now) {
@@ -434,27 +486,40 @@ export class QuantumWeb3Security {
   }
 
   // Generate quantum-resistant wallet key pair
-  async generateQuantumWallet(algorithm: PQCAlgorithm = PQCAlgorithm.ML_DSA_65): Promise<QuantumKeyPair> {
-    return await this.quantumManager.generateKeyPair(algorithm, QuantumSecurityLevel.LEVEL_3);
+  async generateQuantumWallet(
+    algorithm: PQCAlgorithm = PQCAlgorithm.ML_DSA_65,
+  ): Promise<QuantumKeyPair> {
+    return await this.quantumManager.generateKeyPair(
+      algorithm,
+      QuantumSecurityLevel.LEVEL_3,
+    );
   }
 
   // Sign Web3 transaction with quantum resistance
-  async signTransaction(transaction: any, keyId: string): Promise<QuantumSignature> {
+  async signTransaction(
+    transaction: any,
+    keyId: string,
+  ): Promise<QuantumSignature> {
     const message = new TextEncoder().encode(JSON.stringify(transaction));
     return await this.quantumManager.sign(message, keyId);
   }
 
   // Verify quantum-resistant Web3 signature
-  async verifyTransaction(quantumSig: QuantumSignature, publicKey: Uint8Array): Promise<boolean> {
+  async verifyTransaction(
+    quantumSig: QuantumSignature,
+    publicKey: Uint8Array,
+  ): Promise<boolean> {
     return await this.quantumManager.verify(quantumSig, publicKey);
   }
 
   // Establish quantum-secure channel for Web3 communication
-  async establishSecureChannel(peerPublicKey: Uint8Array): Promise<QuantumSession> {
+  async establishSecureChannel(
+    peerPublicKey: Uint8Array,
+  ): Promise<QuantumSession> {
     return await this.quantumManager.establishQuantumSession(
       peerPublicKey,
       PQCAlgorithm.ML_KEM_768,
-      QuantumSecurityLevel.LEVEL_3
+      QuantumSecurityLevel.LEVEL_3,
     );
   }
 }
@@ -466,30 +531,35 @@ export function useQuantumSecurity() {
 
   return {
     // Key management
-    generateKeyPair: (algorithm: PQCAlgorithm, securityLevel?: QuantumSecurityLevel) =>
-      quantumManager.generateKeyPair(algorithm, securityLevel),
-    
+    generateKeyPair: (
+      algorithm: PQCAlgorithm,
+      securityLevel?: QuantumSecurityLevel,
+    ) => quantumManager.generateKeyPair(algorithm, securityLevel),
+
     // Signing and verification
-    sign: (message: Uint8Array, keyId: string) => quantumManager.sign(message, keyId),
-    verify: (signature: QuantumSignature, publicKey: Uint8Array) => 
+    sign: (message: Uint8Array, keyId: string) =>
+      quantumManager.sign(message, keyId),
+    verify: (signature: QuantumSignature, publicKey: Uint8Array) =>
       quantumManager.verify(signature, publicKey),
-    
+
     // Session management
     establishSession: (peerPublicKey: Uint8Array, algorithm?: PQCAlgorithm) =>
       quantumManager.establishQuantumSession(peerPublicKey, algorithm),
-    
+
     // Web3 integration
-    generateQuantumWallet: (algorithm?: PQCAlgorithm) => quantumWeb3.generateQuantumWallet(algorithm),
-    signTransaction: (transaction: any, keyId: string) => quantumWeb3.signTransaction(transaction, keyId),
+    generateQuantumWallet: (algorithm?: PQCAlgorithm) =>
+      quantumWeb3.generateQuantumWallet(algorithm),
+    signTransaction: (transaction: any, keyId: string) =>
+      quantumWeb3.signTransaction(transaction, keyId),
     verifyTransaction: (signature: QuantumSignature, publicKey: Uint8Array) =>
       quantumWeb3.verifyTransaction(signature, publicKey),
-    
+
     // Metrics and management
     getMetrics: () => quantumManager.getQuantumSecurityMetrics(),
     getKeyPair: (keyId: string) => quantumManager.getKeyPair(keyId),
     getSession: (sessionId: string) => quantumManager.getSession(sessionId),
     cleanup: () => quantumManager.cleanup(),
-    
+
     // Constants
     algorithms: PQCAlgorithm,
     securityLevels: QuantumSecurityLevel,

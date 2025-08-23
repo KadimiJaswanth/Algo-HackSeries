@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   FiClock as Clock,
   FiUsers as Users,
   FiZap as Zap,
   FiTruck as Truck,
+  FiCheckCircle as CheckCircle,
 } from "react-icons/fi";
 import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
 
@@ -29,9 +31,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideBike",
     icon: <Bike className="h-6 w-6" />,
     description: "Quick & affordable bike rides",
-    basePrice: 0.05,
-    pricePerKm: 0.012,
-    pricePerMin: 0.006,
+    basePrice: 0.0001,
+    pricePerKm: 0.00005,
+    pricePerMin: 0.00002,
     capacity: 1,
     eta: "2-5 min",
     features: ["Fastest arrival", "Best for short trips", "Affordable"],
@@ -42,9 +44,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideAuto",
     icon: <Truck className="h-6 w-6" />,
     description: "Comfortable auto-rickshaw",
-    basePrice: 0.08,
-    pricePerKm: 0.018,
-    pricePerMin: 0.008,
+    basePrice: 0.0002,
+    pricePerKm: 0.00008,
+    pricePerMin: 0.00003,
     capacity: 3,
     eta: "3-8 min",
     features: ["AC available", "Good for city rides", "Moderate pricing"],
@@ -55,9 +57,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideGo",
     icon: <Car className="h-6 w-6" />,
     description: "Affordable car rides",
-    basePrice: 0.12,
-    pricePerKm: 0.025,
-    pricePerMin: 0.01,
+    basePrice: 0.0003,
+    pricePerKm: 0.00012,
+    pricePerMin: 0.00005,
     capacity: 4,
     eta: "5-12 min",
     features: ["AC car", "Safe & reliable", "Budget-friendly"],
@@ -68,9 +70,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideComfort",
     icon: <Car className="h-6 w-6" />,
     description: "More spacious rides",
-    basePrice: 0.18,
-    pricePerKm: 0.035,
-    pricePerMin: 0.015,
+    basePrice: 0.0004,
+    pricePerKm: 0.00015,
+    pricePerMin: 0.00007,
     capacity: 4,
     eta: "6-15 min",
     features: ["Spacious cars", "Professional drivers", "Extra legroom"],
@@ -81,9 +83,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RidePremium",
     icon: <Car className="h-6 w-6" />,
     description: "Luxury car experience",
-    basePrice: 0.3,
-    pricePerKm: 0.06,
-    pricePerMin: 0.02,
+    basePrice: 0.0005,
+    pricePerKm: 0.0002,
+    pricePerMin: 0.0001,
     capacity: 4,
     eta: "8-20 min",
     features: ["Luxury cars", "Top-rated drivers", "Premium service"],
@@ -94,9 +96,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideXL",
     icon: <Truck className="h-6 w-6" />,
     description: "Large group rides",
-    basePrice: 0.25,
-    pricePerKm: 0.05,
-    pricePerMin: 0.018,
+    basePrice: 0.0004,
+    pricePerKm: 0.00018,
+    pricePerMin: 0.00008,
     capacity: 6,
     eta: "10-25 min",
     features: ["6+ seater", "Extra luggage space", "Group rides"],
@@ -110,6 +112,7 @@ interface VehicleSelectionProps {
   selectedVehicle: string;
   onVehicleSelect: (vehicleId: string, fareEstimate: number) => void;
   surgeMultiplier?: number;
+  onBookRide?: (vehicleId: string, vehicleName: string, fare: number) => void;
 }
 
 export default function VehicleSelection({
@@ -118,7 +121,9 @@ export default function VehicleSelection({
   selectedVehicle,
   onVehicleSelect,
   surgeMultiplier = 1,
+  onBookRide,
 }: VehicleSelectionProps) {
+  const [bookedVehicle, setBookedVehicle] = useState<string | null>(null);
   const calculateFare = (vehicle: VehicleType): number => {
     const baseFare = vehicle.basePrice;
     const distanceFare = distance * vehicle.pricePerKm;
@@ -197,15 +202,35 @@ export default function VehicleSelection({
                   </div>
                 </div>
 
-                <div className="text-right">
+                <div className="text-right space-y-2">
                   <div className="text-lg font-bold">
-                    {fare.toFixed(4)} AVAX
+                    {fare.toFixed(6)} TOKENS
                   </div>
-                  <div className="text-xs text-muted-foreground">Avalanche</div>
+                  <div className="text-xs text-muted-foreground">Blockchain</div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
-                      +{(fare - fare / surgeMultiplier).toFixed(4)} AVAX surge
+                      +{(fare - fare / surgeMultiplier).toFixed(6)} TOKENS surge
                     </div>
+                  )}
+
+                  {bookedVehicle === vehicle.id ? (
+                    <div className="flex items-center space-x-1 text-green-600 text-sm font-medium">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>Ride Confirmed!</span>
+                    </div>
+                  ) : (
+                    <Button
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setBookedVehicle(vehicle.id);
+                        onBookRide?.(vehicle.id, vehicle.name, fare);
+                        setTimeout(() => setBookedVehicle(null), 3000);
+                      }}
+                      className="w-full"
+                    >
+                      Book Ride
+                    </Button>
                   )}
                 </div>
               </div>
@@ -220,9 +245,9 @@ export default function VehicleSelection({
                     ))}
                   </div>
                   <div className="mt-2 text-xs text-muted-foreground">
-                    Base: {vehicle.basePrice.toFixed(4)} + Distance:
-                    {(distance * vehicle.pricePerKm).toFixed(4)} + Time:
-                    {(duration * vehicle.pricePerMin).toFixed(4)} AVAX
+                    Base: {vehicle.basePrice.toFixed(6)} + Distance:
+                    {(distance * vehicle.pricePerKm).toFixed(6)} + Time:
+                    {(duration * vehicle.pricePerMin).toFixed(6)} TOKENS
                   </div>
                 </div>
               )}

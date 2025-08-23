@@ -154,7 +154,7 @@ export class SecurityManager {
   }
 }
 
-// Web3 Security Utilities
+// Web3 Security Utilities (Enhanced with Quantum Resistance)
 export class Web3Security {
   static validateSignature(message: string, signature: string, expectedAddress: string): boolean {
     try {
@@ -165,6 +165,43 @@ export class Web3Security {
       console.error('Signature validation failed:', error);
       return false;
     }
+  }
+
+  // Quantum-resistant signature validation
+  static async validateQuantumSignature(
+    message: Uint8Array,
+    signature: Uint8Array,
+    publicKey: Uint8Array,
+    algorithm: string
+  ): Promise<boolean> {
+    try {
+      // This would integrate with our quantum security module
+      // Import is done dynamically to avoid circular dependencies
+      const { QuantumSecurityManager } = await import('./quantumSecurity');
+      const manager = QuantumSecurityManager.getInstance();
+
+      const quantumSig = {
+        signature,
+        algorithm: algorithm as any,
+        keyId: 'temp',
+        timestamp: Date.now(),
+        message,
+      };
+
+      return await manager.verify(quantumSig, publicKey);
+    } catch (error) {
+      console.error('Quantum signature validation failed:', error);
+      return false;
+    }
+  }
+
+  // Check if signature is quantum-resistant
+  static isQuantumResistant(algorithm: string): boolean {
+    const quantumAlgorithms = [
+      'ML-DSA-65', 'SLH-DSA-SHAKE-128s', 'Falcon-512', 'Falcon-1024',
+      'ML-KEM-768', 'ML-KEM-1024'
+    ];
+    return quantumAlgorithms.includes(algorithm);
   }
 
   static validateTransaction(transaction: any): boolean {

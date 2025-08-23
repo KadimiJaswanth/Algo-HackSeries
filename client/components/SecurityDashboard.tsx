@@ -310,7 +310,7 @@ export default function SecurityDashboard() {
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
           {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <Card className="glass">
               <CardContent className="p-6 text-center">
                 <div className={`text-3xl font-bold ${getScoreColor(securityMetrics.securityScore)}`}>
@@ -354,6 +354,20 @@ export default function SecurityDashboard() {
                 <div className={`w-2 h-2 rounded-full mx-auto mt-2 ${
                   isMonitoring ? 'bg-green-400 animate-pulse' : 'bg-gray-400'
                 }`}></div>
+              </CardContent>
+            </Card>
+
+            <Card className="glass">
+              <CardContent className="p-6 text-center">
+                <div className={`text-3xl font-bold ${
+                  securityMetrics.quantumMetrics?.quantumResistant ? 'text-green-500' : 'text-red-500'
+                }`}>
+                  {securityMetrics.quantumMetrics?.quantumResistant ? 'SAFE' : 'VULNERABLE'}
+                </div>
+                <div className="text-sm text-muted-foreground">Quantum Status</div>
+                <Badge variant={securityMetrics.quantumMetrics?.quantumResistant ? 'default' : 'destructive'} className="mt-2">
+                  {securityMetrics.quantumMetrics?.activeKeys || 0} Keys
+                </Badge>
               </CardContent>
             </Card>
           </div>

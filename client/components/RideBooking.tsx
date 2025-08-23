@@ -92,6 +92,7 @@ interface ActiveRide {
 
 export default function RideBooking() {
   const { address, isConnected } = useAccount();
+  const { sendNotification, pollStatus, formatDetails, getEstimatedResponseTime } = useSmsNotification();
   const [activeTab, setActiveTab] = useState("book");
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
@@ -104,6 +105,11 @@ export default function RideBooking() {
     vehicleName: string;
     fare: number;
   } | null>(null);
+  // SMS notification states
+  const [smsNotificationSent, setSmsNotificationSent] = useState(false);
+  const [currentRideId, setCurrentRideId] = useState<string | null>(null);
+  const [driverResponseStatus, setDriverResponseStatus] = useState<'pending' | 'accepted' | 'ignored' | null>(null);
+  const [smsNotificationDialog, setSmsNotificationDialog] = useState(false);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,

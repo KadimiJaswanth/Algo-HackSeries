@@ -18,20 +18,18 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import {
-  Calendar,
-  MapPin,
-  Clock,
-  DollarSign,
-  Star,
-  Download,
-  Search,
-  Filter,
-  Car,
-  Bike,
-  Truck,
-  User,
-  Phone,
-} from "lucide-react";
+  FiCalendar as Calendar,
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiDollarSign as DollarSign,
+  FiStar as Star,
+  FiDownload as Download,
+  FiSearch as Search,
+  FiFilter as Filter,
+  FiUser as User,
+  FiPhone as Phone,
+} from "react-icons/fi";
+import { FaCar as Car, FaBicycle as Bike, FaTruck as Truck } from "react-icons/fa";
 
 interface RideHistoryItem {
   id: string;

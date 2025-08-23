@@ -11,15 +11,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import {
-  MapPin,
-  Clock,
-  DollarSign,
-  User,
-  Phone,
-  MessageCircle,
-  Car,
-  Navigation,
-} from "lucide-react";
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiDollarSign as DollarSign,
+  FiUser as User,
+  FiPhone as Phone,
+  FiMessageCircle as MessageCircle,
+  FiNavigation as Navigation,
+} from "react-icons/fi";
+import { FaCar as Car } from "react-icons/fa";
 
 interface RideStatusProps {
   ride: {

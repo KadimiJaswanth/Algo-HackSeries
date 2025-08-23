@@ -15,25 +15,25 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  MapPin,
-  Clock,
-  DollarSign,
-  Car,
-  AlertCircle,
-  Plus,
-  X,
-  Calendar,
-  Users,
-  Shield,
-  Share2,
-  Phone,
-  Heart,
-  Star,
-  Navigation,
-  Route,
-  Timer,
-  Zap,
-} from "lucide-react";
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiDollarSign as DollarSign,
+  FiAlertCircle as AlertCircle,
+  FiPlus as Plus,
+  FiX as X,
+  FiCalendar as Calendar,
+  FiUsers as Users,
+  FiShield as Shield,
+  FiShare2 as Share2,
+  FiPhone as Phone,
+  FiHeart as Heart,
+  FiStar as Star,
+  FiNavigation as Navigation,
+  FiMap as Route,
+  FiClock as Timer,
+  FiZap as Zap,
+} from "react-icons/fi";
+import { FaCar as Car } from "react-icons/fa";
 import { useAccount } from "wagmi";
 import VehicleSelection from "./VehicleSelection";
 import GoogleMaps from "./GoogleMaps";

@@ -6,19 +6,19 @@ import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Brain,
-  DollarSign,
-  TrendingUp,
-  TrendingDown,
-  Clock,
-  Users,
-  Zap,
-  CheckCircle,
-  XCircle,
-  MessageSquare,
-  Target,
-  BarChart3,
-} from "lucide-react";
+  FiCpu as Brain,
+  FiDollarSign as DollarSign,
+  FiTrendingUp as TrendingUp,
+  FiTrendingDown as TrendingDown,
+  FiClock as Clock,
+  FiUsers as Users,
+  FiZap as Zap,
+  FiCheckCircle as CheckCircle,
+  FiXCircle as XCircle,
+  FiMessageSquare as MessageSquare,
+  FiTarget as Target,
+  FiBarChart2 as BarChart3,
+} from "react-icons/fi";
 
 interface NegotiationOffer {
   id: string;

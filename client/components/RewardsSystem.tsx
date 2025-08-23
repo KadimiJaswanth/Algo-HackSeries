@@ -4,16 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
-  Gift,
-  Star,
-  Trophy,
-  Coins,
-  Zap,
-  Target,
-  Crown,
-  Award,
-  TrendingUp,
-} from "lucide-react";
+  FiGift as Gift,
+  FiStar as Star,
+  FiTrendingUp as TrendingUp,
+  FiZap as Zap,
+  FiTarget as Target,
+} from "react-icons/fi";
+import { FaTrophy as Trophy, FaCoins as Coins, FaCrown as Crown, FaAward as Award } from "react-icons/fa";
 
 interface RewardTier {
   name: string;

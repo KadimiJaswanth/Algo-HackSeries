@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import {
-  Users,
-  MapPin,
-  Clock,
-  DollarSign,
-  Star,
-  Shield,
-  Leaf,
-  Route,
-  UserPlus,
-  Timer,
-} from "lucide-react";
+  FiUsers as Users,
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiDollarSign as DollarSign,
+  FiStar as Star,
+  FiShield as Shield,
+  FiUserPlus as UserPlus,
+  FiMap as Route,
+  FiClock as Timer,
+} from "react-icons/fi";
+import { FaLeaf as Leaf } from "react-icons/fa";
 
 interface PoolRide {
   id: string;

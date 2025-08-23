@@ -6,25 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import {
-  ArrowLeft,
-  Shield,
-  Lock,
-  Key,
-  Eye,
-  AlertTriangle,
-  CheckCircle,
-  Globe,
-  Server,
-  Database,
-  Zap,
-  Bug,
-  Users,
-  FileText,
-  Settings,
-  Activity,
-  BarChart3,
-} from "lucide-react";
+import { FiArrowLeft as ArrowLeft, FiShield as Shield, FiLock as Lock, FiKey as Key, FiEye as Eye, FiAlertTriangle as AlertTriangle, FiCheckCircle as CheckCircle, FiDatabase as Database, FiUsers as Users, FiBarChart2 as BarChart3, FiActivity, FiSettings, FiZap, FiServer, FiGlobe, FiFileText } from "react-icons/fi";
+import { FaBug } from "react-icons/fa";
 import WalletConnect from "@/components/WalletConnect";
 import SecurityDashboard from "@/components/SecurityDashboard";
 import Web3SecurityValidator from "@/components/Web3SecurityValidator";
@@ -226,21 +209,21 @@ export default function Security() {
               value="protection"
               className="flex items-center space-x-1 text-xs"
             >
-              <Bug className="h-3 w-3" />
+              <FaBug className="h-3 w-3" />
               <span className="hidden sm:inline">Protection</span>
             </TabsTrigger>
             <TabsTrigger
               value="monitoring"
               className="flex items-center space-x-1 text-xs"
             >
-              <Activity className="h-3 w-3" />
+              <FiActivity className="h-3 w-3" />
               <span className="hidden sm:inline">Monitoring</span>
             </TabsTrigger>
             <TabsTrigger
               value="testing"
               className="flex items-center space-x-1 text-xs"
             >
-              <Settings className="h-3 w-3" />
+              <FiSettings className="h-3 w-3" />
               <span className="hidden sm:inline">Testing</span>
             </TabsTrigger>
           </TabsList>
@@ -276,7 +259,7 @@ export default function Security() {
               <Card className="glass">
                 <CardContent className="p-6 text-center">
                   <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                    <Zap className="h-6 w-6 text-purple-500" />
+                    <FiZap className="h-6 w-6 text-purple-500" />
                   </div>
                   <h3 className="font-semibold mb-2">Instant Response</h3>
                   <p className="text-sm text-muted-foreground">
@@ -293,7 +276,7 @@ export default function Security() {
             <Card className="glass">
               <CardHeader>
                 <CardTitle className="flex items-center text-gradient">
-                  <Server className="mr-2 h-5 w-5" />
+                  <FiServer className="mr-2 h-5 w-5" />
                   Security Architecture
                 </CardTitle>
                 <CardDescription>
@@ -380,7 +363,7 @@ export default function Security() {
             <Card className="glass">
               <CardHeader>
                 <CardTitle className="flex items-center text-gradient">
-                  <Bug className="mr-2 h-5 w-5" />
+                  <FaBug className="mr-2 h-5 w-5" />
                   Vulnerability Protection Matrix
                 </CardTitle>
                 <CardDescription>
@@ -415,7 +398,7 @@ export default function Security() {
             <Card className="glass">
               <CardHeader>
                 <CardTitle className="flex items-center text-gradient">
-                  <Settings className="mr-2 h-5 w-5" />
+                  <FiSettings className="mr-2 h-5 w-5" />
                   Security Testing Tools
                 </CardTitle>
                 <CardDescription>
@@ -445,7 +428,7 @@ export default function Security() {
                       onClick={() => testSecurityEndpoint('/api/ping')}
                       className="justify-start"
                     >
-                      <Globe className="mr-2 h-4 w-4" />
+                      <FiGlobe className="mr-2 h-4 w-4" />
                       Test Rate Limiting
                     </Button>
                     <Button
@@ -453,7 +436,7 @@ export default function Security() {
                       onClick={() => testSecurityEndpoint('/api/health')}
                       className="justify-start"
                     >
-                      <Activity className="mr-2 h-4 w-4" />
+                      <FiActivity className="mr-2 h-4 w-4" />
                       Test Security Headers
                     </Button>
                     <Button
@@ -469,7 +452,7 @@ export default function Security() {
                       onClick={() => testSecurityEndpoint('/api/security/test')}
                       className="justify-start"
                     >
-                      <FileText className="mr-2 h-4 w-4" />
+                      <FiFileText className="mr-2 h-4 w-4" />
                       Security Feature Test
                     </Button>
                   </div>

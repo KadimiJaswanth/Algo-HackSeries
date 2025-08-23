@@ -12,19 +12,18 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
-  MapPin,
-  Clock,
-  DollarSign,
-  User,
-  Navigation,
-  CheckCircle,
-  AlertCircle,
-  Car,
-  Bike,
-  Truck,
-  Zap,
-  Star,
-} from "lucide-react";
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiDollarSign as DollarSign,
+  FiUser as User,
+  FiNavigation as Navigation,
+  FiCheckCircle as CheckCircle,
+  FiAlertCircle as AlertCircle,
+  FiTruck as Truck,
+  FiZap as Zap,
+  FiStar as Star,
+} from "react-icons/fi";
+import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
 import { useAccount } from "wagmi";
 
 interface RideRequest {

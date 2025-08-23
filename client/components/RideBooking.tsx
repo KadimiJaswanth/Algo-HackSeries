@@ -258,32 +258,104 @@ export default function RideBooking() {
     }
   };
 
-  const proceedWithBooking = () => {
+  const proceedWithBooking = async () => {
     setIsLoading(true);
+    setRideConfirmed(false);
 
     try {
-      // Create ride with enhanced details
-      const rideId = `ride-${Date.now()}`;
-      const newRide: ActiveRide = {
-        id: rideId,
-        status: "searching",
-        pickup: bookingData.pickup!.address,
-        dropoff: bookingData.dropoff!.address,
-        price: bookingData.fareEstimate,
-      };
+      // Send real SMS notification to driver
+      const notificationResult = await sendNotification(
+        "Rider User", // rider name
+        bookingData.pickup!.address,
+        bookingData.dropoff!.address,
+        bookingData.fareEstimate
+      );
 
-      setActiveRide(newRide);
-      setActiveTab("track");
-      setIsLoading(false);
-      setRideConfirmed(false);
+      if (notificationResult.success) {
+        // Store ride ID for status tracking
+        setCurrentRideId(notificationResult.rideId);
+        setSmsNotificationSent(true);
+        setDriverResponseStatus('pending');
 
-      // Simulate ride workflow
-      simulateRideWorkflow(newRide);
+        // Create ride with enhanced details
+        const newRide: ActiveRide = {
+          id: notificationResult.rideId,
+          status: "searching",
+          pickup: bookingData.pickup!.address,
+          dropoff: bookingData.dropoff!.address,
+          price: bookingData.fareEstimate,
+        };
+
+        setActiveRide(newRide);
+        setActiveTab("track");
+        setSmsNotificationDialog(true);
+
+        // Start polling for driver response
+        pollStatus(notificationResult.rideId, (status) => {
+          setDriverResponseStatus(status);
+
+          if (status === 'accepted') {
+            // Driver accepted via SMS
+            const driver = {
+              name: "Driver (6301214658)",
+              rating: 4.8,
+              carModel: "Available Vehicle",
+              licensePlate: "SMS-RIDE",
+              eta: Math.floor(Math.random() * 8) + 3,
+            };
+
+            setActiveRide(prev => prev ? {
+              ...prev,
+              status: "matched",
+              driver,
+            } : null);
+
+            setSmsNotificationDialog(false);
+
+            // Continue with normal ride workflow
+            setTimeout(() => {
+              setActiveRide(prev => prev ? { ...prev, status: "pickup" } : null);
+            }, 5000);
+
+            setTimeout(() => {
+              setActiveRide(prev => prev ? { ...prev, status: "in_progress" } : null);
+            }, 12000);
+
+          } else if (status === 'ignored') {
+            // Driver ignored via SMS
+            setActiveRide(prev => prev ? {
+              ...prev,
+              status: "searching"
+            } : null);
+
+            setSmsNotificationDialog(false);
+            alert("Driver declined the ride. We're looking for another driver...");
+
+            // In a real app, you would reassign to another driver
+            setTimeout(() => {
+              setActiveRide(null);
+              setActiveTab("book");
+              alert("No drivers available at the moment. Please try again later.");
+            }, 3000);
+          }
+        }).catch(error => {
+          console.error("Error polling driver response:", error);
+          setSmsNotificationDialog(false);
+          alert("Error tracking driver response. Please contact support.");
+        });
+
+      } else {
+        throw new Error("Failed to send SMS notification");
+      }
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
+      setActiveRide(null);
+      setSmsNotificationSent(false);
+      setCurrentRideId(null);
+      setDriverResponseStatus(null);
+    } finally {
       setIsLoading(false);
-      setRideConfirmed(false);
     }
   };
 

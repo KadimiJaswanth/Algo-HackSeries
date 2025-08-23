@@ -9,20 +9,19 @@ export default function WalletConnect() {
   const { disconnect } = useDisconnect();
 
   if (!isConnected) {
+    // Use the first available connector (usually injected/MetaMask)
+    const primaryConnector = connectors[0];
+
     return (
-      <div className="flex items-center space-x-2">
-        {connectors.map((connector) => (
-          <Button
-            key={connector.id}
-            variant="outline"
-            size="sm"
-            onClick={() => connect({ connector })}
-          >
-            <Wallet className="mr-2 h-4 w-4" />
-            Connect {connector.name}
-          </Button>
-        ))}
-      </div>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => primaryConnector && connect({ connector: primaryConnector })}
+        disabled={!primaryConnector}
+      >
+        <Wallet className="mr-2 h-4 w-4" />
+        Connect Wallet
+      </Button>
     );
   }
 

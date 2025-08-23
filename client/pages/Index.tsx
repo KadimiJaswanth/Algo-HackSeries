@@ -49,87 +49,73 @@ export default function Index() {
           
           {/* User Type Selection */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
-            <Card 
-              className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                userType === "rider" ? "ring-2 ring-rider bg-rider/5" : ""
-              }`}
-              onClick={() => setUserType("rider")}
-            >
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-rider text-white">
-                  <MapPin className="h-8 w-8" />
-                </div>
-                <CardTitle className="text-2xl">I Need a Ride</CardTitle>
-                <CardDescription>
-                  Book secure rides with crypto payments and on-chain reputation
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center">
-                    <Shield className="mr-2 h-4 w-4 text-rider" />
-                    Escrow payments for security
-                  </li>
-                  <li className="flex items-center">
-                    <Zap className="mr-2 h-4 w-4 text-rider" />
-                    Instant crypto transactions
-                  </li>
-                  <li className="flex items-center">
-                    <Star className="mr-2 h-4 w-4 text-rider" />
-                    Blockchain-verified ratings
-                  </li>
-                </ul>
-                {userType === "rider" && (
-                  <Link to="/rider">
-                    <Button className="w-full mt-4 bg-rider hover:bg-rider/90">
-                      Start Riding
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                )}
-              </CardContent>
-            </Card>
+            <Link to="/rider" className="block">
+              <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:ring-2 hover:ring-rider hover:bg-rider/5 h-full">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-rider text-white">
+                    <MapPin className="h-8 w-8" />
+                  </div>
+                  <CardTitle className="text-2xl">I Need a Ride</CardTitle>
+                  <CardDescription>
+                    Book secure rides with crypto payments and on-chain reputation
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-center">
+                      <Shield className="mr-2 h-4 w-4 text-rider" />
+                      Escrow payments for security
+                    </li>
+                    <li className="flex items-center">
+                      <Zap className="mr-2 h-4 w-4 text-rider" />
+                      Instant crypto transactions
+                    </li>
+                    <li className="flex items-center">
+                      <Star className="mr-2 h-4 w-4 text-rider" />
+                      Blockchain-verified ratings
+                    </li>
+                  </ul>
+                  <Button className="w-full bg-rider hover:bg-rider/90">
+                    Start Riding
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
 
-            <Card 
-              className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                userType === "driver" ? "ring-2 ring-driver bg-driver/5" : ""
-              }`}
-              onClick={() => setUserType("driver")}
-            >
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-driver text-white">
-                  <Car className="h-8 w-8" />
-                </div>
-                <CardTitle className="text-2xl">I Want to Drive</CardTitle>
-                <CardDescription>
-                  Earn crypto by providing rides with guaranteed payments
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center">
-                    <Shield className="mr-2 h-4 w-4 text-driver" />
-                    Guaranteed payments via smart contracts
-                  </li>
-                  <li className="flex items-center">
-                    <Zap className="mr-2 h-4 w-4 text-driver" />
-                    Instant crypto earnings
-                  </li>
-                  <li className="flex items-center">
-                    <Users className="mr-2 h-4 w-4 text-driver" />
-                    Build on-chain reputation
-                  </li>
-                </ul>
-                {userType === "driver" && (
-                  <Link to="/driver">
-                    <Button className="w-full mt-4 bg-driver hover:bg-driver/90">
-                      Start Driving
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                )}
-              </CardContent>
-            </Card>
+            <Link to="/driver" className="block">
+              <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:ring-2 hover:ring-driver hover:bg-driver/5 h-full">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-driver text-white">
+                    <Car className="h-8 w-8" />
+                  </div>
+                  <CardTitle className="text-2xl">I Want to Drive</CardTitle>
+                  <CardDescription>
+                    Earn crypto by providing rides with guaranteed payments
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-center">
+                      <Shield className="mr-2 h-4 w-4 text-driver" />
+                      Guaranteed payments via smart contracts
+                    </li>
+                    <li className="flex items-center">
+                      <Zap className="mr-2 h-4 w-4 text-driver" />
+                      Instant crypto earnings
+                    </li>
+                    <li className="flex items-center">
+                      <Users className="mr-2 h-4 w-4 text-driver" />
+                      Build on-chain reputation
+                    </li>
+                  </ul>
+                  <Button className="w-full bg-driver hover:bg-driver/90">
+                    Start Driving
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>

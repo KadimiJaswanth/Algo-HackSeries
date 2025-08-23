@@ -849,6 +849,105 @@ export default function RideBooking() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Payment Dialog */}
+      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <DollarSign className="mr-2 h-5 w-5 text-primary" />
+              Pay with Tokens
+            </DialogTitle>
+            <DialogDescription>
+              Confirm your payment to book this ride
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Payment Summary */}
+            <Card className="border-primary/20">
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">From:</span>
+                    <span className="text-sm font-medium">
+                      {bookingData.pickup?.address || ""}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">To:</span>
+                    <span className="text-sm font-medium">
+                      {bookingData.dropoff?.address || ""}
+                    </span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Total Amount:</span>
+                    <span className="text-lg font-bold text-primary">
+                      ${(
+                        bookingData.fareEstimate *
+                        (bookingData.isRoundTrip ? 2 : 1)
+                      ).toFixed(2)} USDC
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Payment Actions */}
+            <div className="flex space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => setShowPaymentDialog(false)}
+                className="flex-1"
+                disabled={paymentProcessing}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleTokenPayment}
+                disabled={paymentProcessing}
+                className="flex-1"
+              >
+                {paymentProcessing ? (
+                  <>
+                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <DollarSign className="mr-2 h-4 w-4" />
+                    Pay Now
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ride Confirmed Dialog */}
+      <Dialog open={rideConfirmed} onOpenChange={setRideConfirmed}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center text-green-600">
+              <CheckCircle className="mr-2 h-5 w-5" />
+              Ride Confirmed!
+            </DialogTitle>
+            <DialogDescription>
+              Payment successful. Searching for drivers...
+            </DialogDescription>
+          </DialogHeader>
+          <div className="text-center py-6">
+            <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <p className="text-lg font-medium mb-2">Payment Successful!</p>
+            <p className="text-sm text-muted-foreground">
+              Your ride has been confirmed and we're now finding the best driver for you.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

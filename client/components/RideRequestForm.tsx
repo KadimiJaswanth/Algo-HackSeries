@@ -90,7 +90,7 @@ export default function RideRequestForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isConnected) {
+    if (!isConnected && !demoMode) {
       alert("Please connect your wallet first");
       return;
     }

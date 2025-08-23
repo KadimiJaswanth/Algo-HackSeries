@@ -21,7 +21,7 @@ interface RideRequest {
   timestamp: string;
 }
 
-// Mock data for available rides
+// Mock data for available rides with enhanced details
 const mockRides: RideRequest[] = [
   {
     id: "ride-001",
@@ -32,31 +32,74 @@ const mockRides: RideRequest[] = [
     estimatedPrice: 45.50,
     estimatedTime: 35,
     distance: "12.3 km",
-    notes: "Need to catch a flight, please be on time",
-    timestamp: "2 minutes ago"
+    notes: "Need to catch a flight, please be on time. Have 2 large suitcases.",
+    timestamp: "2 minutes ago",
+    surge: 1.5,
+    passengerRating: 4.9,
+    tip: 5.0,
+    vehicleType: "premium"
   },
   {
     id: "ride-002",
     riderId: "0x8765...4321",
     pickup: "Central Mall",
     dropoff: "University Campus",
-    rideType: "Economy",
-    estimatedPrice: 18.25,
-    estimatedTime: 20,
-    distance: "6.7 km",
-    timestamp: "5 minutes ago"
+    rideType: "RideBike",
+    estimatedPrice: 8.75,
+    estimatedTime: 12,
+    distance: "3.2 km",
+    timestamp: "3 minutes ago",
+    surge: 1.2,
+    passengerRating: 4.7,
+    tip: 2.0,
+    vehicleType: "bike"
   },
   {
     id: "ride-003",
     riderId: "0x9999...1111",
     pickup: "Train Station",
     dropoff: "Hotel District",
-    rideType: "Comfort",
-    estimatedPrice: 28.75,
+    rideType: "RideAuto",
+    estimatedPrice: 15.25,
+    estimatedTime: 18,
+    distance: "5.1 km",
+    notes: "Please call when you arrive",
+    timestamp: "5 minutes ago",
+    surge: 1.0,
+    passengerRating: 4.8,
+    tip: 1.5,
+    vehicleType: "auto"
+  },
+  {
+    id: "ride-004",
+    riderId: "0x5555...2222",
+    pickup: "Shopping Center",
+    dropoff: "Residential Area",
+    rideType: "RideGo",
+    estimatedPrice: 22.50,
     estimatedTime: 25,
-    distance: "8.9 km",
-    notes: "Have 2 large suitcases",
-    timestamp: "8 minutes ago"
+    distance: "8.7 km",
+    notes: "Elderly passenger, please drive carefully",
+    timestamp: "7 minutes ago",
+    surge: 1.8,
+    passengerRating: 5.0,
+    tip: 3.0,
+    vehicleType: "car"
+  },
+  {
+    id: "ride-005",
+    riderId: "0x7777...3333",
+    pickup: "Medical Center",
+    dropoff: "Pharmacy",
+    rideType: "RideComfort",
+    estimatedPrice: 12.00,
+    estimatedTime: 15,
+    distance: "4.5 km",
+    timestamp: "9 minutes ago",
+    surge: 1.0,
+    passengerRating: 4.6,
+    tip: 2.5,
+    vehicleType: "car"
   }
 ];
 

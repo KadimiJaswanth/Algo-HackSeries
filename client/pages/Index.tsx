@@ -81,7 +81,7 @@ export default function Index() {
           </p>
 
           {/* User Type Selection */}
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
             <Link to="/rider" className="block animate-slide-in-left" style={{ animationDelay: '0.4s' }}>
               <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-rider/20">
                 <CardHeader className="text-center">

@@ -100,6 +100,7 @@ export default function RideBooking() {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [rideConfirmed, setRideConfirmed] = useState(false);
+  const [quickBookConfirmation, setQuickBookConfirmation] = useState<{vehicleName: string, fare: number} | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,

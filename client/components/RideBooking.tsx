@@ -15,12 +15,20 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   FiMapPin as MapPin,
   FiClock as Clock,
   FiDollarSign as DollarSign,
   FiAlertCircle as AlertCircle,
   FiPlus as Plus,
   FiX as X,
+  FiCheckCircle as CheckCircle,
   FiCalendar as Calendar,
   FiUsers as Users,
   FiShield as Shield,
@@ -33,7 +41,7 @@ import {
   FiClock as Timer,
   FiZap as Zap,
 } from "react-icons/fi";
-import { FaCar as Car } from "react-icons/fa";
+import { FaCar as Car, FaWallet as Wallet } from "react-icons/fa";
 import { useAccount } from "wagmi";
 import VehicleSelection from "./VehicleSelection";
 import GoogleMaps from "./GoogleMaps";
@@ -88,6 +96,10 @@ export default function RideBooking() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
   const [surgeMultiplier, setSurgeMultiplier] = useState(1);
+  const [demoMode, setDemoMode] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [rideConfirmed, setRideConfirmed] = useState(false);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,
@@ -180,7 +192,7 @@ export default function RideBooking() {
   };
 
   const handleBookRide = async () => {
-    if (!isConnected && !isDemoMode()) {
+    if (!isConnected && !demoMode) {
       alert("Please connect your wallet or try demo mode");
       return;
     }
@@ -196,6 +208,34 @@ export default function RideBooking() {
       return;
     }
 
+    // Show payment dialog instead of immediately booking
+    setShowPaymentDialog(true);
+  };
+
+  const handleTokenPayment = async () => {
+    setPaymentProcessing(true);
+
+    try {
+      // Simulate token payment processing
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Payment successful - show confirmation
+      setRideConfirmed(true);
+      setPaymentProcessing(false);
+      setShowPaymentDialog(false);
+
+      // Wait a moment to show confirmation, then proceed with booking
+      setTimeout(() => {
+        proceedWithBooking();
+      }, 1500);
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed. Please try again.");
+      setPaymentProcessing(false);
+    }
+  };
+
+  const proceedWithBooking = () => {
     setIsLoading(true);
 
     try {
@@ -204,14 +244,15 @@ export default function RideBooking() {
       const newRide: ActiveRide = {
         id: rideId,
         status: "searching",
-        pickup: bookingData.pickup.address,
-        dropoff: bookingData.dropoff.address,
+        pickup: bookingData.pickup!.address,
+        dropoff: bookingData.dropoff!.address,
         price: bookingData.fareEstimate,
       };
 
       setActiveRide(newRide);
       setActiveTab("track");
       setIsLoading(false);
+      setRideConfirmed(false);
 
       // Simulate ride workflow
       simulateRideWorkflow(newRide);
@@ -219,6 +260,7 @@ export default function RideBooking() {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
       setIsLoading(false);
+      setRideConfirmed(false);
     }
   };
 
@@ -265,7 +307,7 @@ export default function RideBooking() {
     }, 25000);
   };
 
-  const isDemoMode = () => !isConnected;
+  const isDemoMode = () => demoMode;
 
   const getRandomDriverName = () => {
     const names = [
@@ -313,7 +355,24 @@ export default function RideBooking() {
     handleCompleteRide();
   };
 
-  if (!isConnected) {
+  const enableDemoMode = () => {
+    setDemoMode(true);
+    setBookingData((prev) => ({
+      ...prev,
+      pickup: {
+        lat: 37.7749,
+        lng: -122.4194,
+        address: "Downtown San Francisco",
+      },
+      dropoff: {
+        lat: 37.6213,
+        lng: -122.379,
+        address: "San Francisco Airport",
+      },
+    }));
+  };
+
+  if (!isConnected && !demoMode) {
     return (
       <Card>
         <CardHeader className="text-center">
@@ -324,25 +383,7 @@ export default function RideBooking() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button
-            onClick={() =>
-              setBookingData((prev) => ({
-                ...prev,
-                pickup: {
-                  lat: 37.7749,
-                  lng: -122.4194,
-                  address: "Downtown San Francisco",
-                },
-                dropoff: {
-                  lat: 37.6213,
-                  lng: -122.379,
-                  address: "San Francisco Airport",
-                },
-              }))
-            }
-          >
-            🚀 Try Demo Mode
-          </Button>
+          <Button onClick={enableDemoMode}>🚀 Try Demo Mode</Button>
           <p className="text-sm text-muted-foreground">
             Experience the full ride-booking workflow without wallet connection
           </p>
@@ -353,6 +394,29 @@ export default function RideBooking() {
 
   return (
     <div className="space-y-6">
+      {demoMode && (
+        <Card className="border-orange-500/50 bg-orange-500/10">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="bg-orange-500 text-white">
+                  🚀 Demo Mode
+                </Badge>
+                <span className="text-sm text-muted-foreground">
+                  Experience the full app without wallet connection
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDemoMode(false)}
+              >
+                Exit Demo
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+      )}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="book">Book Ride</TabsTrigger>
@@ -403,7 +467,7 @@ export default function RideBooking() {
                         ...prev,
                         pickup: prev.pickup
                           ? { ...prev.pickup, address: e.target.value }
-                          : null,
+                          : { lat: 0, lng: 0, address: e.target.value },
                       }))
                     }
                   />
@@ -419,7 +483,7 @@ export default function RideBooking() {
                         ...prev,
                         dropoff: prev.dropoff
                           ? { ...prev.dropoff, address: e.target.value }
-                          : null,
+                          : { lat: 0, lng: 0, address: e.target.value },
                       }))
                     }
                   />
@@ -669,21 +733,21 @@ export default function RideBooking() {
                     <div className="flex justify-between">
                       <span>Base fare</span>
                       <span>
-                        $
                         {(
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.4
-                        ).toFixed(2)}
+                        ).toFixed(4)}{" "}
+                        AVAX
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Distance & time</span>
                       <span>
-                        $
                         {(
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.6
-                        ).toFixed(2)}
+                        ).toFixed(4)}{" "}
+                        AVAX
                       </span>
                     </div>
                     {surgeMultiplier > 1 && (
@@ -692,30 +756,30 @@ export default function RideBooking() {
                           Surge pricing ({surgeMultiplier.toFixed(1)}x)
                         </span>
                         <span>
-                          +$
+                          +
                           {(
                             bookingData.fareEstimate -
                             bookingData.fareEstimate / surgeMultiplier
-                          ).toFixed(2)}
+                          ).toFixed(4)}{" "}
+                          AVAX
                         </span>
                       </div>
                     )}
                     {bookingData.isRoundTrip && (
                       <div className="flex justify-between">
                         <span>Return trip</span>
-                        <span>+${bookingData.fareEstimate.toFixed(2)}</span>
+                        <span>+{bookingData.fareEstimate.toFixed(4)} AVAX</span>
                       </div>
                     )}
                     <Separator />
                     <div className="flex justify-between font-bold text-lg">
                       <span>Total</span>
                       <span>
-                        $
                         {(
                           bookingData.fareEstimate *
                           (bookingData.isRoundTrip ? 2 : 1)
-                        ).toFixed(2)}{" "}
-                        USDC
+                        ).toFixed(4)}{" "}
+                        AVAX
                       </span>
                     </div>
                   </div>
@@ -783,6 +847,107 @@ export default function RideBooking() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Payment Dialog */}
+      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Wallet className="mr-2 h-5 w-5 text-primary" />
+              Pay with AVAX Tokens
+            </DialogTitle>
+            <DialogDescription>
+              Confirm your payment to book this ride
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Payment Summary */}
+            <Card className="border-primary/20">
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">From:</span>
+                    <span className="text-sm font-medium">
+                      {bookingData.pickup?.address || ""}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">To:</span>
+                    <span className="text-sm font-medium">
+                      {bookingData.dropoff?.address || ""}
+                    </span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Total Amount:</span>
+                    <span className="text-lg font-bold text-primary">
+                      {(
+                        bookingData.fareEstimate *
+                        (bookingData.isRoundTrip ? 2 : 1)
+                      ).toFixed(4)}{" "}
+                      AVAX
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Payment Actions */}
+            <div className="flex space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => setShowPaymentDialog(false)}
+                className="flex-1"
+                disabled={paymentProcessing}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleTokenPayment}
+                disabled={paymentProcessing}
+                className="flex-1"
+              >
+                {paymentProcessing ? (
+                  <>
+                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Wallet className="mr-2 h-4 w-4" />
+                    Pay with AVAX
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ride Confirmed Dialog */}
+      <Dialog open={rideConfirmed} onOpenChange={setRideConfirmed}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center text-green-600">
+              <CheckCircle className="mr-2 h-5 w-5" />
+              Ride Confirmed!
+            </DialogTitle>
+            <DialogDescription>
+              Payment successful. Searching for drivers...
+            </DialogDescription>
+          </DialogHeader>
+          <div className="text-center py-6">
+            <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <p className="text-lg font-medium mb-2">Payment Successful!</p>
+            <p className="text-sm text-muted-foreground">
+              Your ride has been confirmed and we're now finding the best driver
+              for you.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

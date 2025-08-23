@@ -60,6 +60,7 @@ export default function RideRequestForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   const handleInputChange = (
     field: keyof RideRequest,
@@ -89,7 +90,7 @@ export default function RideRequestForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isConnected) {
+    if (!isConnected && !demoMode) {
       alert("Please connect your wallet first");
       return;
     }
@@ -209,83 +210,35 @@ export default function RideRequestForm() {
     );
   }
 
-  if (!isConnected) {
+  const enableDemoMode = () => {
+    setDemoMode(true);
+    setFormData({
+      pickup: "Downtown Business District",
+      dropoff: "International Airport",
+      rideType: "premium",
+      notes: "Demo ride for testing",
+      estimatedPrice: 45.5,
+      estimatedTime: 35,
+    });
+  };
+
+  if (!isConnected && !demoMode) {
     return (
       <Card>
         <CardHeader className="text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <CardTitle>Wallet Required</CardTitle>
+          <CardTitle>Connect Wallet or Try Demo</CardTitle>
           <CardDescription>
-            Please connect your Web3 wallet to request a ride
+            Connect your Web3 wallet to request a ride or try our demo mode
           </CardDescription>
         </CardHeader>
-        <CardContent className="text-center">
-          <Button
-            variant="outline"
-            onClick={() => {
-              // Demo mode - simulate wallet connection
-              setFormData({
-                pickup: "Downtown Business District",
-                dropoff: "International Airport",
-                rideType: "premium",
-                notes: "Demo ride for testing",
-                estimatedPrice: 45.5,
-                estimatedTime: 35,
-              });
-
-              // Create demo ride
-              const rideId = `demo-ride-${Date.now()}`;
-              const demoRide = {
-                id: rideId,
-                status: "searching" as const,
-                pickup: "Downtown Business District",
-                dropoff: "International Airport",
-                price: 45.5,
-              };
-
-              setActiveRide(demoRide);
-
-              // Simulate the workflow in demo mode
-              setTimeout(() => {
-                setActiveRide((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        status: "matched",
-                        driver: {
-                          name: "Demo Driver",
-                          rating: 4.9,
-                          carModel: "Tesla Model 3",
-                          licensePlate: "DEMO-123",
-                          eta: 3,
-                        },
-                      }
-                    : null,
-                );
-              }, 3000);
-
-              setTimeout(() => {
-                setActiveRide((prev) =>
-                  prev ? { ...prev, status: "pickup" } : null,
-                );
-              }, 8000);
-
-              setTimeout(() => {
-                setActiveRide((prev) =>
-                  prev ? { ...prev, status: "in_progress" } : null,
-                );
-              }, 12000);
-
-              setTimeout(() => {
-                setActiveRide((prev) =>
-                  prev ? { ...prev, status: "completed" } : null,
-                );
-              }, 20000);
-            }}
-            className="mt-4"
-          >
-            Try Demo Mode
+        <CardContent className="text-center space-y-4">
+          <Button onClick={enableDemoMode}>
+            🚀 Try Demo Mode
           </Button>
+          <p className="text-sm text-muted-foreground">
+            Experience ride booking without wallet connection
+          </p>
         </CardContent>
       </Card>
     );

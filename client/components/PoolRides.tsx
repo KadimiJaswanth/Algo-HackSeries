@@ -204,7 +204,7 @@ export default function PoolRides({ mode }: PoolRideProps) {
                         </div>
                       </div>
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                        ${ride.savings} saved
+                        {ride.savings.toFixed(4)} AVAX saved
                       </Badge>
                     </div>
 
@@ -246,7 +246,7 @@ export default function PoolRides({ mode }: PoolRideProps) {
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-bold text-primary">
-                          ${ride.pricePerSeat}
+                          {ride.pricePerSeat.toFixed(4)} AVAX
                         </p>
                         <p className="text-xs text-muted-foreground">
                           per seat

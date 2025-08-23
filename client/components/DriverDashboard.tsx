@@ -135,9 +135,10 @@ export default function DriverDashboard() {
   const [rideStatus, setRideStatus] = useState<
     "pickup" | "in_progress" | "completed" | null
   >(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   const handleAcceptRide = async (rideId: string) => {
-    if (!isConnected) {
+    if (!isConnected && !demoMode) {
       alert("Please connect your wallet first");
       return;
     }
@@ -205,30 +206,28 @@ export default function DriverDashboard() {
     }
   };
 
-  if (!isConnected) {
+  const enableDemoMode = () => {
+    setDemoMode(true);
+    setIsOnline(true);
+  };
+
+  if (!isConnected && !demoMode) {
     return (
       <Card>
         <CardHeader className="text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <CardTitle>Wallet Required</CardTitle>
+          <CardTitle>Connect Wallet or Try Demo</CardTitle>
           <CardDescription>
-            Please connect your Web3 wallet to start driving
+            Connect your Web3 wallet to start driving or try our demo mode
           </CardDescription>
         </CardHeader>
-        <CardContent className="text-center">
-          <Button
-            variant="outline"
-            onClick={() => {
-              // Demo mode - simulate wallet connection and going online
-              setIsOnline(true);
-              alert(
-                "Demo mode activated! You're now online and can accept rides.",
-              );
-            }}
-            className="mt-4"
-          >
-            Try Demo Mode
+        <CardContent className="text-center space-y-4">
+          <Button onClick={enableDemoMode}>
+            🚀 Try Demo Mode
           </Button>
+          <p className="text-sm text-muted-foreground">
+            Experience driver features without wallet connection
+          </p>
         </CardContent>
       </Card>
     );
@@ -236,6 +235,34 @@ export default function DriverDashboard() {
 
   return (
     <div className="space-y-6">
+      {demoMode && (
+        <Card className="border-orange-500/50 bg-orange-500/10">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="bg-orange-500 text-white">
+                  🚀 Demo Mode
+                </Badge>
+                <span className="text-sm text-muted-foreground">
+                  Try driver features without wallet connection
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setDemoMode(false);
+                  setIsOnline(false);
+                  setActiveRide(null);
+                  setRideStatus(null);
+                }}
+              >
+                Exit Demo
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+      )}
       {/* Active Ride Status */}
       {activeRide && (
         <Card className="border-driver">

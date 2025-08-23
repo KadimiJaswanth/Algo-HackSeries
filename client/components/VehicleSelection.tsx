@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FiClock as Clock, FiUsers as Users, FiZap as Zap, FiTruck as Truck } from "react-icons/fi";
+import {
+  FiClock as Clock,
+  FiUsers as Users,
+  FiZap as Zap,
+  FiTruck as Truck,
+} from "react-icons/fi";
 import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
 
 interface VehicleType {
@@ -24,9 +29,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideBike",
     icon: <Bike className="h-6 w-6" />,
     description: "Quick & affordable bike rides",
-    basePrice: 2.0,
-    pricePerKm: 0.5,
-    pricePerMin: 0.25,
+    basePrice: 0.05,
+    pricePerKm: 0.012,
+    pricePerMin: 0.006,
     capacity: 1,
     eta: "2-5 min",
     features: ["Fastest arrival", "Best for short trips", "Affordable"],
@@ -37,9 +42,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideAuto",
     icon: <Truck className="h-6 w-6" />,
     description: "Comfortable auto-rickshaw",
-    basePrice: 3.5,
-    pricePerKm: 0.8,
-    pricePerMin: 0.3,
+    basePrice: 0.08,
+    pricePerKm: 0.018,
+    pricePerMin: 0.008,
     capacity: 3,
     eta: "3-8 min",
     features: ["AC available", "Good for city rides", "Moderate pricing"],
@@ -50,9 +55,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideGo",
     icon: <Car className="h-6 w-6" />,
     description: "Affordable car rides",
-    basePrice: 5.0,
-    pricePerKm: 1.2,
-    pricePerMin: 0.4,
+    basePrice: 0.12,
+    pricePerKm: 0.025,
+    pricePerMin: 0.01,
     capacity: 4,
     eta: "5-12 min",
     features: ["AC car", "Safe & reliable", "Budget-friendly"],
@@ -63,9 +68,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideComfort",
     icon: <Car className="h-6 w-6" />,
     description: "More spacious rides",
-    basePrice: 7.5,
-    pricePerKm: 1.5,
-    pricePerMin: 0.5,
+    basePrice: 0.18,
+    pricePerKm: 0.035,
+    pricePerMin: 0.015,
     capacity: 4,
     eta: "6-15 min",
     features: ["Spacious cars", "Professional drivers", "Extra legroom"],
@@ -76,9 +81,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RidePremium",
     icon: <Car className="h-6 w-6" />,
     description: "Luxury car experience",
-    basePrice: 12.0,
-    pricePerKm: 2.5,
-    pricePerMin: 0.8,
+    basePrice: 0.3,
+    pricePerKm: 0.06,
+    pricePerMin: 0.02,
     capacity: 4,
     eta: "8-20 min",
     features: ["Luxury cars", "Top-rated drivers", "Premium service"],
@@ -89,9 +94,9 @@ const vehicleTypes: VehicleType[] = [
     name: "RideXL",
     icon: <Truck className="h-6 w-6" />,
     description: "Large group rides",
-    basePrice: 10.0,
-    pricePerKm: 2.0,
-    pricePerMin: 0.6,
+    basePrice: 0.25,
+    pricePerKm: 0.05,
+    pricePerMin: 0.018,
     capacity: 6,
     eta: "10-25 min",
     features: ["6+ seater", "Extra luggage space", "Group rides"],
@@ -119,7 +124,7 @@ export default function VehicleSelection({
     const distanceFare = distance * vehicle.pricePerKm;
     const timeFare = duration * vehicle.pricePerMin;
     const subtotal = baseFare + distanceFare + timeFare;
-    return Math.round(subtotal * surgeMultiplier * 100) / 100;
+    return Math.round(subtotal * surgeMultiplier * 10000) / 10000;
   };
 
   const getCategoryColor = (category: string) => {
@@ -193,13 +198,13 @@ export default function VehicleSelection({
                 </div>
 
                 <div className="text-right">
-                  <div className="text-lg font-bold">${fare}</div>
-                  <div className="text-xs text-muted-foreground">USDC</div>
+                  <div className="text-lg font-bold">
+                    {fare.toFixed(4)} AVAX
+                  </div>
+                  <div className="text-xs text-muted-foreground">Avalanche</div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
-                      +$
-                      {Math.round((fare - fare / surgeMultiplier) * 100) / 100}{" "}
-                      surge
+                      +{(fare - fare / surgeMultiplier).toFixed(4)} AVAX surge
                     </div>
                   )}
                 </div>
@@ -215,9 +220,9 @@ export default function VehicleSelection({
                     ))}
                   </div>
                   <div className="mt-2 text-xs text-muted-foreground">
-                    Base: ${vehicle.basePrice} + Distance: $
-                    {(distance * vehicle.pricePerKm).toFixed(2)} + Time: $
-                    {(duration * vehicle.pricePerMin).toFixed(2)}
+                    Base: {vehicle.basePrice.toFixed(4)} + Distance:
+                    {(distance * vehicle.pricePerKm).toFixed(4)} + Time:
+                    {(duration * vehicle.pricePerMin).toFixed(4)} AVAX
                   </div>
                 </div>
               )}

@@ -47,6 +47,15 @@ interface SecurityMetrics {
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   activeThreats: number;
   lastUpdate: number;
+  quantumMetrics?: QuantumMetrics;
+}
+
+interface QuantumMetrics {
+  quantumResistant: boolean;
+  supportedAlgorithms: string[];
+  activeKeys: number;
+  activeSessions: number;
+  securityLevels: number[];
 }
 
 interface ThreatEvent {

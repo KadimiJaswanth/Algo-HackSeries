@@ -191,6 +191,64 @@ export default function RideRequestForm() {
             Please connect your Web3 wallet to request a ride
           </CardDescription>
         </CardHeader>
+        <CardContent className="text-center">
+          <Button
+            variant="outline"
+            onClick={() => {
+              // Demo mode - simulate wallet connection
+              setFormData({
+                pickup: "Downtown Business District",
+                dropoff: "International Airport",
+                rideType: "premium",
+                notes: "Demo ride for testing",
+                estimatedPrice: 45.50,
+                estimatedTime: 35,
+              });
+
+              // Create demo ride
+              const rideId = `demo-ride-${Date.now()}`;
+              const demoRide = {
+                id: rideId,
+                status: 'searching' as const,
+                pickup: "Downtown Business District",
+                dropoff: "International Airport",
+                price: 45.50,
+              };
+
+              setActiveRide(demoRide);
+
+              // Simulate the workflow in demo mode
+              setTimeout(() => {
+                setActiveRide(prev => prev ? {
+                  ...prev,
+                  status: 'matched',
+                  driver: {
+                    name: "Demo Driver",
+                    rating: 4.9,
+                    carModel: "Tesla Model 3",
+                    licensePlate: "DEMO-123",
+                    eta: 3
+                  }
+                } : null);
+              }, 3000);
+
+              setTimeout(() => {
+                setActiveRide(prev => prev ? { ...prev, status: 'pickup' } : null);
+              }, 8000);
+
+              setTimeout(() => {
+                setActiveRide(prev => prev ? { ...prev, status: 'in_progress' } : null);
+              }, 12000);
+
+              setTimeout(() => {
+                setActiveRide(prev => prev ? { ...prev, status: 'completed' } : null);
+              }, 20000);
+            }}
+            className="mt-4"
+          >
+            Try Demo Mode
+          </Button>
+        </CardContent>
       </Card>
     );
   }

@@ -159,18 +159,25 @@ export default function BookRideConfirmation() {
   };
 
   const generatePhoneNumber = () => {
-    return `+1 (${Math.floor(Math.random() * 900 + 100)}) ${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 9000 + 1000)}`;
+    return "6307884689";
   };
 
   const handleCall = () => {
     if (driverInfo) {
-      alert(`Calling ${driverInfo.name} at ${driverInfo.phone}`);
+      alert(`Driver Number: ${driverInfo.phone}`);
     }
   };
 
   const handleChat = () => {
     if (driverInfo) {
-      alert(`Opening chat with ${driverInfo.name}`);
+      // Navigate to chat page with driver details
+      const params = new URLSearchParams({
+        driverName: driverInfo.name,
+        driverRating: driverInfo.rating.toString(),
+        vehicle: driverInfo.vehicle.model,
+        licensePlate: driverInfo.vehicle.licensePlate,
+      });
+      navigate(`/driver-chat?${params.toString()}`);
     }
   };
 

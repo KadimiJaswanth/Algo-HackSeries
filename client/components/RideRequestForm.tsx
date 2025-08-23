@@ -79,31 +79,60 @@ export default function RideRequestForm() {
     }
 
     setIsLoading(true);
-    
-    // Mock ride request submission
+
+    // Create active ride and simulate complete workflow
     try {
-      // This would be replaced with actual smart contract interaction
       console.log("Submitting ride request:", formData);
       console.log("User address:", address);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert("Ride request submitted successfully! Looking for available drivers...");
-      
-      // Reset form
-      setFormData({
-        pickup: "",
-        dropoff: "",
-        rideType: "",
-        notes: "",
-        estimatedPrice: 0,
-        estimatedTime: 0,
-      });
+
+      // Create ride with 'searching' status
+      const rideId = `ride-${Date.now()}`;
+      const newRide: ActiveRide = {
+        id: rideId,
+        status: 'searching',
+        pickup: formData.pickup,
+        dropoff: formData.dropoff,
+        price: formData.estimatedPrice,
+      };
+
+      setActiveRide(newRide);
+      setIsLoading(false);
+
+      // Simulate finding a driver after 3-5 seconds
+      setTimeout(() => {
+        const driver = {
+          name: "John Smith",
+          rating: 4.8,
+          carModel: "Toyota Camry",
+          licensePlate: "ABC-123",
+          eta: 5
+        };
+
+        setActiveRide(prev => prev ? {
+          ...prev,
+          status: 'matched',
+          driver
+        } : null);
+      }, Math.random() * 2000 + 3000);
+
+      // Simulate driver pickup process
+      setTimeout(() => {
+        setActiveRide(prev => prev ? { ...prev, status: 'pickup' } : null);
+      }, 8000);
+
+      // Simulate ride in progress
+      setTimeout(() => {
+        setActiveRide(prev => prev ? { ...prev, status: 'in_progress' } : null);
+      }, 12000);
+
+      // Simulate ride completion
+      setTimeout(() => {
+        setActiveRide(prev => prev ? { ...prev, status: 'completed' } : null);
+      }, 20000);
+
     } catch (error) {
       console.error("Error submitting ride request:", error);
       alert("Error submitting ride request. Please try again.");
-    } finally {
       setIsLoading(false);
     }
   };

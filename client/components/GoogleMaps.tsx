@@ -137,39 +137,66 @@ export default function GoogleMaps({
   const createDemoMap = () => {
     if (mapRef.current) {
       mapRef.current.innerHTML = `
-        <div class="w-full h-full bg-gradient-to-br from-blue-100 to-green-100 flex items-center justify-center relative overflow-hidden">
+        <div class="w-full h-full relative overflow-hidden rounded-lg" style="background: linear-gradient(135deg, hsl(225 25% 8%) 0%, hsl(240 15% 12%) 50%, hsl(280 15% 8%) 100%);">
+          <!-- Animated background effects -->
+          <div class="absolute inset-0" style="background: rgba(168, 85, 247, 0.1); backdrop-filter: blur(10px);"></div>
+
+          <!-- Grid pattern -->
           <div class="absolute inset-0 opacity-20">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#94a3b8" stroke-width="1"/>
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgb(168, 85, 247)" stroke-width="1"/>
                 </pattern>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
               </defs>
               <rect width="100%" height="100%" fill="url(#grid)" />
             </svg>
           </div>
-          <div class="text-center z-10">
-            <div class="mb-4">
-              <svg class="w-16 h-16 mx-auto text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Interactive Map Demo</h3>
-            <p class="text-sm text-gray-500 max-w-xs">
-              Live Google Maps integration with real-time location tracking
-            </p>
-            <div class="mt-4 text-xs text-gray-400">
-              Connect Google Maps API for full functionality
+
+          <!-- Floating orbs -->
+          <div class="absolute top-1/4 left-1/4 w-16 h-16 rounded-full" style="background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%); animation: float 3s ease-in-out infinite;"></div>
+          <div class="absolute bottom-1/3 right-1/3 w-12 h-12 rounded-full" style="background: radial-gradient(circle, rgba(34, 197, 94, 0.6) 0%, transparent 70%); animation: float 3s ease-in-out infinite; animation-delay: 1.5s;"></div>
+
+          <div class="flex items-center justify-center h-full">
+            <div class="text-center z-10 p-6" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 1rem;">
+              <div class="mb-4">
+                <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(168, 85, 247); filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold mb-2" style="color: rgb(168, 85, 247); text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">Futuristic Map Interface</h3>
+              <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">
+                Real-time location tracking with blockchain integration
+              </p>
+              <div class="text-xs px-3 py-1 rounded-full" style="background: rgba(168, 85, 247, 0.2); color: rgb(168, 85, 247); border: 1px solid rgba(168, 85, 247, 0.3);">
+                Connect Google Maps API for live functionality
+              </div>
             </div>
           </div>
-          
-          <!-- Demo markers -->
-          <div class="absolute top-1/4 left-1/3 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">P</div>
-          <div class="absolute bottom-1/3 right-1/4 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">D</div>
-          
-          <!-- Demo route line -->
+
+          <!-- Enhanced demo markers with glow -->
+          <div class="absolute top-1/4 left-1/3 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: linear-gradient(135deg, rgb(34, 197, 94), rgb(168, 85, 247)); box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); animation: pulse 2s ease-in-out infinite;">P</div>
+          <div class="absolute bottom-1/3 right-1/4 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: linear-gradient(135deg, rgb(239, 68, 68), rgb(168, 85, 247)); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 2s ease-in-out infinite; animation-delay: 1s;">D</div>
+
+          <!-- Animated route line -->
           <svg class="absolute inset-0 w-full h-full pointer-events-none">
-            <path d="M 33% 25% Q 50% 40% 75% 67%" stroke="#4F46E5" stroke-width="3" fill="none" stroke-dasharray="5,5" />
+            <defs>
+              <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:rgb(168, 85, 247);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgb(34, 197, 94);stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <path d="M 33% 25% Q 50% 40% 75% 67%" stroke="url(#routeGradient)" stroke-width="3" fill="none" stroke-dasharray="10,5" style="filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.5)); animation: dash 2s linear infinite;">
+              <animate attributeName="stroke-dashoffset" values="0;-15" dur="1s" repeatCount="indefinite"/>
+            </path>
           </svg>
         </div>
       `;

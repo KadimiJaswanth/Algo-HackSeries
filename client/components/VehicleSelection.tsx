@@ -215,25 +215,24 @@ export default function VehicleSelection({
                     </div>
                   )}
 
-                  {bookedVehicle === vehicle.id ? (
-                    <div className="flex items-center space-x-1 text-green-600 text-sm font-medium">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Ride Confirmed!</span>
-                    </div>
-                  ) : (
-                    <Button
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setBookedVehicle(vehicle.id);
-                        onBookRide?.(vehicle.id, vehicle.name, fare);
-                        setTimeout(() => setBookedVehicle(null), 3000);
-                      }}
-                      className="w-full"
-                    >
-                      Book Ride
-                    </Button>
-                  )}
+                  <Button
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Navigate to confirmation page with ride details
+                      const params = new URLSearchParams({
+                        vehicleId: vehicle.id,
+                        vehicleName: vehicle.name,
+                        fare: fare.toString(),
+                        estimatedTime: vehicle.eta,
+                      });
+                      navigate(`/book-ride-confirmation?${params.toString()}`);
+                      onBookRide?.(vehicle.id, vehicle.name, fare);
+                    }}
+                    className="w-full"
+                  >
+                    Book Ride
+                  </Button>
                 </div>
               </div>
 

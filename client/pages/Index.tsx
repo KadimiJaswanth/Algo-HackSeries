@@ -155,10 +155,11 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      <section className="relative py-20 px-4 z-10">
+        <div className="absolute inset-0 glass"></div>
+        <div className="container mx-auto relative z-10">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
               Why Choose RideChain?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -167,22 +168,22 @@ export default function Index() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <div className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white glow animate-float">
                 <Shield className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Secure Escrow</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Secure Escrow</h3>
               <p className="text-muted-foreground">
                 Smart contracts hold payments in escrow until ride completion,
                 ensuring security for both parties.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent text-accent-foreground">
+            <div className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent to-warning text-white glow animate-float" style={{ animationDelay: '1s' }}>
                 <Star className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">
                 On-Chain Reputation
               </h3>
               <p className="text-muted-foreground">
@@ -191,11 +192,11 @@ export default function Index() {
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground">
+            <div className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-warning to-primary text-white glow animate-float" style={{ animationDelay: '2s' }}>
                 <Zap className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Instant Payments</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Instant Payments</h3>
               <p className="text-muted-foreground">
                 Automatic crypto payments powered by Avalanche's fast and
                 low-cost transactions.

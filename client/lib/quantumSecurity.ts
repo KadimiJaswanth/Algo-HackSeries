@@ -195,15 +195,14 @@ export class QuantumSecurityManager {
     }
   }
 
-  // Falcon signing (using Dilithium fallback)
+  // Falcon signing (using ML-DSA fallback)
   private async signWithFalcon(message: Uint8Array, privateKey: Uint8Array, algorithm: PQCAlgorithm): Promise<Uint8Array> {
     try {
-      // Use Dilithium signing as FALCON fallback
-      const dilithiumSig = Dilithium.sign(privateKey, message);
-      return new Uint8Array(dilithiumSig);
-    } catch (error) {
-      // Final fallback to ML-DSA
+      // Use ML-DSA signing as FALCON fallback
       return ml_dsa65.sign(privateKey, message);
+    } catch (error) {
+      console.error('Failed to sign with FALCON fallback:', error);
+      throw new Error(`FALCON signing failed: ${error.message}`);
     }
   }
 

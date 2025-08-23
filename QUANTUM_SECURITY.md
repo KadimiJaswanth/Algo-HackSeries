@@ -76,12 +76,26 @@ vite.config.ts                   # WebAssembly support configuration
 ```json
 {
   "@noble/post-quantum": "NIST-standardized PQC algorithms (ML-DSA, ML-KEM, SLH-DSA)",
-  "@noble/hashes": "Quantum-resistant hash functions",
+  "@noble/hashes": "Quantum-resistant hash functions (SHA-2, SHA-3, SHAKE)",
   "@noble/curves": "Elliptic curve cryptography",
   "@stablelib/ed25519": "Ed25519 signatures",
   "@stablelib/x25519": "X25519 key exchange",
   "vite-plugin-wasm": "WebAssembly support for PQC"
 }
+```
+
+### Import Structure
+
+```typescript
+// Correct import structure for @noble/hashes
+import { sha256, sha512 } from "@noble/hashes/sha2";     // SHA-2 family
+import { shake256 } from "@noble/hashes/sha3";           // SHA-3 family
+import { randomBytes } from "@noble/hashes/utils";       // Utilities
+
+// Post-quantum algorithms
+import { ml_dsa65 } from "@noble/post-quantum/ml-dsa";   // Dilithium
+import { ml_kem768 } from "@noble/post-quantum/ml-kem";  // Kyber
+import { slh_dsa_shake_128s } from "@noble/post-quantum/slh-dsa"; // SPHINCS+
 ```
 
 ## 🚀 Usage Examples

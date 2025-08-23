@@ -60,7 +60,10 @@ export default function BookRideConfirmation() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate("/rider?tab=tracking");
+          // Use setTimeout to avoid state update during render
+          setTimeout(() => {
+            navigate("/rider?tab=tracking");
+          }, 0);
           return 0;
         }
         return prev - 1;
@@ -136,10 +139,13 @@ export default function BookRideConfirmation() {
               </div>
             </div>
             <CardTitle className="text-xl">{rideDetails.vehicleName}</CardTitle>
-            <CardDescription>
+            <div className="mt-2">
               <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                 {rideDetails.fare.toFixed(6)} TOKENS
               </Badge>
+            </div>
+            <CardDescription className="mt-2">
+              Ride booking confirmed
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

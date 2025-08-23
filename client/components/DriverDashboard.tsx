@@ -142,6 +142,19 @@ export default function DriverDashboard() {
             Please connect your Web3 wallet to start driving
           </CardDescription>
         </CardHeader>
+        <CardContent className="text-center">
+          <Button
+            variant="outline"
+            onClick={() => {
+              // Demo mode - simulate wallet connection and going online
+              setIsOnline(true);
+              alert("Demo mode activated! You're now online and can accept rides.");
+            }}
+            className="mt-4"
+          >
+            Try Demo Mode
+          </Button>
+        </CardContent>
       </Card>
     );
   }

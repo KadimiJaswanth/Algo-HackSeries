@@ -137,6 +137,50 @@ export default function RideRequestForm() {
     }
   };
 
+  const handleCancelRide = () => {
+    setActiveRide(null);
+    // Reset form
+    setFormData({
+      pickup: "",
+      dropoff: "",
+      rideType: "",
+      notes: "",
+      estimatedPrice: 0,
+      estimatedTime: 0,
+    });
+  };
+
+  const handleCompleteRide = () => {
+    alert("Ride completed! Payment has been processed via smart contract.");
+    setActiveRide(null);
+    // Reset form
+    setFormData({
+      pickup: "",
+      dropoff: "",
+      rideType: "",
+      notes: "",
+      estimatedPrice: 0,
+      estimatedTime: 0,
+    });
+  };
+
+  const handleRateDriver = (rating: number) => {
+    alert(`Thank you for rating your driver ${rating} stars! Your rating has been stored on the blockchain.`);
+    handleCompleteRide();
+  };
+
+  // Show ride status if there's an active ride
+  if (activeRide) {
+    return (
+      <RideStatus
+        ride={activeRide}
+        onCancel={handleCancelRide}
+        onComplete={handleCompleteRide}
+        onRate={handleRateDriver}
+      />
+    );
+  }
+
   if (!isConnected) {
     return (
       <Card>

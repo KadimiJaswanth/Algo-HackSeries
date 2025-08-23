@@ -16,9 +16,14 @@ import {
   FiClock as Clock,
   FiUsers as Users,
   FiNavigation as Navigation,
+  FiPhone as Phone,
+  FiMessageCircle as MessageCircle,
+  FiStar as Star,
+  FiUser as User,
 } from "react-icons/fi";
 import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
 import { FiTruck as Truck } from "react-icons/fi";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface RideDetails {
   vehicleId: string;
@@ -29,11 +34,24 @@ interface RideDetails {
   dropoffLocation?: string;
 }
 
+interface DriverInfo {
+  name: string;
+  rating: number;
+  avatar?: string;
+  vehicle: {
+    model: string;
+    licensePlate: string;
+  };
+  phone: string;
+}
+
 export default function BookRideConfirmation() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [rideDetails, setRideDetails] = useState<RideDetails | null>(null);
   const [countdown, setCountdown] = useState(5);
+  const [driverInfo, setDriverInfo] = useState<DriverInfo | null>(null);
+  const [showDriverInfo, setShowDriverInfo] = useState(false);
 
   useEffect(() => {
     // Get ride details from URL params
@@ -53,6 +71,21 @@ export default function BookRideConfirmation() {
         pickupLocation: pickupLocation || "Current Location",
         dropoffLocation: dropoffLocation || "Selected Destination",
       });
+
+      // Simulate driver assignment after 2 seconds
+      setTimeout(() => {
+        setDriverInfo({
+          name: getRandomDriverName(),
+          rating: 4.5 + Math.random() * 0.5,
+          avatar: `https://api.dicebear.com/7.x/avatars/svg?seed=${Math.random()}`,
+          vehicle: {
+            model: getRandomCarModel(vehicleId),
+            licensePlate: generateLicensePlate(),
+          },
+          phone: generatePhoneNumber(),
+        });
+        setShowDriverInfo(true);
+      }, 2000);
     }
 
     // Start countdown for auto-redirect
@@ -97,6 +130,47 @@ export default function BookRideConfirmation() {
         return "bg-purple-500";
       default:
         return "bg-blue-500";
+    }
+  };
+
+  const getRandomDriverName = () => {
+    const names = [
+      "Alex Johnson", "Sarah Chen", "Mike Rodriguez", "Emily Davis",
+      "David Kim", "Lisa Anderson", "Carlos Martinez", "Anna Wilson"
+    ];
+    return names[Math.floor(Math.random() * names.length)];
+  };
+
+  const getRandomCarModel = (vehicleId: string) => {
+    const models = {
+      bike: ["Honda CB", "Yamaha R15", "Bajaj Pulsar"],
+      auto: ["Bajaj Auto", "TVS King", "Mahindra Alfa"],
+      car: ["Toyota Camry", "Honda Civic", "Hyundai Elantra"],
+      premium: ["BMW 5 Series", "Audi A4", "Mercedes C-Class"]
+    };
+    const categoryModels = models[vehicleId as keyof typeof models] || models.car;
+    return categoryModels[Math.floor(Math.random() * categoryModels.length)];
+  };
+
+  const generateLicensePlate = () => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    return `${letters[Math.floor(Math.random() * letters.length)]}${letters[Math.floor(Math.random() * letters.length)]}-${numbers[Math.floor(Math.random() * numbers.length)]}${numbers[Math.floor(Math.random() * numbers.length)]}-${letters[Math.floor(Math.random() * letters.length)]}${letters[Math.floor(Math.random() * letters.length)]}`;
+  };
+
+  const generatePhoneNumber = () => {
+    return `+1 (${Math.floor(Math.random() * 900 + 100)}) ${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 9000 + 1000)}`;
+  };
+
+  const handleCall = () => {
+    if (driverInfo) {
+      alert(`Calling ${driverInfo.name} at ${driverInfo.phone}`);
+    }
+  };
+
+  const handleChat = () => {
+    if (driverInfo) {
+      alert(`Opening chat with ${driverInfo.name}`);
     }
   };
 
@@ -182,22 +256,95 @@ export default function BookRideConfirmation() {
           </CardContent>
         </Card>
 
-        {/* Status Update */}
-        <Card className="border-yellow-500/30 bg-yellow-500/10">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-full bg-yellow-500/20">
-                <Users className="h-5 w-5 text-yellow-400" />
+        {/* Driver Assignment Status */}
+        {!showDriverInfo ? (
+          <Card className="border-yellow-500/30 bg-yellow-500/10">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-full bg-yellow-500/20 animate-pulse">
+                  <Users className="h-5 w-5 text-yellow-400" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-yellow-400">Finding Driver</h4>
+                  <p className="text-sm text-muted-foreground">
+                    We're connecting you with the nearest driver...
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-medium text-yellow-400">Finding Driver</h4>
-                <p className="text-sm text-muted-foreground">
-                  We're connecting you with the nearest driver...
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="border-green-500/30 bg-green-500/10 animate-fade-in-up">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <h4 className="font-semibold text-green-400 flex items-center">
+                  <CheckCircle className="mr-2 h-5 w-5" />
+                  Driver Assigned
+                </h4>
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                  ETA: {rideDetails?.estimatedTime}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Driver Profile */}
+              <div className="flex items-center space-x-4">
+                <Avatar className="h-12 w-12 border-2 border-green-500/30">
+                  <AvatarImage src={driverInfo?.avatar} alt={driverInfo?.name} />
+                  <AvatarFallback className="bg-green-500/20 text-green-400">
+                    <User className="h-6 w-6" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h5 className="font-semibold">{driverInfo?.name}</h5>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1">
+                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                      <span className="text-sm font-medium">{driverInfo?.rating.toFixed(1)}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">•</span>
+                    <span className="text-sm text-muted-foreground">
+                      {driverInfo?.vehicle.model}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    License: {driverInfo?.vehicle.licensePlate}
+                  </p>
+                </div>
+              </div>
+
+              {/* Communication Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  onClick={handleCall}
+                  variant="outline"
+                  className="flex items-center space-x-2 border-green-500/30 text-green-400 hover:bg-green-500/10"
+                >
+                  <Phone className="h-4 w-4" />
+                  <span>Call Driver</span>
+                </Button>
+                <Button
+                  onClick={handleChat}
+                  variant="outline"
+                  className="flex items-center space-x-2 border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span>Chat</span>
+                </Button>
+              </div>
+
+              {/* Driver Status */}
+              <div className="text-center p-3 bg-primary/10 rounded-lg">
+                <p className="text-sm font-medium text-primary">
+                  🚗 Driver is on the way to your location
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  You'll receive updates as your driver approaches
                 </p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Auto-redirect Notice */}
         <Card className="border-primary/30 bg-primary/10">
@@ -209,21 +356,44 @@ export default function BookRideConfirmation() {
           </CardContent>
         </Card>
 
-        {/* Action Buttons */}
+        {/* Enhanced Action Buttons */}
         <div className="space-y-3">
+          {showDriverInfo && (
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <Button
+                onClick={handleCall}
+                variant="outline"
+                className="border-green-500/30 text-green-400 hover:bg-green-500/10"
+                size="lg"
+              >
+                <Phone className="mr-2 h-5 w-5" />
+                Quick Call
+              </Button>
+              <Button
+                onClick={handleChat}
+                variant="outline"
+                className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                size="lg"
+              >
+                <MessageCircle className="mr-2 h-5 w-5" />
+                Send Message
+              </Button>
+            </div>
+          )}
+
           <Button
             onClick={() => navigate("/rider?tab=tracking")}
-            className="w-full bg-primary hover:bg-primary/90"
+            className="w-full bg-primary hover:bg-primary/90 glow"
             size="lg"
           >
             <Navigation className="mr-2 h-5 w-5" />
-            Track My Ride
+            Track My Ride Live
           </Button>
-          
+
           <Button
             onClick={() => navigate("/")}
             variant="outline"
-            className="w-full"
+            className="w-full glass-hover"
             size="lg"
           >
             <Home className="mr-2 h-5 w-5" />

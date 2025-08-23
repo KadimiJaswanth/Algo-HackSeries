@@ -26,10 +26,7 @@ export default function Index() {
           <nav className="flex items-center space-x-6">
             <Link to="/about" className="text-sm font-medium hover:text-primary">About</Link>
             <Link to="/how-it-works" className="text-sm font-medium hover:text-primary">How it Works</Link>
-            <Button variant="outline" size="sm">
-              <Wallet className="mr-2 h-4 w-4" />
-              Connect Wallet
-            </Button>
+            <WalletConnect />
           </nav>
         </div>
       </header>

@@ -28,9 +28,17 @@ import SplitFare from "@/components/SplitFare";
 import OnChainReview from "@/components/OnChainReview";
 
 export default function Rider() {
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("book");
   const [activeRideId] = useState("ride-123");
   const [currentFare] = useState(25.5);
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen relative overflow-hidden">

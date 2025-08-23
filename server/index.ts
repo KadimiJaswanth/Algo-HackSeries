@@ -145,12 +145,12 @@ function securityHeaders(req: express.Request, res: express.Response, next: expr
   // Allow iframe embedding in development for Builder.io preview
   if (process.env.NODE_ENV === 'development') {
     // Allow iframe embedding from any origin in development
-    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors *;";
+    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss: ws:; frame-ancestors *;";
   } else {
     // Production security - deny iframe embedding
     headers['X-Frame-Options'] = 'DENY';
     headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors 'none';";
+    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss:; frame-ancestors 'none';";
   }
 
   res.set(headers);

@@ -206,7 +206,7 @@ export default function BookRideConfirmation() {
         {/* Action Buttons */}
         <div className="space-y-3">
           <Button
-            onClick={() => navigate("/rider?tab=track")}
+            onClick={() => navigate("/rider?tab=tracking")}
             className="w-full bg-primary hover:bg-primary/90"
             size="lg"
           >

@@ -189,7 +189,51 @@ Quantum cryptography features require:
 - Test quantum resistance in isolated environments
 - Monitor for side-channel attack vulnerabilities
 
-## 📚 References
+## 🔧 Troubleshooting
+
+### Common Import Issues
+
+**Problem**: `shake256` import error from `@noble/hashes/sha2`
+**Solution**: Import from correct module:
+```typescript
+// ❌ Wrong
+import { shake256 } from "@noble/hashes/sha2";
+
+// ✅ Correct
+import { shake256 } from "@noble/hashes/sha3";
+```
+
+**Problem**: Module optimization errors in Vite
+**Solution**: Ensure proper `optimizeDeps` configuration:
+```typescript
+// vite.config.ts
+optimizeDeps: {
+  include: [
+    "@noble/post-quantum",
+    "@noble/post-quantum/ml-dsa",
+    "@noble/post-quantum/ml-kem",
+    "@noble/post-quantum/slh-dsa",
+    "@noble/hashes",
+    "@noble/hashes/sha2",
+    "@noble/hashes/sha3",
+    "@noble/hashes/utils",
+    "@noble/curves"
+  ],
+}
+```
+
+**Problem**: WebAssembly loading issues
+**Solution**: Enable proper file serving in Vite:
+```typescript
+// vite.config.ts
+server: {
+  fs: {
+    allow: ["./client", "./shared", "node_modules"],
+  },
+}
+```
+
+## �� References
 
 - [NIST Post-Quantum Cryptography Standards](https://csrc.nist.gov/projects/post-quantum-cryptography)
 - [ML-DSA (Dilithium) Specification](https://pq-crystals.org/dilithium/)

@@ -135,6 +135,7 @@ export default function DriverDashboard() {
   const [rideStatus, setRideStatus] = useState<
     "pickup" | "in_progress" | "completed" | null
   >(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   const handleAcceptRide = async (rideId: string) => {
     if (!isConnected) {

@@ -24,7 +24,6 @@ import {
 import {
   FiMapPin as MapPin,
   FiClock as Clock,
-  FiDollarSign as DollarSign,
   FiAlertCircle as AlertCircle,
   FiPlus as Plus,
   FiX as X,

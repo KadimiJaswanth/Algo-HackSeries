@@ -79,7 +79,7 @@ function sanitizeInput(req: express.Request, res: express.Response, next: expres
   }
 
   if (req.query && typeof req.query === 'object') {
-    req.query = sanitizeObject(req.query);
+    req.query = sanitizeObject(req.query) as any;
   }
 
   next();
@@ -188,9 +188,16 @@ export function createServer() {
 
   // CSRF token generation
   app.get('/api/csrf-token', (req, res) => {
-    const token = require('crypto').randomBytes(16).toString('hex');
-    (req.session as any).csrfToken = token;
-    res.json({ csrfToken: token });
+    try {
+      const token = require('crypto').randomBytes(16).toString('hex');
+      if (req.session) {
+        (req.session as any).csrfToken = token;
+      }
+      res.json({ csrfToken: token });
+    } catch (error) {
+      console.error('CSRF token generation error:', error);
+      res.status(500).json({ error: 'Failed to generate CSRF token' });
+    }
   });
 
   // Public API routes

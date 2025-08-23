@@ -431,6 +431,66 @@ export default function Security() {
             </Card>
           </TabsContent>
 
+          {/* Quantum Security Tab */}
+          <TabsContent value="quantum" className="space-y-6 animate-fade-in-up">
+            <Card className="glass">
+              <CardHeader>
+                <CardTitle className="flex items-center text-gradient">
+                  <Zap className="mr-2 h-5 w-5" />
+                  Post-Quantum Cryptography
+                </CardTitle>
+                <CardDescription>
+                  Advanced quantum-resistant security using NIST-standardized algorithms
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-6 mb-6">
+                  <div className="text-center glass glass-hover p-6 rounded-xl">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white glow animate-float">
+                      <Shield className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-gradient">NIST Standards</h3>
+                    <p className="text-muted-foreground">
+                      Implements ML-DSA (Dilithium), SLH-DSA (SPHINCS+), and ML-KEM (Kyber) algorithms
+                    </p>
+                  </div>
+
+                  <div className="text-center glass glass-hover p-6 rounded-xl">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent to-warning text-white glow animate-float" style={{ animationDelay: '1s' }}>
+                      <Key className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-gradient">
+                      Quantum Wallets
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Generate and manage quantum-resistant key pairs for secure transactions
+                    </p>
+                  </div>
+
+                  <div className="text-center glass glass-hover p-6 rounded-xl">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-warning to-primary text-white glow animate-float" style={{ animationDelay: '2s' }}>
+                      <Lock className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-gradient">Future-Proof</h3>
+                    <p className="text-muted-foreground">
+                      Protection against both classical and quantum computer attacks
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quantum Wallet Component */}
+            <QuantumWallet
+              onWalletCreated={(keyId) => {
+                console.log('Quantum wallet created:', keyId);
+              }}
+              onSignature={(signature) => {
+                console.log('Quantum signature generated:', signature);
+              }}
+            />
+          </TabsContent>
+
           {/* Features Tab */}
           <TabsContent value="features" className="space-y-6 animate-fade-in-up">
             {securityFeatures.map((category, categoryIndex) => (

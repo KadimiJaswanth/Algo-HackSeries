@@ -18,6 +18,10 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist/spa",
   },
   plugins: [react(), wasm(), expressPlugin()],
+  optimizeDeps: {
+    exclude: ["pqc-kyber", "pqc-dilithium"],
+    include: ["@noble/post-quantum", "@noble/hashes", "@noble/curves"],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),

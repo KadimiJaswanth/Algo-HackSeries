@@ -60,7 +60,7 @@ export default function BookRideConfirmation() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate("/rider?tab=track");
+          navigate("/rider?tab=tracking");
           return 0;
         }
         return prev - 1;

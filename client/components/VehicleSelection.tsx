@@ -208,7 +208,9 @@ export default function VehicleSelection({
                   <div className="text-lg font-bold">
                     {fare.toFixed(6)} TOKENS
                   </div>
-                  <div className="text-xs text-muted-foreground">Blockchain</div>
+                  <div className="text-xs text-muted-foreground">
+                    Blockchain
+                  </div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
                       +{(fare - fare / surgeMultiplier).toFixed(6)} TOKENS surge

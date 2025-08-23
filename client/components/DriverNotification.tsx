@@ -78,10 +78,10 @@ export default function DriverNotification({
 
   const handleAccept = async () => {
     if (!rideRequest) return;
-    
+
     setIsProcessing(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
       onAccept(rideRequest.id);
       setIsProcessing(false);
       onClose();
@@ -93,10 +93,10 @@ export default function DriverNotification({
 
   const handleIgnore = async () => {
     if (!rideRequest) return;
-    
+
     setIsProcessing(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
       onIgnore(rideRequest.id);
       setIsProcessing(false);
       onClose();
@@ -128,14 +128,13 @@ export default function DriverNotification({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
-            <span className="flex items-center">
-              📱 New Ride Request
-            </span>
+            <span className="flex items-center">📱 New Ride Request</span>
             <div className="flex items-center space-x-2">
-              <Badge 
+              <Badge
                 className={`animate-pulse ${
-                  countdown <= 10 ? "bg-red-500/20 text-red-400 border-red-500/30" : 
-                  "bg-primary/20 text-primary border-primary/30"
+                  countdown <= 10
+                    ? "bg-red-500/20 text-red-400 border-red-500/30"
+                    : "bg-primary/20 text-primary border-primary/30"
                 }`}
               >
                 {countdown}s
@@ -156,14 +155,17 @@ export default function DriverNotification({
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   {getVehicleIcon(rideRequest.vehicleType)}
-                  <span className="font-semibold capitalize">{rideRequest.vehicleType}</span>
+                  <span className="font-semibold capitalize">
+                    {rideRequest.vehicleType}
+                  </span>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-bold text-primary">
                     {rideRequest.estimatedFare.toFixed(6)} TOKENS
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {rideRequest.distance.toFixed(1)} km • {rideRequest.estimatedDuration} min
+                    {rideRequest.distance.toFixed(1)} km •{" "}
+                    {rideRequest.estimatedDuration} min
                   </div>
                 </div>
               </div>
@@ -203,7 +205,8 @@ export default function DriverNotification({
                 <div>
                   <p className="text-sm font-medium">{rideRequest.riderName}</p>
                   <p className="text-xs text-muted-foreground">
-                    Requested {new Date(rideRequest.timestamp).toLocaleTimeString()}
+                    Requested{" "}
+                    {new Date(rideRequest.timestamp).toLocaleTimeString()}
                   </p>
                 </div>
               </div>
@@ -228,7 +231,7 @@ export default function DriverNotification({
                 </>
               )}
             </Button>
-            
+
             <Button
               onClick={handleAccept}
               disabled={isProcessing}
@@ -258,7 +261,8 @@ export default function DriverNotification({
           {/* Estimated Earnings */}
           <div className="text-center p-3 bg-primary/10 rounded-lg">
             <p className="text-sm font-medium text-primary">
-              💰 Estimated Earnings: {rideRequest.estimatedFare.toFixed(6)} TOKENS
+              💰 Estimated Earnings: {rideRequest.estimatedFare.toFixed(6)}{" "}
+              TOKENS
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Payment secured via smart contract
@@ -273,31 +277,32 @@ export default function DriverNotification({
 // Hook for managing driver notifications
 export function useDriverNotifications() {
   const [notifications, setNotifications] = useState<RideRequest[]>([]);
-  const [currentNotification, setCurrentNotification] = useState<RideRequest | null>(null);
+  const [currentNotification, setCurrentNotification] =
+    useState<RideRequest | null>(null);
   const [showNotification, setShowNotification] = useState(false);
 
   const addNotification = (rideRequest: RideRequest) => {
-    setNotifications(prev => [...prev, rideRequest]);
+    setNotifications((prev) => [...prev, rideRequest]);
     setCurrentNotification(rideRequest);
     setShowNotification(true);
   };
 
   const handleAccept = (requestId: string) => {
     console.log(`Accepted ride request: ${requestId}`);
-    setNotifications(prev => prev.filter(n => n.id !== requestId));
+    setNotifications((prev) => prev.filter((n) => n.id !== requestId));
     setShowNotification(false);
-    
+
     // Trigger success notification
     alert(`Ride accepted! ETA to pickup: 5 minutes. Rider has been notified.`);
   };
 
   const handleIgnore = (requestId: string) => {
     console.log(`Ignored ride request: ${requestId}`);
-    setNotifications(prev => prev.filter(n => n.id !== requestId));
+    setNotifications((prev) => prev.filter((n) => n.id !== requestId));
     setShowNotification(false);
-    
+
     // Show next notification if any
-    const remaining = notifications.filter(n => n.id !== requestId);
+    const remaining = notifications.filter((n) => n.id !== requestId);
     if (remaining.length > 0) {
       setTimeout(() => {
         setCurrentNotification(remaining[0]);

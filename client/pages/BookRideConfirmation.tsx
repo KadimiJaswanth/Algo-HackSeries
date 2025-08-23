@@ -135,8 +135,14 @@ export default function BookRideConfirmation() {
 
   const getRandomDriverName = () => {
     const names = [
-      "Alex Johnson", "Sarah Chen", "Mike Rodriguez", "Emily Davis",
-      "David Kim", "Lisa Anderson", "Carlos Martinez", "Anna Wilson"
+      "Alex Johnson",
+      "Sarah Chen",
+      "Mike Rodriguez",
+      "Emily Davis",
+      "David Kim",
+      "Lisa Anderson",
+      "Carlos Martinez",
+      "Anna Wilson",
     ];
     return names[Math.floor(Math.random() * names.length)];
   };
@@ -146,9 +152,10 @@ export default function BookRideConfirmation() {
       bike: ["Honda CB", "Yamaha R15", "Bajaj Pulsar"],
       auto: ["Bajaj Auto", "TVS King", "Mahindra Alfa"],
       car: ["Toyota Camry", "Honda Civic", "Hyundai Elantra"],
-      premium: ["BMW 5 Series", "Audi A4", "Mercedes C-Class"]
+      premium: ["BMW 5 Series", "Audi A4", "Mercedes C-Class"],
     };
-    const categoryModels = models[vehicleId as keyof typeof models] || models.car;
+    const categoryModels =
+      models[vehicleId as keyof typeof models] || models.car;
     return categoryModels[Math.floor(Math.random() * categoryModels.length)];
   };
 
@@ -186,7 +193,9 @@ export default function BookRideConfirmation() {
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card>
           <CardContent className="text-center py-8">
-            <p className="text-muted-foreground">Loading ride confirmation...</p>
+            <p className="text-muted-foreground">
+              Loading ride confirmation...
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -272,7 +281,9 @@ export default function BookRideConfirmation() {
                   <Users className="h-5 w-5 text-yellow-400" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-yellow-400">Finding Driver</h4>
+                  <h4 className="font-medium text-yellow-400">
+                    Finding Driver
+                  </h4>
                   <p className="text-sm text-muted-foreground">
                     We're connecting you with the nearest driver...
                   </p>
@@ -297,7 +308,10 @@ export default function BookRideConfirmation() {
               {/* Driver Profile */}
               <div className="flex items-center space-x-4">
                 <Avatar className="h-12 w-12 border-2 border-green-500/30">
-                  <AvatarImage src={driverInfo?.avatar} alt={driverInfo?.name} />
+                  <AvatarImage
+                    src={driverInfo?.avatar}
+                    alt={driverInfo?.name}
+                  />
                   <AvatarFallback className="bg-green-500/20 text-green-400">
                     <User className="h-6 w-6" />
                   </AvatarFallback>
@@ -307,7 +321,9 @@ export default function BookRideConfirmation() {
                   <div className="flex items-center space-x-2">
                     <div className="flex items-center space-x-1">
                       <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium">{driverInfo?.rating.toFixed(1)}</span>
+                      <span className="text-sm font-medium">
+                        {driverInfo?.rating.toFixed(1)}
+                      </span>
                     </div>
                     <span className="text-sm text-muted-foreground">•</span>
                     <span className="text-sm text-muted-foreground">
@@ -358,7 +374,8 @@ export default function BookRideConfirmation() {
           <CardContent className="p-4 text-center">
             <p className="text-sm text-muted-foreground">
               Automatically redirecting to tracking in{" "}
-              <span className="font-bold text-primary">{countdown}</span> seconds
+              <span className="font-bold text-primary">{countdown}</span>{" "}
+              seconds
             </p>
           </CardContent>
         </Card>

@@ -111,7 +111,7 @@ export default function DriverChat() {
         status: "sent",
       };
 
-      setMessages(prev => [...prev, message]);
+      setMessages((prev) => [...prev, message]);
       setNewMessage("");
 
       // Simulate driver response
@@ -125,7 +125,7 @@ export default function DriverChat() {
             timestamp: new Date(),
             status: "sent",
           };
-          setMessages(prev => [...prev, driverResponse]);
+          setMessages((prev) => [...prev, driverResponse]);
           setIsTyping(false);
         }, 2000);
       }, 1000);
@@ -150,7 +150,7 @@ export default function DriverChat() {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   if (!driverInfo) {
@@ -178,7 +178,7 @@ export default function DriverChat() {
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            
+
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <Avatar className="h-10 w-10 border-2 border-primary/30">
@@ -191,7 +191,7 @@ export default function DriverChat() {
                   <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
                 )}
               </div>
-              
+
               <div>
                 <h3 className="font-semibold">{driverInfo.name}</h3>
                 <div className="flex items-center space-x-2 text-xs text-muted-foreground">
@@ -254,15 +254,23 @@ export default function DriverChat() {
             >
               <p className="text-sm">{message.text}</p>
               <div className="flex items-center justify-end space-x-1 mt-1">
-                <span className={`text-xs ${
-                  message.sender === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
-                }`}>
+                <span
+                  className={`text-xs ${
+                    message.sender === "user"
+                      ? "text-primary-foreground/70"
+                      : "text-muted-foreground"
+                  }`}
+                >
                   {formatTime(message.timestamp)}
                 </span>
                 {message.sender === "user" && message.status && (
-                  <div className={`text-xs ${
-                    message.status === "read" ? "text-blue-400" : "text-primary-foreground/70"
-                  }`}>
+                  <div
+                    className={`text-xs ${
+                      message.status === "read"
+                        ? "text-blue-400"
+                        : "text-primary-foreground/70"
+                    }`}
+                  >
                     {message.status === "read" ? "✓✓" : "✓"}
                   </div>
                 )}
@@ -276,13 +284,19 @@ export default function DriverChat() {
             <div className="bg-muted p-3 rounded-2xl rounded-bl-sm">
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                <div
+                  className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.1s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
               </div>
             </div>
           </div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -307,7 +321,7 @@ export default function DriverChat() {
             <Send className="h-4 w-4" />
           </Button>
         </div>
-        
+
         {/* Quick Actions */}
         <div className="flex space-x-2 mt-2">
           <Button

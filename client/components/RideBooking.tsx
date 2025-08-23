@@ -99,7 +99,10 @@ export default function RideBooking() {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [rideConfirmed, setRideConfirmed] = useState(false);
-  const [quickBookConfirmation, setQuickBookConfirmation] = useState<{vehicleName: string, fare: number} | null>(null);
+  const [quickBookConfirmation, setQuickBookConfirmation] = useState<{
+    vehicleName: string;
+    fare: number;
+  } | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,
@@ -168,8 +171,12 @@ export default function RideBooking() {
     }));
   };
 
-  const handleQuickBookRide = (vehicleId: string, vehicleName: string, fare: number) => {
-    setQuickBookConfirmation({vehicleName, fare});
+  const handleQuickBookRide = (
+    vehicleId: string,
+    vehicleName: string,
+    fare: number,
+  ) => {
+    setQuickBookConfirmation({ vehicleName, fare });
 
     // Clear confirmation after 3 seconds
     setTimeout(() => {
@@ -703,9 +710,12 @@ export default function RideBooking() {
                     <CheckCircle className="h-6 w-6 text-green-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-green-400">Your ride is confirmed!</h4>
+                    <h4 className="font-semibold text-green-400">
+                      Your ride is confirmed!
+                    </h4>
                     <p className="text-sm text-muted-foreground">
-                      {quickBookConfirmation.vehicleName} booked for {quickBookConfirmation.fare.toFixed(6)} TOKENS
+                      {quickBookConfirmation.vehicleName} booked for{" "}
+                      {quickBookConfirmation.fare.toFixed(6)} TOKENS
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Driver will be assigned shortly...
@@ -801,7 +811,9 @@ export default function RideBooking() {
                     {bookingData.isRoundTrip && (
                       <div className="flex justify-between">
                         <span>Return trip</span>
-                        <span>+{bookingData.fareEstimate.toFixed(4)} TOKENS</span>
+                        <span>
+                          +{bookingData.fareEstimate.toFixed(4)} TOKENS
+                        </span>
                       </div>
                     )}
                     <Separator />

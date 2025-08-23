@@ -74,15 +74,16 @@ function rateLimit(windowMs: number, max: number) {
 
 // Input sanitization
 function sanitizeInput(req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (req.body && typeof req.body === 'object') {
-    req.body = sanitizeObject(req.body);
+  try {
+    if (req.body && typeof req.body === 'object') {
+      req.body = sanitizeObject(req.body);
+    }
+    // Skip query sanitization to avoid readonly property issues
+    next();
+  } catch (error) {
+    console.error('Input sanitization error:', error);
+    next(error);
   }
-
-  if (req.query && typeof req.query === 'object') {
-    req.query = sanitizeObject(req.query) as any;
-  }
-
-  next();
 }
 
 function sanitizeObject(obj: any): any {

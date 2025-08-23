@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Car, MapPin, Wallet } from "lucide-react";
+import { ArrowLeft, Car, MapPin } from "lucide-react";
+import WalletConnect from "@/components/WalletConnect";
 
 export default function Rider() {
   return (
@@ -24,10 +25,7 @@ export default function Rider() {
               <span className="text-sm text-muted-foreground">Rider</span>
             </div>
           </div>
-          <Button variant="outline" size="sm">
-            <Wallet className="mr-2 h-4 w-4" />
-            Connect Wallet
-          </Button>
+          <WalletConnect />
         </div>
       </header>
 

@@ -76,7 +76,6 @@ export default function Rider() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <SOSButton />
             <WalletConnect />
           </div>
         </div>
@@ -154,19 +153,31 @@ export default function Rider() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="book" className="space-y-0 animate-fade-in-up">
-            <div className="grid lg:grid-cols-4 gap-6">
-              <div className="lg:col-span-3">
-                <RideBooking />
+          <TabsContent value="book" className="space-y-6 animate-fade-in-up">
+            {/* Main Ride Booking */}
+            <div className="w-full">
+              <RideBooking />
+            </div>
+
+            {/* Centered Wide Containers */}
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="md:col-span-2 lg:col-span-2">
+                  <AIFareNegotiation
+                    basePrice={currentFare}
+                    onFareAgreed={(price) =>
+                      console.log(`Fare agreed: $${price}`)
+                    }
+                  />
+                </div>
+                <div className="md:col-span-2 lg:col-span-1">
+                  <SplitFare totalFare={currentFare} rideId={activeRideId} />
+                </div>
               </div>
-              <div className="space-y-4">
-                <AIFareNegotiation
-                  basePrice={currentFare}
-                  onFareAgreed={(price) =>
-                    console.log(`Fare agreed: $${price}`)
-                  }
-                />
-                <SplitFare totalFare={currentFare} rideId={activeRideId} />
+
+              {/* Emergency Contacts - Full Width */}
+              <div className="w-full">
+                <SOSButton />
               </div>
             </div>
           </TabsContent>

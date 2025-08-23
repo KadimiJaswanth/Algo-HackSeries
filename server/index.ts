@@ -134,14 +134,24 @@ function csrfProtection(req: express.Request, res: express.Response, next: expre
 
 // Security headers
 function securityHeaders(req: express.Request, res: express.Response, next: express.NextFunction) {
-  res.set({
+  const headers: Record<string, string> = {
     'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;",
-  });
+  };
+
+  // Allow iframe embedding in development for Builder.io preview
+  if (process.env.NODE_ENV === 'development') {
+    // Allow iframe embedding from any origin in development
+    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors *;";
+  } else {
+    // Production security - deny iframe embedding
+    headers['X-Frame-Options'] = 'DENY';
+    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors 'none';";
+  }
+
+  res.set(headers);
   next();
 }
 

@@ -12,6 +12,7 @@ import Driver from "./pages/Driver";
 import Security from "./pages/Security";
 import BookRideConfirmation from "./pages/BookRideConfirmation";
 import DriverChat from "./pages/DriverChat";
+import SmsTest from "./pages/SmsTest";
 import NotFound from "./pages/NotFound";
 
 const App = () => (

@@ -333,7 +333,7 @@ export default function DriverDashboard() {
             ) : (
               <div className="space-y-4">
                 {availableRides.map((ride) => (
-                  <div key={ride.id} className="border rounded-lg p-4 space-y-4">
+                  <div key={ride.id} className="border rounded-lg p-4 space-y-4 hover:shadow-md transition-shadow">
                     {/* Ride Header */}
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
@@ -341,11 +341,25 @@ export default function DriverDashboard() {
                           <Badge className={getRideTypeColor(ride.rideType)}>
                             {ride.rideType}
                           </Badge>
+                          {ride.surge && ride.surge > 1.2 && (
+                            <Badge variant="destructive" className="animate-pulse">
+                              <Zap className="mr-1 h-3 w-3" />
+                              {ride.surge}x
+                            </Badge>
+                          )}
                           <span className="text-sm text-muted-foreground">{ride.timestamp}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                          <User className="h-4 w-4" />
-                          <span>{ride.riderId}</span>
+                        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                          <div className="flex items-center space-x-1">
+                            <User className="h-4 w-4" />
+                            <span>{ride.riderId}</span>
+                          </div>
+                          {ride.passengerRating && (
+                            <div className="flex items-center space-x-1">
+                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              <span>{ride.passengerRating}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="text-right">
@@ -353,7 +367,21 @@ export default function DriverDashboard() {
                           ${ride.estimatedPrice}
                         </div>
                         <div className="text-sm text-muted-foreground">USDC</div>
+                        {ride.tip && ride.tip > 0 && (
+                          <div className="text-sm text-green-600 font-medium">
+                            +${ride.tip} tip
+                          </div>
+                        )}
                       </div>
+                    </div>
+
+                    {/* Vehicle Type Indicator */}
+                    <div className="flex items-center space-x-2">
+                      {ride.vehicleType === 'bike' && <Bike className="h-4 w-4 text-green-500" />}
+                      {ride.vehicleType === 'auto' && <Truck className="h-4 w-4 text-yellow-500" />}
+                      {ride.vehicleType === 'car' && <Car className="h-4 w-4 text-blue-500" />}
+                      {ride.vehicleType === 'premium' && <Car className="h-4 w-4 text-purple-500" />}
+                      <span className="text-sm font-medium capitalize">{ride.vehicleType} Required</span>
                     </div>
 
                     {/* Route */}
@@ -372,7 +400,7 @@ export default function DriverDashboard() {
                     </div>
 
                     {/* Trip Details */}
-                    <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="grid grid-cols-3 gap-4 text-sm bg-muted/50 p-3 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                         <span>{ride.estimatedTime} min</span>
@@ -381,37 +409,59 @@ export default function DriverDashboard() {
                         <Navigation className="h-4 w-4 text-muted-foreground" />
                         <span>{ride.distance}</span>
                       </div>
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <span>${(ride.estimatedPrice / ride.estimatedTime * 60).toFixed(0)}/hr</span>
+                      </div>
                     </div>
+
+                    {/* Earnings Breakdown */}
+                    {ride.surge && ride.surge > 1 && (
+                      <div className="text-sm bg-red-50 border border-red-200 p-2 rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <span className="text-red-700 font-medium">Surge Pricing Active</span>
+                          <span className="text-red-700 font-bold">+${((ride.estimatedPrice * ride.surge) - ride.estimatedPrice).toFixed(2)}</span>
+                        </div>
+                        <div className="text-red-600 text-xs mt-1">
+                          High demand in this area • Total: ${(ride.estimatedPrice * ride.surge).toFixed(2)}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Notes */}
                     {ride.notes && (
                       <>
                         <Separator />
                         <div className="text-sm">
-                          <span className="font-medium">Notes: </span>
+                          <span className="font-medium">Passenger Notes: </span>
                           <span className="text-muted-foreground">{ride.notes}</span>
                         </div>
                       </>
                     )}
 
-                    {/* Accept Button */}
-                    <Button
-                      onClick={() => handleAcceptRide(ride.id)}
-                      disabled={acceptingRide === ride.id}
-                      className="w-full bg-driver hover:bg-driver/90"
-                    >
-                      {acceptingRide === ride.id ? (
-                        <>
-                          <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                          Accepting Ride...
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle className="mr-2 h-4 w-4" />
-                          Accept Ride
-                        </>
-                      )}
-                    </Button>
+                    {/* Action Buttons */}
+                    <div className="flex space-x-2">
+                      <Button
+                        onClick={() => handleAcceptRide(ride.id)}
+                        disabled={acceptingRide === ride.id}
+                        className="flex-1 bg-driver hover:bg-driver/90"
+                      >
+                        {acceptingRide === ride.id ? (
+                          <>
+                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                            Accepting...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle className="mr-2 h-4 w-4" />
+                            Accept ${ride.estimatedPrice}
+                          </>
+                        )}
+                      </Button>
+                      <Button variant="outline" size="sm" className="px-4">
+                        <Navigation className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>

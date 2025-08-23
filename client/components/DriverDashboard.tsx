@@ -65,6 +65,8 @@ export default function DriverDashboard() {
   const [isOnline, setIsOnline] = useState(false);
   const [availableRides, setAvailableRides] = useState<RideRequest[]>(mockRides);
   const [acceptingRide, setAcceptingRide] = useState<string | null>(null);
+  const [activeRide, setActiveRide] = useState<RideRequest | null>(null);
+  const [rideStatus, setRideStatus] = useState<'pickup' | 'in_progress' | 'completed' | null>(null);
 
   const handleAcceptRide = async (rideId: string) => {
     if (!isConnected) {

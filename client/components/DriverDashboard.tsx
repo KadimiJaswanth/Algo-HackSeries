@@ -358,14 +358,14 @@ export default function DriverDashboard() {
             )}
           </CardContent>
         </Card>
-      ) : (
+      ) : !activeRide ? (
         <Card>
           <CardContent className="text-center py-8">
             <Navigation className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-muted-foreground">Go online to see available rides</p>
           </CardContent>
         </Card>
-      )}
+      ) : null}
     </div>
   );
 }

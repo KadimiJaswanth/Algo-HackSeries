@@ -181,7 +181,7 @@ export default function RideBooking() {
   };
 
   const handleBookRide = async () => {
-    if (!isConnected && !isDemoMode()) {
+    if (!isConnected && !demoMode) {
       alert("Please connect your wallet or try demo mode");
       return;
     }
@@ -266,7 +266,7 @@ export default function RideBooking() {
     }, 25000);
   };
 
-  const isDemoMode = () => !isConnected;
+  const isDemoMode = () => demoMode;
 
   const getRandomDriverName = () => {
     const names = [
@@ -314,7 +314,24 @@ export default function RideBooking() {
     handleCompleteRide();
   };
 
-  if (!isConnected) {
+  const enableDemoMode = () => {
+    setDemoMode(true);
+    setBookingData((prev) => ({
+      ...prev,
+      pickup: {
+        lat: 37.7749,
+        lng: -122.4194,
+        address: "Downtown San Francisco",
+      },
+      dropoff: {
+        lat: 37.6213,
+        lng: -122.379,
+        address: "San Francisco Airport",
+      },
+    }));
+  };
+
+  if (!isConnected && !demoMode) {
     return (
       <Card>
         <CardHeader className="text-center">
@@ -325,23 +342,7 @@ export default function RideBooking() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button
-            onClick={() =>
-              setBookingData((prev) => ({
-                ...prev,
-                pickup: {
-                  lat: 37.7749,
-                  lng: -122.4194,
-                  address: "Downtown San Francisco",
-                },
-                dropoff: {
-                  lat: 37.6213,
-                  lng: -122.379,
-                  address: "San Francisco Airport",
-                },
-              }))
-            }
-          >
+          <Button onClick={enableDemoMode}>
             🚀 Try Demo Mode
           </Button>
           <p className="text-sm text-muted-foreground">

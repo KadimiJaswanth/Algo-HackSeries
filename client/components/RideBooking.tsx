@@ -1072,6 +1072,102 @@ export default function RideBooking() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* SMS Notification Status Dialog */}
+      <Dialog open={smsNotificationDialog} onOpenChange={setSmsNotificationDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Phone className="mr-2 h-5 w-5 text-primary" />
+              Driver Notification Sent
+            </DialogTitle>
+            <DialogDescription>
+              Real SMS sent to driver: 6301214658
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Notification Status */}
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <div className={`h-3 w-3 rounded-full ${
+                      driverResponseStatus === 'pending' ? 'bg-yellow-500 animate-pulse' :
+                      driverResponseStatus === 'accepted' ? 'bg-green-500' :
+                      driverResponseStatus === 'ignored' ? 'bg-red-500' : 'bg-gray-500'
+                    }`} />
+                    <span className="text-sm font-medium">
+                      {driverResponseStatus === 'pending' && 'Waiting for driver response...'}
+                      {driverResponseStatus === 'accepted' && 'Driver accepted your ride!'}
+                      {driverResponseStatus === 'ignored' && 'Driver declined the ride'}
+                    </span>
+                  </div>
+
+                  {smsNotificationSent && currentRideId && (
+                    <div className="text-xs text-muted-foreground space-y-1">
+                      <p>📱 SMS sent to: +91 6301214658</p>
+                      <p>🆔 Ride ID: {currentRideId}</p>
+                      <p>⏱️ {getEstimatedResponseTime()}</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* SMS Details */}
+            {smsNotificationSent && (
+              <Card className="border-muted">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">SMS Content Sent:</CardTitle>
+                </CardHeader>
+                <CardContent className="text-xs font-mono bg-muted/50 p-3 rounded">
+                  {formatDetails(
+                    "Rider User",
+                    bookingData.pickup?.address || "",
+                    bookingData.dropoff?.address || "",
+                    bookingData.fareEstimate
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Status Actions */}
+            <div className="flex space-x-3">
+              {driverResponseStatus === 'pending' && (
+                <Button
+                  variant="outline"
+                  onClick={() => setSmsNotificationDialog(false)}
+                  className="flex-1"
+                >
+                  Continue Waiting
+                </Button>
+              )}
+              {driverResponseStatus === 'accepted' && (
+                <Button
+                  onClick={() => setSmsNotificationDialog(false)}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <CheckCircle className="mr-2 h-4 w-4" />
+                  Great! Close
+                </Button>
+              )}
+              {driverResponseStatus === 'ignored' && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSmsNotificationDialog(false);
+                    setActiveRide(null);
+                    setActiveTab("book");
+                  }}
+                  className="flex-1"
+                >
+                  Try Again
+                </Button>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

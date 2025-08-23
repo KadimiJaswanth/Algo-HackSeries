@@ -448,6 +448,101 @@ export default function SecurityDashboard() {
           <Web3SecurityValidator showDetails={true} />
         </TabsContent>
 
+        {/* Quantum Security Tab */}
+        <TabsContent value="quantum" className="space-y-6">
+          <Card className="glass">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Shield className="mr-2 h-5 w-5" />
+                  Post-Quantum Cryptography
+                </div>
+                <Badge variant={securityMetrics.quantumMetrics?.quantumResistant ? 'default' : 'destructive'}>
+                  {securityMetrics.quantumMetrics?.quantumResistant ? 'Quantum-Safe' : 'Quantum-Vulnerable'}
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {securityMetrics.quantumMetrics ? (
+                <div className="space-y-6">
+                  {/* Quantum Metrics */}
+                  <div className="grid md:grid-cols-4 gap-4">
+                    <div className="text-center p-4 rounded-lg border">
+                      <div className="text-2xl font-bold text-primary">
+                        {securityMetrics.quantumMetrics.supportedAlgorithms.length}
+                      </div>
+                      <div className="text-sm text-muted-foreground">PQC Algorithms</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg border">
+                      <div className="text-2xl font-bold text-accent">
+                        {securityMetrics.quantumMetrics.activeKeys}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Active Keys</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg border">
+                      <div className="text-2xl font-bold text-success">
+                        {securityMetrics.quantumMetrics.activeSessions}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Quantum Sessions</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg border">
+                      <div className="text-2xl font-bold text-green-500">
+                        {Math.max(...securityMetrics.quantumMetrics.securityLevels, 0)}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Max Security Level</div>
+                    </div>
+                  </div>
+
+                  {/* Supported Algorithms */}
+                  <div>
+                    <h4 className="font-semibold mb-3">NIST Post-Quantum Standards</h4>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      {[
+                        { name: 'ML-DSA (Dilithium)', type: 'Digital Signature', status: 'NIST Standard' },
+                        { name: 'SLH-DSA (SPHINCS+)', type: 'Hash-based Signature', status: 'NIST Standard' },
+                        { name: 'ML-KEM (Kyber)', type: 'Key Encapsulation', status: 'NIST Standard' },
+                        { name: 'Falcon', type: 'Compact Signature', status: 'Alternative' },
+                      ].map((algo, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 rounded border">
+                          <div>
+                            <div className="font-medium">{algo.name}</div>
+                            <div className="text-sm text-muted-foreground">{algo.type}</div>
+                          </div>
+                          <Badge variant={algo.status === 'NIST Standard' ? 'default' : 'outline'}>
+                            {algo.status}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Shield className="mx-auto h-12 w-12 mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-4">Quantum security not initialized</p>
+                  <Button onClick={() => setQuantumEnabled(true)}>
+                    Enable Quantum Protection
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quantum Wallet Integration */}
+          <QuantumWallet
+            onWalletCreated={(keyId) => {
+              updateSecurityMetrics();
+              reportSecurityEvent('quantum_wallet_integrated', 'low', { keyId });
+            }}
+            onSignature={(signature) => {
+              reportSecurityEvent('quantum_signature_generated', 'low', {
+                algorithm: signature.algorithm,
+                timestamp: signature.timestamp
+              });
+            }}
+          />
+        </TabsContent>
+
         {/* Threats Tab */}
         <TabsContent value="threats" className="space-y-6">
           <Card className="glass">

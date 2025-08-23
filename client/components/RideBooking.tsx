@@ -852,8 +852,8 @@ export default function RideBooking() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center">
-              <DollarSign className="mr-2 h-5 w-5 text-primary" />
-              Pay with Tokens
+              <Wallet className="mr-2 h-5 w-5 text-primary" />
+              Pay with AVAX Tokens
             </DialogTitle>
             <DialogDescription>
               Confirm your payment to book this ride

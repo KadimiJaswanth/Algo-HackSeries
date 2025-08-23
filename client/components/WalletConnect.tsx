@@ -1,13 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, ChevronDown, LogOut } from 'lucide-react';
+import { Wallet, LogOut } from 'lucide-react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 export default function WalletConnect() {
   const { address, isConnected, chain } = useAccount();
@@ -16,27 +10,19 @@ export default function WalletConnect() {
 
   if (!isConnected) {
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+      <div className="flex items-center space-x-2">
+        {connectors.map((connector) => (
+          <Button
+            key={connector.id}
+            variant="outline"
+            size="sm"
+            onClick={() => connect({ connector })}
+          >
             <Wallet className="mr-2 h-4 w-4" />
-            Connect Wallet
-            <ChevronDown className="ml-2 h-4 w-4" />
+            Connect {connector.name}
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {connectors.map((connector) => (
-            <DropdownMenuItem
-              key={connector.id}
-              onClick={() => connect({ connector })}
-              className="cursor-pointer"
-            >
-              {connector.name}
-              {connector.id === 'injected' && ' (Browser Wallet)'}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+        ))}
+      </div>
     );
   }
 
@@ -50,23 +36,18 @@ export default function WalletConnect() {
         </Badge>
       )}
       
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
-            {address?.slice(0, 6)}...{address?.slice(-4)}
-            <ChevronDown className="ml-2 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => disconnect()}
-            className="cursor-pointer text-red-600"
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            Disconnect
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center space-x-2">
+        <span className="text-sm">
+          {address?.slice(0, 6)}...{address?.slice(-4)}
+        </span>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => disconnect()}
+        >
+          <LogOut className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }

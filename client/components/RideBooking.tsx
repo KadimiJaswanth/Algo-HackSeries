@@ -217,7 +217,7 @@ export default function RideBooking() {
 
     try {
       // Simulate token payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Payment successful - show confirmation
       setRideConfirmed(true);
@@ -228,7 +228,6 @@ export default function RideBooking() {
       setTimeout(() => {
         proceedWithBooking();
       }, 1500);
-
     } catch (error) {
       console.error("Payment error:", error);
       alert("Payment failed. Please try again.");
@@ -384,9 +383,7 @@ export default function RideBooking() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button onClick={enableDemoMode}>
-            🚀 Try Demo Mode
-          </Button>
+          <Button onClick={enableDemoMode}>🚀 Try Demo Mode</Button>
           <p className="text-sm text-muted-foreground">
             Experience the full ride-booking workflow without wallet connection
           </p>
@@ -739,7 +736,8 @@ export default function RideBooking() {
                         {(
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.4
-                        ).toFixed(4)} AVAX
+                        ).toFixed(4)}{" "}
+                        AVAX
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -748,7 +746,8 @@ export default function RideBooking() {
                         {(
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.6
-                        ).toFixed(4)} AVAX
+                        ).toFixed(4)}{" "}
+                        AVAX
                       </span>
                     </div>
                     {surgeMultiplier > 1 && (
@@ -757,10 +756,12 @@ export default function RideBooking() {
                           Surge pricing ({surgeMultiplier.toFixed(1)}x)
                         </span>
                         <span>
-                          +{(
+                          +
+                          {(
                             bookingData.fareEstimate -
                             bookingData.fareEstimate / surgeMultiplier
-                          ).toFixed(4)} AVAX
+                          ).toFixed(4)}{" "}
+                          AVAX
                         </span>
                       </div>
                     )}
@@ -883,7 +884,8 @@ export default function RideBooking() {
                       {(
                         bookingData.fareEstimate *
                         (bookingData.isRoundTrip ? 2 : 1)
-                      ).toFixed(4)} AVAX
+                      ).toFixed(4)}{" "}
+                      AVAX
                     </span>
                   </div>
                 </div>
@@ -940,7 +942,8 @@ export default function RideBooking() {
             </div>
             <p className="text-lg font-medium mb-2">Payment Successful!</p>
             <p className="text-sm text-muted-foreground">
-              Your ride has been confirmed and we're now finding the best driver for you.
+              Your ride has been confirmed and we're now finding the best driver
+              for you.
             </p>
           </div>
         </DialogContent>

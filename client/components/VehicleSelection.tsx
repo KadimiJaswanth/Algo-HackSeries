@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FiClock as Clock, FiUsers as Users, FiZap as Zap, FiTruck as Truck } from "react-icons/fi";
+import {
+  FiClock as Clock,
+  FiUsers as Users,
+  FiZap as Zap,
+  FiTruck as Truck,
+} from "react-icons/fi";
 import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
 
 interface VehicleType {
@@ -193,12 +198,13 @@ export default function VehicleSelection({
                 </div>
 
                 <div className="text-right">
-                  <div className="text-lg font-bold">{fare.toFixed(4)} AVAX</div>
+                  <div className="text-lg font-bold">
+                    {fare.toFixed(4)} AVAX
+                  </div>
                   <div className="text-xs text-muted-foreground">Avalanche</div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
-                      +{((fare - fare / surgeMultiplier)).toFixed(4)}{" "}
-                      AVAX surge
+                      +{(fare - fare / surgeMultiplier).toFixed(4)} AVAX surge
                     </div>
                   )}
                 </div>

@@ -169,6 +169,15 @@ export default function RideBooking() {
     }));
   };
 
+  const handleQuickBookRide = (vehicleId: string, vehicleName: string, fare: number) => {
+    setQuickBookConfirmation({vehicleName, fare});
+
+    // Clear confirmation after 3 seconds
+    setTimeout(() => {
+      setQuickBookConfirmation(null);
+    }, 3000);
+  };
+
   const addStop = () => {
     const newStop: Stop = {
       id: `stop-${Date.now()}`,

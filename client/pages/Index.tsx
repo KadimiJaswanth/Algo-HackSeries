@@ -64,17 +64,17 @@ export default function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4">
+      <section className="relative py-20 px-4 z-10">
         <div className="container mx-auto text-center">
-          <Badge className="mb-4" variant="secondary">
+          <Badge className="mb-4 glass glow-accent animate-fade-in-down" variant="secondary">
             Powered by Avalanche C-Chain
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6 animate-fade-in-up text-glow">
             Decentralized
             <br />
             Ride Sharing
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             The future of transportation is here. Secure, transparent, and
             trustless ride-sharing powered by smart contracts and blockchain
             technology.

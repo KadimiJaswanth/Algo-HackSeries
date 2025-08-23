@@ -60,6 +60,7 @@ export default function RideRequestForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   const handleInputChange = (
     field: keyof RideRequest,

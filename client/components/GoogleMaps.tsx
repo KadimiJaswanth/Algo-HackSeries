@@ -3,6 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Navigation, Crosshair } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Location {
   lat: number;

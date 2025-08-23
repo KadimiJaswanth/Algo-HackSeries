@@ -133,22 +133,17 @@ export class QuantumSecurityManager {
     }
   }
 
-  // FALCON key generation (using Dilithium as a fallback for demonstration)
+  // FALCON key generation (using ML-DSA as a fallback for demonstration)
   private async generateFalconKeyPair(algorithm: PQCAlgorithm): Promise<{ publicKey: Uint8Array; privateKey: Uint8Array }> {
     // Note: This is a simplified implementation. In production, you would use
     // a proper FALCON implementation like pqcrypto-falcon or similar
-    
+
     try {
-      // Use Dilithium as fallback for FALCON (both are lattice-based signatures)
-      const dilithiumKeys = Dilithium.keyPair();
-      
-      return {
-        publicKey: new Uint8Array(dilithiumKeys.publicKey),
-        privateKey: new Uint8Array(dilithiumKeys.secretKey)
-      };
-    } catch (error) {
-      // Final fallback to ML-DSA if libraries fail
+      // Use ML-DSA as fallback for FALCON (both are lattice-based signatures)
       return ml_dsa65.keygen();
+    } catch (error) {
+      console.error('Failed to generate FALCON key pair:', error);
+      throw new Error(`FALCON key generation failed: ${error.message}`);
     }
   }
 

@@ -39,6 +39,16 @@ export default function Security() {
   }, []);
 
   const fetchCSRFToken = async () => {
+    // Prevent concurrent requests
+    if (isLoadingToken) {
+      return;
+    }
+
+    setIsLoadingToken(true);
+
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort(), 10000); // 10 second timeout
+
     try {
       const response = await fetch('/api/csrf-token', {
         method: 'GET',
@@ -46,7 +56,10 @@ export default function Security() {
         headers: {
           'Content-Type': 'application/json',
         },
+        signal: abortController.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -58,7 +71,16 @@ export default function Security() {
         throw new Error('Response is not JSON');
       }
 
-      const data = await response.json();
+      // Clone the response to avoid "body stream already read" error
+      const responseClone = response.clone();
+      let data;
+
+      try {
+        data = await responseClone.json();
+      } catch (jsonError) {
+        // If JSON parsing fails, try with original response
+        data = await response.json();
+      }
 
       if (data && data.csrfToken) {
         setCsrfToken(data.csrfToken);
@@ -66,10 +88,20 @@ export default function Security() {
         throw new Error('Invalid CSRF token response');
       }
     } catch (error) {
+      clearTimeout(timeoutId);
+
+      // Don't log aborted requests as errors
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('CSRF token request was aborted');
+        return;
+      }
+
       console.error('Failed to fetch CSRF token:', error);
       reportSecurityEvent('csrf_token_fetch_failed', 'medium', {
         error: error instanceof Error ? error.message : 'Unknown error'
       });
+    } finally {
+      setIsLoadingToken(false);
     }
   };
 

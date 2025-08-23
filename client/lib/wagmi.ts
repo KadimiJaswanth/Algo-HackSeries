@@ -1,9 +1,21 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { createConfig, http } from 'wagmi';
 import { avalanche, avalancheFuji } from 'wagmi/chains';
+import { injected, metaMask, safe, walletConnect } from 'wagmi/connectors';
 
-export const config = getDefaultConfig({
-  appName: 'RideChain',
-  projectId: 'YOUR_PROJECT_ID', // Get from WalletConnect Cloud
+// Create a more flexible config that works without requiring WalletConnect project ID
+const projectId = process.env.VITE_WALLETCONNECT_PROJECT_ID || 'demo-project-id';
+
+export const config = createConfig({
   chains: [avalanche, avalancheFuji],
-  ssr: false, // If your dApp uses server side rendering (SSR)
+  connectors: [
+    injected(),
+    metaMask(),
+    safe(),
+    // Only include WalletConnect if we have a valid project ID
+    ...(projectId !== 'demo-project-id' ? [walletConnect({ projectId })] : []),
+  ],
+  transports: {
+    [avalanche.id]: http(),
+    [avalancheFuji.id]: http(),
+  },
 });

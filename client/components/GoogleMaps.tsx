@@ -347,28 +347,28 @@ export default function GoogleMaps({
   };
 
   return (
-    <div className="relative">
-      <div ref={mapRef} className={className} />
+    <div className="relative rounded-lg overflow-hidden">
+      <div ref={mapRef} className={cn(className, "rounded-lg")} />
 
       {/* Control buttons for selection mode */}
       {mode === "select" && (
-        <div className="absolute top-4 left-4 space-y-2">
+        <div className="absolute top-4 left-4 space-y-2 animate-slide-in-left">
           <Button
             size="sm"
             variant={selectingFor === "pickup" ? "default" : "outline"}
             onClick={() => setSelectingFor("pickup")}
-            className="bg-white/90 backdrop-blur"
+            className="glass glass-hover glow-hover border-green-500/30"
           >
-            <MapPin className="mr-2 h-4 w-4 text-green-500" />
+            <MapPin className="mr-2 h-4 w-4 text-green-400 glow-accent" />
             Set Pickup
           </Button>
           <Button
             size="sm"
             variant={selectingFor === "dropoff" ? "default" : "outline"}
             onClick={() => setSelectingFor("dropoff")}
-            className="bg-white/90 backdrop-blur"
+            className="glass glass-hover glow-hover border-red-500/30"
           >
-            <MapPin className="mr-2 h-4 w-4 text-red-500" />
+            <MapPin className="mr-2 h-4 w-4 text-red-400 glow-accent" />
             Set Dropoff
           </Button>
         </div>
@@ -379,28 +379,28 @@ export default function GoogleMaps({
         size="sm"
         variant="outline"
         onClick={getCurrentLocation}
-        className="absolute bottom-4 right-4 bg-white/90 backdrop-blur"
+        className="absolute bottom-4 right-4 glass glass-hover glow animate-float"
       >
-        <Crosshair className="h-4 w-4" />
+        <Crosshair className="h-4 w-4 text-primary" />
       </Button>
 
       {/* Location indicators */}
       {mode !== "select" && (
-        <div className="absolute top-4 right-4 space-y-2">
+        <div className="absolute top-4 right-4 space-y-2 animate-slide-in-right">
           {pickup && (
-            <Badge className="bg-green-500 text-white">
+            <Badge className="glass bg-green-500/20 text-green-400 border-green-500/30 glow-accent">
               <MapPin className="mr-1 h-3 w-3" />
               Pickup Set
             </Badge>
           )}
           {dropoff && (
-            <Badge className="bg-red-500 text-white">
+            <Badge className="glass bg-red-500/20 text-red-400 border-red-500/30 glow-accent">
               <MapPin className="mr-1 h-3 w-3" />
               Dropoff Set
             </Badge>
           )}
           {driverLocation && (
-            <Badge className="bg-blue-500 text-white">
+            <Badge className="glass bg-blue-500/20 text-blue-400 border-blue-500/30 glow-accent">
               <Navigation className="mr-1 h-3 w-3" />
               Driver Tracking
             </Badge>
@@ -409,9 +409,10 @@ export default function GoogleMaps({
       )}
 
       {selectingFor && (
-        <div className="absolute bottom-4 left-4">
-          <Badge className="bg-primary text-white animate-pulse">
-            Tap on map to set {selectingFor} location
+        <div className="absolute bottom-4 left-4 animate-fade-in-up">
+          <Badge className="glass bg-primary/20 text-primary border-primary/30 animate-glow">
+            <span className="animate-pulse">🎯</span>
+            <span className="ml-2">Tap on map to set {selectingFor} location</span>
           </Badge>
         </div>
       )}

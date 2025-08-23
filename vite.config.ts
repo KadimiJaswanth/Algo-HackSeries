@@ -1,5 +1,6 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import wasm from "vite-plugin-wasm";
 import path from "path";
 import { createServer } from "./server";
 
@@ -9,14 +10,27 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     fs: {
-      allow: ["./client", "./shared"],
+      allow: ["./client", "./shared", "node_modules"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
     },
   },
   build: {
     outDir: "dist/spa",
   },
-  plugins: [react(), expressPlugin()],
+  plugins: [react(), wasm(), expressPlugin()],
+  optimizeDeps: {
+    include: [
+      "@noble/post-quantum",
+      "@noble/post-quantum/ml-dsa",
+      "@noble/post-quantum/ml-kem",
+      "@noble/post-quantum/slh-dsa",
+      "@noble/hashes",
+      "@noble/hashes/sha2",
+      "@noble/hashes/sha3",
+      "@noble/hashes/utils",
+      "@noble/curves",
+    ],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),

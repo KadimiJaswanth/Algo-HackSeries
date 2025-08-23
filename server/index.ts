@@ -15,10 +15,12 @@ const securityConfig = {
   corsOptions: {
     origin: process.env.NODE_ENV === 'development' ? true : [
       'https://yourdomain.com', // Add your production domains
+      'https://metamask.io',
+      'https://*.metamask.io',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With'],
   },
 
   // Session configuration
@@ -134,14 +136,24 @@ function csrfProtection(req: express.Request, res: express.Response, next: expre
 
 // Security headers
 function securityHeaders(req: express.Request, res: express.Response, next: express.NextFunction) {
-  res.set({
+  const headers: Record<string, string> = {
     'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;",
-  });
+  };
+
+  // Allow iframe embedding in development for Builder.io preview
+  if (process.env.NODE_ENV === 'development') {
+    // Allow iframe embedding from any origin in development
+    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss: ws:; frame-ancestors *;";
+  } else {
+    // Production security - deny iframe embedding
+    headers['X-Frame-Options'] = 'DENY';
+    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss:; frame-ancestors 'none';";
+  }
+
+  res.set(headers);
   next();
 }
 

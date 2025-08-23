@@ -89,6 +89,9 @@ export default function RideBooking() {
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
   const [surgeMultiplier, setSurgeMultiplier] = useState(1);
   const [demoMode, setDemoMode] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [rideConfirmed, setRideConfirmed] = useState(false);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: null,

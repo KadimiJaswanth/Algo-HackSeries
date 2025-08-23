@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Car, History, Star } from "lucide-react";
 import WalletConnect from "@/components/WalletConnect";
-import RideRequestForm from "@/components/RideRequestForm";
+import RideBooking from "@/components/RideBooking";
 
 export default function Rider() {
   return (
@@ -75,7 +75,7 @@ export default function Rider() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                     <div>
-                      <div className="font-medium">Downtown → Airport</div>
+                      <div className="font-medium">Downtown ��� Airport</div>
                       <div className="text-muted-foreground">2 hours ago</div>
                     </div>
                     <div className="text-right">

@@ -736,21 +736,19 @@ export default function RideBooking() {
                     <div className="flex justify-between">
                       <span>Base fare</span>
                       <span>
-                        $
                         {(
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.4
-                        ).toFixed(2)}
+                        ).toFixed(4)} AVAX
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Distance & time</span>
                       <span>
-                        $
                         {(
                           (bookingData.fareEstimate / surgeMultiplier) *
                           0.6
-                        ).toFixed(2)}
+                        ).toFixed(4)} AVAX
                       </span>
                     </div>
                     {surgeMultiplier > 1 && (
@@ -759,30 +757,28 @@ export default function RideBooking() {
                           Surge pricing ({surgeMultiplier.toFixed(1)}x)
                         </span>
                         <span>
-                          +$
-                          {(
+                          +{(
                             bookingData.fareEstimate -
                             bookingData.fareEstimate / surgeMultiplier
-                          ).toFixed(2)}
+                          ).toFixed(4)} AVAX
                         </span>
                       </div>
                     )}
                     {bookingData.isRoundTrip && (
                       <div className="flex justify-between">
                         <span>Return trip</span>
-                        <span>+${bookingData.fareEstimate.toFixed(2)}</span>
+                        <span>+{bookingData.fareEstimate.toFixed(4)} AVAX</span>
                       </div>
                     )}
                     <Separator />
                     <div className="flex justify-between font-bold text-lg">
                       <span>Total</span>
                       <span>
-                        $
                         {(
                           bookingData.fareEstimate *
                           (bookingData.isRoundTrip ? 2 : 1)
-                        ).toFixed(2)}{" "}
-                        USDC
+                        ).toFixed(4)}{" "}
+                        AVAX
                       </span>
                     </div>
                   </div>
@@ -884,10 +880,10 @@ export default function RideBooking() {
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Total Amount:</span>
                     <span className="text-lg font-bold text-primary">
-                      ${(
+                      {(
                         bookingData.fareEstimate *
                         (bookingData.isRoundTrip ? 2 : 1)
-                      ).toFixed(2)} USDC
+                      ).toFixed(4)} AVAX
                     </span>
                   </div>
                 </div>

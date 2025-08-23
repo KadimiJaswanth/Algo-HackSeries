@@ -114,7 +114,7 @@ function sanitizeObject(obj: any): any {
 
 // CSRF protection
 function csrfProtection(req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (req.method === 'GET' || req.path.includes('/ping') || req.path.includes('/demo')) {
+  if (req.method === 'GET' || req.path.includes('/ping') || req.path.includes('/demo') || req.path.includes('/csrf-token')) {
     return next();
   }
 

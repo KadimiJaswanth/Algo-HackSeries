@@ -102,18 +102,36 @@ export default function SecurityDashboard() {
     try {
       // Get security audit metrics
       const auditMetrics = SecurityAudit.getSecurityMetrics();
-      
+
       // Get contract security report
       const contractReport = ContractSecurityAnalyzer.getSecurityReport();
-      
+
+      // Get quantum security metrics
+      let quantumMetrics: QuantumMetrics | undefined;
+      try {
+        const qMetrics = getQuantumMetrics();
+        quantumMetrics = {
+          quantumResistant: qMetrics.quantumResistant,
+          supportedAlgorithms: qMetrics.supportedAlgorithms || [],
+          activeKeys: qMetrics.activeKeys || 0,
+          activeSessions: qMetrics.activeSessions || 0,
+          securityLevels: qMetrics.securityLevels || [],
+        };
+      } catch (error) {
+        console.log('Quantum metrics not available:', error);
+      }
+
       // Calculate overall security score
       const baseScore = 100;
       const criticalPenalty = auditMetrics.criticalEvents * 20;
       const highPenalty = auditMetrics.highSeverityEvents * 10;
       const mediumPenalty = auditMetrics.mediumSeverityEvents * 5;
-      
-      const securityScore = Math.max(0, baseScore - criticalPenalty - highPenalty - mediumPenalty);
-      
+
+      // Bonus for quantum resistance
+      const quantumBonus = quantumMetrics?.quantumResistant ? 10 : 0;
+
+      const securityScore = Math.min(100, Math.max(0, baseScore - criticalPenalty - highPenalty - mediumPenalty + quantumBonus));
+
       // Determine threat level
       let threatLevel: 'low' | 'medium' | 'high' | 'critical' = 'low';
       if (auditMetrics.criticalEvents > 0) threatLevel = 'critical';
@@ -126,13 +144,14 @@ export default function SecurityDashboard() {
         threatLevel,
         activeThreats: auditMetrics.criticalEvents + auditMetrics.highSeverityEvents,
         lastUpdate: Date.now(),
+        quantumMetrics,
       };
 
       setSecurityMetrics(metrics);
-      
+
       // Update threat events
       updateThreatEvents();
-      
+
     } catch (error) {
       console.error('Failed to update security metrics:', error);
       reportSecurityEvent('metrics_update_failed', 'medium', { error: error.message });

@@ -355,6 +355,29 @@ export default function RideBooking() {
 
   return (
     <div className="space-y-6">
+      {demoMode && (
+        <Card className="border-orange-500/50 bg-orange-500/10">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="bg-orange-500 text-white">
+                  🚀 Demo Mode
+                </Badge>
+                <span className="text-sm text-muted-foreground">
+                  Experience the full app without wallet connection
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDemoMode(false)}
+              >
+                Exit Demo
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+      )}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="book">Book Ride</TabsTrigger>

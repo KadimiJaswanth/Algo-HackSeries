@@ -19,33 +19,8 @@ import {
   Eye,
   EyeOff
 } from "lucide-react";
+import { useQuantumSecurity, PQCAlgorithm, QuantumSecurityLevel, QuantumKeyPair } from "@/lib/quantumSecurity";
 import { SecurityAudit } from "@/lib/security";
-
-// Dynamic import for quantum security to handle potential import issues
-const useQuantumSecuritySafe = () => {
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { useQuantumSecurity, PQCAlgorithm, QuantumSecurityLevel } = require("@/lib/quantumSecurity");
-    return {
-      useQuantumSecurity: useQuantumSecurity(),
-      PQCAlgorithm,
-      QuantumSecurityLevel,
-      available: true
-    };
-  } catch (error) {
-    console.warn('Quantum security not available:', error);
-    return {
-      useQuantumSecurity: null,
-      PQCAlgorithm: {},
-      QuantumSecurityLevel: {},
-      available: false
-    };
-  }
-};
-
-type PQCAlgorithm = any;
-type QuantumSecurityLevel = any;
-type QuantumKeyPair = any;
 
 interface QuantumWalletProps {
   onWalletCreated?: (keyId: string) => void;

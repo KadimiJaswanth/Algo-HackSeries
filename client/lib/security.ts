@@ -1,5 +1,4 @@
 import { z } from "zod";
-import CryptoJS from "crypto-js";
 
 // Input Validation Schemas
 export const addressSchema = z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address");
@@ -58,7 +57,9 @@ export function sanitizeHtml(html: string): string {
 
 // CSRF Protection
 export function generateCSRFToken(): string {
-  return CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
 export function validateCSRFToken(token: string, expectedToken: string): boolean {
@@ -84,20 +85,64 @@ export class SecurityManager {
   }
 
   private generateEncryptionKey(): string {
-    return CryptoJS.lib.WordArray.random(256/8).toString(CryptoJS.enc.Hex);
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
-  encrypt(data: string): string {
-    return CryptoJS.AES.encrypt(data, this.encryptionKey).toString();
+  async encrypt(data: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const dataBuffer = encoder.encode(data);
+    const keyBuffer = await crypto.subtle.importKey(
+      'raw',
+      new Uint8Array(this.encryptionKey.match(/.{2}/g)!.map(byte => parseInt(byte, 16))),
+      { name: 'AES-GCM' },
+      false,
+      ['encrypt']
+    );
+
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encrypted = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv },
+      keyBuffer,
+      dataBuffer
+    );
+
+    const combined = new Uint8Array(iv.length + encrypted.byteLength);
+    combined.set(iv);
+    combined.set(new Uint8Array(encrypted), iv.length);
+
+    return Array.from(combined, byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
-  decrypt(encryptedData: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, this.encryptionKey);
-    return bytes.toString(CryptoJS.enc.Utf8);
+  async decrypt(encryptedData: string): Promise<string> {
+    const dataArray = new Uint8Array(encryptedData.match(/.{2}/g)!.map(byte => parseInt(byte, 16)));
+    const iv = dataArray.slice(0, 12);
+    const encrypted = dataArray.slice(12);
+
+    const keyBuffer = await crypto.subtle.importKey(
+      'raw',
+      new Uint8Array(this.encryptionKey.match(/.{2}/g)!.map(byte => parseInt(byte, 16))),
+      { name: 'AES-GCM' },
+      false,
+      ['decrypt']
+    );
+
+    const decrypted = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv },
+      keyBuffer,
+      encrypted
+    );
+
+    return new TextDecoder().decode(decrypted);
   }
 
-  hash(data: string): string {
-    return CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex);
+  async hash(data: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const dataBuffer = encoder.encode(data);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+    const hashArray = new Uint8Array(hashBuffer);
+    return Array.from(hashArray, byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
   checkRateLimit(identifier: string): boolean {
@@ -258,7 +303,9 @@ export class PrivacyManager {
   }
 
   static generateAnonymousId(): string {
-    return 'anon_' + CryptoJS.lib.WordArray.random(64/8).toString(CryptoJS.enc.Hex);
+    const array = new Uint8Array(8);
+    crypto.getRandomValues(array);
+    return 'anon_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
   }
 }
 

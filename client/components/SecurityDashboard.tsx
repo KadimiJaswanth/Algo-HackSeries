@@ -33,7 +33,9 @@ import {
 } from "lucide-react";
 import { SecurityAudit, SessionManager, useSecurityMonitoring } from "@/lib/security";
 import { ContractSecurityAnalyzer } from "@/lib/contractSecurity";
+import { useQuantumSecurity } from "@/lib/quantumSecurity";
 import Web3SecurityValidator from "./Web3SecurityValidator";
+import QuantumWallet from "./QuantumWallet";
 
 interface SecurityMetrics {
   totalEvents: number;

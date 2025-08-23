@@ -82,34 +82,34 @@ export default function Index() {
 
           {/* User Type Selection */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
-            <Link to="/rider" className="block">
-              <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:ring-2 hover:ring-rider hover:bg-rider/5 h-full">
+            <Link to="/rider" className="block animate-slide-in-left" style={{ animationDelay: '0.4s' }}>
+              <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-rider/20">
                 <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-rider text-white">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-rider to-primary text-white glow group-hover:animate-float">
                     <MapPin className="h-8 w-8" />
                   </div>
-                  <CardTitle className="text-2xl">I Need a Ride</CardTitle>
-                  <CardDescription>
+                  <CardTitle className="text-2xl text-gradient">I Need a Ride</CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Book secure rides with crypto payments and on-chain
                     reputation
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-                    <li className="flex items-center">
-                      <Shield className="mr-2 h-4 w-4 text-rider" />
+                  <ul className="space-y-3 text-sm text-muted-foreground mb-6">
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Shield className="mr-3 h-5 w-5 text-rider glow-accent" />
                       Escrow payments for security
                     </li>
-                    <li className="flex items-center">
-                      <Zap className="mr-2 h-4 w-4 text-rider" />
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Zap className="mr-3 h-5 w-5 text-rider glow-accent" />
                       Instant crypto transactions
                     </li>
-                    <li className="flex items-center">
-                      <Star className="mr-2 h-4 w-4 text-rider" />
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Star className="mr-3 h-5 w-5 text-rider glow-accent" />
                       Blockchain-verified ratings
                     </li>
                   </ul>
-                  <Button className="w-full bg-rider hover:bg-rider/90">
+                  <Button className="w-full bg-gradient-to-r from-rider to-primary hover:from-primary hover:to-rider glow transition-all duration-300">
                     Start Riding
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -117,33 +117,33 @@ export default function Index() {
               </Card>
             </Link>
 
-            <Link to="/driver" className="block">
-              <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:ring-2 hover:ring-driver hover:bg-driver/5 h-full">
+            <Link to="/driver" className="block animate-slide-in-right" style={{ animationDelay: '0.6s' }}>
+              <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-driver/20">
                 <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-driver text-white">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-driver to-accent text-white glow group-hover:animate-float">
                     <Car className="h-8 w-8" />
                   </div>
-                  <CardTitle className="text-2xl">I Want to Drive</CardTitle>
-                  <CardDescription>
+                  <CardTitle className="text-2xl text-gradient">I Want to Drive</CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Earn crypto by providing rides with guaranteed payments
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-                    <li className="flex items-center">
-                      <Shield className="mr-2 h-4 w-4 text-driver" />
+                  <ul className="space-y-3 text-sm text-muted-foreground mb-6">
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Shield className="mr-3 h-5 w-5 text-driver glow-accent" />
                       Guaranteed payments via smart contracts
                     </li>
-                    <li className="flex items-center">
-                      <Zap className="mr-2 h-4 w-4 text-driver" />
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Zap className="mr-3 h-5 w-5 text-driver glow-accent" />
                       Instant crypto earnings
                     </li>
-                    <li className="flex items-center">
-                      <Users className="mr-2 h-4 w-4 text-driver" />
+                    <li className="flex items-center glass-hover px-2 py-1 rounded-md">
+                      <Users className="mr-3 h-5 w-5 text-driver glow-accent" />
                       Build on-chain reputation
                     </li>
                   </ul>
-                  <Button className="w-full bg-driver hover:bg-driver/90">
+                  <Button className="w-full bg-gradient-to-r from-driver to-accent hover:from-accent hover:to-driver glow transition-all duration-300">
                     Start Driving
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>

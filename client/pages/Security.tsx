@@ -17,14 +17,25 @@ export default function Security() {
   const [activeTab, setActiveTab] = useState("overview");
   const [securityScore, setSecurityScore] = useState(95);
   const [csrfToken, setCsrfToken] = useState<string>("");
+  const [isLoadingToken, setIsLoadingToken] = useState(false);
   const { checkSecurity, reportSecurityEvent } = useSecurityMonitoring();
 
   useEffect(() => {
-    // Fetch CSRF token on component mount
-    fetchCSRFToken();
-    
+    let isMounted = true;
+
+    // Only fetch if not already loading and no token exists
+    if (!isLoadingToken && !csrfToken) {
+      fetchCSRFToken();
+    }
+
     // Report security page access
-    reportSecurityEvent('security_page_accessed', 'low', { timestamp: Date.now() });
+    if (isMounted) {
+      reportSecurityEvent('security_page_accessed', 'low', { timestamp: Date.now() });
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const fetchCSRFToken = async () => {

@@ -46,6 +46,7 @@ export default function RideRequestForm() {
     estimatedTime: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
 
   const handleInputChange = (field: keyof RideRequest, value: string | number) => {
     setFormData(prev => ({

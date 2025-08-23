@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  Mic,
-  MicOff,
-  Volume2,
-  Brain,
-  MapPin,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Zap,
-  MessageSquare,
-  Play,
-  Square,
-} from "lucide-react";
+  FiMic as Mic,
+  FiMicOff as MicOff,
+  FiVolume2 as Volume2,
+  FiCpu as Brain,
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiCheckCircle as CheckCircle,
+  FiAlertCircle as AlertCircle,
+  FiZap as Zap,
+  FiMessageSquare as MessageSquare,
+  FiPlay as Play,
+  FiSquare as Square,
+} from "react-icons/fi";
 
 interface VoiceCommand {
   id: string;

@@ -10,14 +10,14 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Car,
-  MapPin,
-  Shield,
-  Zap,
-  Users,
-  Star,
-  ChevronRight,
-} from "lucide-react";
+  FiMapPin as MapPin,
+  FiShield as Shield,
+  FiZap as Zap,
+  FiUsers as Users,
+  FiStar as Star,
+  FiChevronRight as ChevronRight,
+} from "react-icons/fi";
+import { FaCar as Car } from "react-icons/fa";
 import WalletConnect from "@/components/WalletConnect";
 
 export default function Index() {

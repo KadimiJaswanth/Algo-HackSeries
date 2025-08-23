@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Wallet, LogOut } from "lucide-react";
+import { FiLogOut as LogOut } from "react-icons/fi";
+import { FaWallet as Wallet } from "react-icons/fa";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function WalletConnect() {

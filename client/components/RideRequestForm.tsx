@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Clock, DollarSign, Car, AlertCircle } from "lucide-react";
+import { FiMapPin as MapPin, FiClock as Clock, FiDollarSign as DollarSign, FiAlertCircle as AlertCircle } from "react-icons/fi";
+import { FaCar as Car } from "react-icons/fa";
 import { useAccount } from "wagmi";
 import RideStatus from "./RideStatus";
 

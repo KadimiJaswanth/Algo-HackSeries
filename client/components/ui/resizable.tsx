@@ -1,4 +1,4 @@
-import { GripVertical } from "lucide-react";
+import { FaGripVertical as GripVertical } from "react-icons/fa";
 import * as ResizablePrimitive from "react-resizable-panels";
 
 import { cn } from "@/lib/utils";

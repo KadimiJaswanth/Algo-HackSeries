@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Navigation, Crosshair } from "lucide-react";
+import { FiMapPin as MapPin, FiNavigation as Navigation, FiCrosshair as Crosshair } from "react-icons/fi";
 import { cn } from "@/lib/utils";
 
 interface Location {

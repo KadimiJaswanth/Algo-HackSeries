@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, Zap, Car, Bike, Truck } from "lucide-react";
+import { FiClock as Clock, FiUsers as Users, FiZap as Zap, FiTruck as Truck } from "react-icons/fi";
+import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
 
 interface VehicleType {
   id: string;

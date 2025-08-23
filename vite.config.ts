@@ -25,6 +25,9 @@ export default defineConfig(({ mode }) => ({
       "@noble/post-quantum/ml-kem",
       "@noble/post-quantum/slh-dsa",
       "@noble/hashes",
+      "@noble/hashes/sha2",
+      "@noble/hashes/sha3",
+      "@noble/hashes/utils",
       "@noble/curves"
     ],
   },

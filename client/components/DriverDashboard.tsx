@@ -148,6 +148,72 @@ export default function DriverDashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Active Ride Status */}
+      {activeRide && (
+        <Card className="border-driver">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center">
+                <Navigation className="mr-2 h-5 w-5 text-driver" />
+                Active Ride
+              </span>
+              <Badge
+                className={
+                  rideStatus === 'pickup' ? 'bg-orange-500' :
+                  rideStatus === 'in_progress' ? 'bg-green-500' :
+                  'bg-blue-500'
+                }
+              >
+                {rideStatus === 'pickup' ? 'Going to Pickup' :
+                 rideStatus === 'in_progress' ? 'Ride in Progress' :
+                 'Completed'}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Route */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-3">
+                <div className="h-3 w-3 rounded-full bg-driver" />
+                <span className="font-medium">{activeRide.pickup}</span>
+              </div>
+              <div className="flex items-center space-x-3 ml-1">
+                <div className="h-6 w-0.5 bg-muted-foreground/30" />
+              </div>
+              <div className="flex items-center space-x-3">
+                <MapPin className="h-3 w-3 text-muted-foreground" />
+                <span className="font-medium">{activeRide.dropoff}</span>
+              </div>
+            </div>
+
+            {/* Ride Details */}
+            <div className="grid grid-cols-2 gap-4 text-sm bg-muted/50 p-3 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span>{activeRide.estimatedTime} min</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <span>${activeRide.estimatedPrice} USDC</span>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            {rideStatus === 'in_progress' && (
+              <Button onClick={handleCompleteRide} className="w-full bg-driver hover:bg-driver/90">
+                Complete Ride
+              </Button>
+            )}
+
+            {rideStatus === 'pickup' && (
+              <Button disabled className="w-full">
+                Navigating to Pickup...
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Driver Status Control */}
       <Card>
         <CardHeader>

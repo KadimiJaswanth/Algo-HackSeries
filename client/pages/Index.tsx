@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Car, MapPin, Shield, Zap, Users, Star, ChevronRight, Wallet } from "lucide-react";
+import { Car, MapPin, Shield, Zap, Users, Star, ChevronRight } from "lucide-react";
+import WalletConnect from "@/components/WalletConnect";
 
 export default function Index() {
   const [userType, setUserType] = useState<"rider" | "driver" | null>(null);

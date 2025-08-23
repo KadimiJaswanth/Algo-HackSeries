@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { MapPin, Clock, DollarSign, User, Navigation, CheckCircle, AlertCircle, Car } from "lucide-react";
+import { MapPin, Clock, DollarSign, User, Navigation, CheckCircle, AlertCircle, Car, Bike, Truck, Zap, Star } from "lucide-react";
 import { useAccount } from "wagmi";
 
 interface RideRequest {

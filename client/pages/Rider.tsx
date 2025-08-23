@@ -124,20 +124,61 @@ export default function Rider() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="book" className="space-y-0">
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Main Content - Enhanced Ride Booking */}
+          <TabsContent value="book" className="space-y-0 animate-fade-in-up">
+            <div className="grid lg:grid-cols-4 gap-6">
               <div className="lg:col-span-3">
                 <RideBooking />
+              </div>
+              <div className="space-y-4">
+                <AIFareNegotiation
+                  basePrice={currentFare}
+                  onFareAgreed={(price) => console.log(`Fare agreed: $${price}`)}
+                />
+                <SplitFare totalFare={currentFare} rideId={activeRideId} />
               </div>
             </div>
           </TabsContent>
 
-          <TabsContent value="history" className="space-y-0">
-            <RideHistory />
+          <TabsContent value="pool" className="space-y-0 animate-fade-in-up">
+            <PoolRides mode="find" />
           </TabsContent>
 
-          <TabsContent value="profile" className="space-y-0">
+          <TabsContent value="voice" className="space-y-0 animate-fade-in-up">
+            <VoiceToRide />
+          </TabsContent>
+
+          <TabsContent value="schedule" className="space-y-0 animate-fade-in-up">
+            <ScheduledRides />
+          </TabsContent>
+
+          <TabsContent value="subscription" className="space-y-0 animate-fade-in-up">
+            <SubscriptionRides />
+          </TabsContent>
+
+          <TabsContent value="tracking" className="space-y-0 animate-fade-in-up">
+            <LiveTracking rideId={activeRideId} isActive={true} />
+          </TabsContent>
+
+          <TabsContent value="rewards" className="space-y-0 animate-fade-in-up">
+            <RewardsSystem />
+          </TabsContent>
+
+          <TabsContent value="history" className="space-y-0 animate-fade-in-up">
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <RideHistory />
+              </div>
+              <div>
+                <OnChainReview
+                  targetId="driver-123"
+                  targetType="driver"
+                  targetName="Alex Rodriguez"
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="profile" className="space-y-0 animate-fade-in-up">
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Profile Information */}
               <div className="lg:col-span-2 space-y-6">

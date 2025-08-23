@@ -207,25 +207,26 @@ export default function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 border-t">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+      <footer className="relative py-12 px-4 border-t border-glass-border z-10">
+        <div className="absolute inset-0 glass"></div>
+        <div className="container mx-auto text-center relative z-10">
+          <div className="flex items-center justify-center space-x-2 mb-4 animate-fade-in-up">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-primary to-accent text-white glow">
               <Car className="h-5 w-5" />
             </div>
-            <span className="text-xl font-bold">RideChain</span>
+            <span className="text-xl font-bold text-gradient">RideChain</span>
           </div>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm mb-4">
             Decentralized ride-sharing powered by Avalanche blockchain
           </p>
-          <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-            <Link to="/privacy" className="hover:text-primary">
+          <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
+            <Link to="/privacy" className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary">
               Privacy
             </Link>
-            <Link to="/terms" className="hover:text-primary">
+            <Link to="/terms" className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary">
               Terms
             </Link>
-            <Link to="/support" className="hover:text-primary">
+            <Link to="/support" className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary">
               Support
             </Link>
           </div>

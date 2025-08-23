@@ -74,4 +74,4 @@ export function formatFare(fare: number): string {
 
 // Constants
 export const DRIVER_PHONE = "+916301214658";
-export const SMS_TIMEOUT_SECONDS = 120; // 2 minutes timeout for driver response
+export const SMS_TIMEOUT_SECONDS = 300; // 5 minutes timeout for driver response (as requested)

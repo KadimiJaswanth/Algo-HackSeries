@@ -125,9 +125,15 @@ export default function Rider() {
           </TabsList>
 
           <TabsContent value="book" className="space-y-0 animate-fade-in-up">
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-4 gap-6">
               <div className="lg:col-span-3">
                 <RideBooking />
+              </div>
+              <div className="space-y-4">
+                <AIFareNegotiation
+                  basePrice={currentFare}
+                  onFareAgreed={(price) => console.log(`Fare agreed: $${price}`)}
+                />
               </div>
             </div>
           </TabsContent>

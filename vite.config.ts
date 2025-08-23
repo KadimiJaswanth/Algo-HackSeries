@@ -20,7 +20,14 @@ export default defineConfig(({ mode }) => ({
   plugins: [react(), wasm(), expressPlugin()],
   optimizeDeps: {
     exclude: ["pqc-kyber", "pqc-dilithium"],
-    include: ["@noble/post-quantum", "@noble/hashes", "@noble/curves"],
+    include: [
+      "@noble/post-quantum",
+      "@noble/post-quantum/ml-dsa",
+      "@noble/post-quantum/ml-kem",
+      "@noble/post-quantum/slh-dsa",
+      "@noble/hashes",
+      "@noble/curves"
+    ],
   },
   resolve: {
     alias: {

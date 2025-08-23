@@ -119,7 +119,7 @@ export default function VehicleSelection({
     const distanceFare = distance * vehicle.pricePerKm;
     const timeFare = duration * vehicle.pricePerMin;
     const subtotal = baseFare + distanceFare + timeFare;
-    return Math.round(subtotal * surgeMultiplier * 100) / 100;
+    return Math.round(subtotal * surgeMultiplier * 10000) / 10000;
   };
 
   const getCategoryColor = (category: string) => {

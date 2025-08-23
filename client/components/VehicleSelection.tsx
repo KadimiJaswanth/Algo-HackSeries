@@ -193,13 +193,12 @@ export default function VehicleSelection({
                 </div>
 
                 <div className="text-right">
-                  <div className="text-lg font-bold">${fare}</div>
-                  <div className="text-xs text-muted-foreground">USDC</div>
+                  <div className="text-lg font-bold">{fare.toFixed(4)} AVAX</div>
+                  <div className="text-xs text-muted-foreground">Avalanche</div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
-                      +$
-                      {Math.round((fare - fare / surgeMultiplier) * 100) / 100}{" "}
-                      surge
+                      +{((fare - fare / surgeMultiplier)).toFixed(4)}{" "}
+                      AVAX surge
                     </div>
                   )}
                 </div>
@@ -215,9 +214,9 @@ export default function VehicleSelection({
                     ))}
                   </div>
                   <div className="mt-2 text-xs text-muted-foreground">
-                    Base: ${vehicle.basePrice} + Distance: $
-                    {(distance * vehicle.pricePerKm).toFixed(2)} + Time: $
-                    {(duration * vehicle.pricePerMin).toFixed(2)}
+                    Base: {vehicle.basePrice.toFixed(4)} + Distance:
+                    {(distance * vehicle.pricePerKm).toFixed(4)} + Time:
+                    {(duration * vehicle.pricePerMin).toFixed(4)} AVAX
                   </div>
                 </div>
               )}

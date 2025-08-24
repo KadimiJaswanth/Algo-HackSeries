@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, TestTube, Phone, MessageSquare } from "lucide-react";
 import SmsNotificationTest from "@/components/SmsNotificationTest";
+import SmsConfirmationDemo from "@/components/SmsConfirmationDemo";
 
 export default function SmsTest() {
   return (

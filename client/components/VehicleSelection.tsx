@@ -123,7 +123,6 @@ export default function VehicleSelection({
   surgeMultiplier = 1,
   onBookRide,
 }: VehicleSelectionProps) {
-  const navigate = useNavigate();
   const [bookedVehicle, setBookedVehicle] = useState<string | null>(null);
   const calculateFare = (vehicle: VehicleType): number => {
     const baseFare = vehicle.basePrice;

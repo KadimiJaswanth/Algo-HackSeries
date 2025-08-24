@@ -43,7 +43,7 @@ import {
 import { FaCar as Car, FaWallet as Wallet } from "react-icons/fa";
 import { useAccount } from "wagmi";
 import VehicleSelection from "./VehicleSelection";
-import GoogleMaps from "./GoogleMaps";
+import GeoapifyMaps from "./GeoapifyMaps";
 import RideStatus from "./RideStatus";
 import EnhancedRideTracking from "./EnhancedRideTracking";
 import BookingFlowDebug from "./BookingFlowDebug";

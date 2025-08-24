@@ -31,7 +31,7 @@ import {
   FiMap as Map,
 } from "react-icons/fi";
 import { FaCar as Car } from "react-icons/fa";
-import GoogleMaps from "./GoogleMaps";
+import GeoapifyMaps from "./GeoapifyMaps";
 import { useSmsNotification } from "@/lib/sms-service";
 
 interface Location {

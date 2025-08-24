@@ -47,6 +47,12 @@ export default function Index() {
           </div>
           <nav className="flex items-center space-x-6 animate-slide-in-right">
             <Link
+              to="/sms-test"
+              className="text-sm hover:text-primary transition-colors glass-hover px-3 py-1 rounded-md"
+            >
+              SMS Test
+            </Link>
+            <Link
               to="/about"
               className="text-sm font-medium hover:text-primary transition-all duration-300 glass-hover px-3 py-1 rounded-md"
             >

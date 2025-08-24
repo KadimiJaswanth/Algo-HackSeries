@@ -45,6 +45,9 @@ import { useAccount } from "wagmi";
 import VehicleSelection from "./VehicleSelection";
 import GoogleMaps from "./GoogleMaps";
 import RideStatus from "./RideStatus";
+import EnhancedRideTracking from "./EnhancedRideTracking";
+import BookingFlowDebug from "./BookingFlowDebug";
+import { useSmsNotification } from "@/lib/sms-service";
 
 interface Location {
   lat: number;
@@ -89,8 +92,18 @@ interface ActiveRide {
   };
 }
 
-export default function RideBooking() {
+interface RideBookingProps {
+  onTabChange?: (tab: string) => void;
+}
+
+export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   const { address, isConnected } = useAccount();
+  const {
+    sendNotification,
+    pollStatus,
+    formatDetails,
+    getEstimatedResponseTime,
+  } = useSmsNotification();
   const [activeTab, setActiveTab] = useState("book");
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
@@ -102,6 +115,14 @@ export default function RideBooking() {
   const [quickBookConfirmation, setQuickBookConfirmation] = useState<{
     vehicleName: string;
     fare: number;
+  } | null>(null);
+  // Enhanced ride tracking states
+  const [useEnhancedTracking, setUseEnhancedTracking] = useState(false);
+  const [enhancedRideData, setEnhancedRideData] = useState<{
+    pickup: Location;
+    dropoff: Location;
+    estimatedFare: number;
+    riderName: string;
   } | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
@@ -251,32 +272,36 @@ export default function RideBooking() {
     }
   };
 
-  const proceedWithBooking = () => {
+  const proceedWithBooking = async () => {
     setIsLoading(true);
+    setRideConfirmed(false);
 
     try {
-      // Create ride with enhanced details
-      const rideId = `ride-${Date.now()}`;
-      const newRide: ActiveRide = {
-        id: rideId,
-        status: "searching",
-        pickup: bookingData.pickup!.address,
-        dropoff: bookingData.dropoff!.address,
-        price: bookingData.fareEstimate,
+      // Prepare enhanced ride data for tracking
+      const rideData = {
+        pickup: bookingData.pickup!,
+        dropoff: bookingData.dropoff!,
+        estimatedFare: bookingData.fareEstimate,
+        riderName: "Rider User", // In real app, get from user profile
       };
 
-      setActiveRide(newRide);
-      setActiveTab("track");
+      setEnhancedRideData(rideData);
+      setUseEnhancedTracking(true);
+      onTabChange?.("track");
       setIsLoading(false);
-      setRideConfirmed(false);
 
-      // Simulate ride workflow
-      simulateRideWorkflow(newRide);
+      // Note: The enhanced tracking component will handle:
+      // 1. Sending SMS to 6301214658
+      // 2. 5-minute auto-cancel timer
+      // 3. Live tracking when accepted
+      // 4. Call/message options
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
+      setUseEnhancedTracking(false);
+      setEnhancedRideData(null);
+    } finally {
       setIsLoading(false);
-      setRideConfirmed(false);
     }
   };
 
@@ -357,13 +382,13 @@ export default function RideBooking() {
 
   const handleCancelRide = () => {
     setActiveRide(null);
-    setActiveTab("book");
+    onTabChange?.("book");
   };
 
   const handleCompleteRide = () => {
     alert("Ride completed! Payment processed via smart contract.");
     setActiveRide(null);
-    setActiveTab("book");
+    onTabChange?.("book");
   };
 
   const handleRateDriver = (rating: number) => {
@@ -410,6 +435,16 @@ export default function RideBooking() {
 
   return (
     <div className="space-y-6">
+      {/* Debug Info for Development */}
+      {process.env.NODE_ENV === "development" && (
+        <BookingFlowDebug
+          isEnhancedTracking={useEnhancedTracking}
+          hasRideData={!!enhancedRideData}
+          currentTab={activeTab}
+          driverPhone="6301214658"
+        />
+      )}
+
       {demoMode && (
         <Card className="border-orange-500/50 bg-orange-500/10">
           <CardHeader className="pb-2">
@@ -854,7 +889,24 @@ export default function RideBooking() {
         </TabsContent>
 
         <TabsContent value="track">
-          {activeRide ? (
+          {useEnhancedTracking && enhancedRideData ? (
+            <EnhancedRideTracking
+              rideData={enhancedRideData}
+              onCancel={() => {
+                setUseEnhancedTracking(false);
+                setEnhancedRideData(null);
+                onTabChange?.("book");
+              }}
+              onComplete={() => {
+                alert(
+                  "🎉 Ride completed successfully! Payment processed via smart contract.",
+                );
+                setUseEnhancedTracking(false);
+                setEnhancedRideData(null);
+                onTabChange?.("book");
+              }}
+            />
+          ) : activeRide ? (
             <RideStatus
               ride={activeRide}
               onCancel={handleCancelRide}
@@ -866,6 +918,9 @@ export default function RideBooking() {
               <CardContent className="text-center py-8">
                 <Car className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No active ride</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Book a ride to start tracking
+                </p>
               </CardContent>
             </Card>
           )}

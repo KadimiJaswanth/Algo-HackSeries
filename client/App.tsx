@@ -12,6 +12,7 @@ import Driver from "./pages/Driver";
 import Security from "./pages/Security";
 import BookRideConfirmation from "./pages/BookRideConfirmation";
 import DriverChat from "./pages/DriverChat";
+import SmsTest from "./pages/SmsTest";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -30,6 +31,7 @@ const App = () => (
             element={<BookRideConfirmation />}
           />
           <Route path="/driver-chat" element={<DriverChat />} />
+          <Route path="/sms-test" element={<SmsTest />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

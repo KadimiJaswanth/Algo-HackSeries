@@ -127,7 +127,9 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   } | null>(null);
 
   // New booking flow states
-  const [bookingFlowState, setBookingFlowState] = useState<'idle' | 'searching' | 'driver_found' | 'tracking'>('idle');
+  const [bookingFlowState, setBookingFlowState] = useState<
+    "idle" | "searching" | "driver_found" | "tracking"
+  >("idle");
   const [searchingData, setSearchingData] = useState<{
     pickup: Location;
     dropoff: Location;
@@ -234,28 +236,34 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
       };
 
       setSearchingData(searchData);
-      setBookingFlowState('searching');
+      setBookingFlowState("searching");
 
       // Simulate searching for driver (3-8 seconds)
-      setTimeout(() => {
-        // Simulate finding a driver
-        const driverData = {
-          name: "Driver Kumar",
-          phone: "6301214658",
-          carModel: vehicleName,
-          licensePlate: "RIDE-" + Math.floor(Math.random() * 1000).toString().padStart(3, '0'),
-          rating: 4.5 + Math.random() * 0.5,
-          eta: Math.floor(Math.random() * 8) + 3,
-        };
+      setTimeout(
+        () => {
+          // Simulate finding a driver
+          const driverData = {
+            name: "Driver Kumar",
+            phone: "6301214658",
+            carModel: vehicleName,
+            licensePlate:
+              "RIDE-" +
+              Math.floor(Math.random() * 1000)
+                .toString()
+                .padStart(3, "0"),
+            rating: 4.5 + Math.random() * 0.5,
+            eta: Math.floor(Math.random() * 8) + 3,
+          };
 
-        setFoundDriverData(driverData);
-        setBookingFlowState('driver_found');
-      }, 3000 + Math.random() * 5000);
-
+          setFoundDriverData(driverData);
+          setBookingFlowState("driver_found");
+        },
+        3000 + Math.random() * 5000,
+      );
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
-      setBookingFlowState('idle');
+      setBookingFlowState("idle");
       setSearchingData(null);
     }
   };
@@ -396,11 +404,10 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
       // Start the new booking flow
       await startBookingFlow(bookingData.fareEstimate, vehicleName);
-
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
-      setBookingFlowState('idle');
+      setBookingFlowState("idle");
       setSearchingData(null);
     } finally {
       setIsLoading(false);
@@ -586,7 +593,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
             searchingData={searchingData}
             driverData={foundDriverData}
             onCancel={() => {
-              setBookingFlowState('idle');
+              setBookingFlowState("idle");
               setSearchingData(null);
               setFoundDriverData(null);
             }}
@@ -601,423 +608,430 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
                 setEnhancedRideData(rideData);
                 setUseEnhancedTracking(true);
-                setBookingFlowState('tracking');
+                setBookingFlowState("tracking");
                 onTabChange?.("tracking");
               }
             }}
           />
 
           {/* Normal booking interface - only show when in idle state */}
-          {bookingFlowState === 'idle' && (
+          {bookingFlowState === "idle" && (
             <>
-          {/* Map View */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Navigation className="mr-2 h-5 w-5" />
-                Select Locations
-              </CardTitle>
-              <CardDescription>
-                Tap on the map to set pickup and dropoff locations
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <GoogleMaps
-                pickup={bookingData.pickup}
-                dropoff={bookingData.dropoff}
-                onLocationSelect={handleLocationSelect}
-                mode="select"
-                className="w-full h-80 rounded-lg border"
-              />
-            </CardContent>
-          </Card>
-
-          {/* Location Details */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Trip Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="pickup-address">Pickup Location</Label>
-                  <Input
-                    id="pickup-address"
-                    value={bookingData.pickup?.address || ""}
-                    placeholder="Enter pickup address"
-                    onChange={(e) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        pickup: prev.pickup
-                          ? { ...prev.pickup, address: e.target.value }
-                          : { lat: 0, lng: 0, address: e.target.value },
-                      }))
-                    }
+              {/* Map View */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Navigation className="mr-2 h-5 w-5" />
+                    Select Locations
+                  </CardTitle>
+                  <CardDescription>
+                    Tap on the map to set pickup and dropoff locations
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <GoogleMaps
+                    pickup={bookingData.pickup}
+                    dropoff={bookingData.dropoff}
+                    onLocationSelect={handleLocationSelect}
+                    mode="select"
+                    className="w-full h-80 rounded-lg border"
                   />
-                </div>
-                <div>
-                  <Label htmlFor="dropoff-address">Dropoff Location</Label>
-                  <Input
-                    id="dropoff-address"
-                    value={bookingData.dropoff?.address || ""}
-                    placeholder="Enter destination address"
-                    onChange={(e) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        dropoff: prev.dropoff
-                          ? { ...prev.dropoff, address: e.target.value }
-                          : { lat: 0, lng: 0, address: e.target.value },
-                      }))
-                    }
-                  />
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
-              {/* Multiple Stops */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Label>Additional Stops</Label>
-                  <Button variant="outline" size="sm" onClick={addStop}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Stop
-                  </Button>
-                </div>
-                {bookingData.stops.map((stop, index) => (
-                  <div
-                    key={stop.id}
-                    className="flex items-center space-x-2 mb-2"
-                  >
-                    <Input
-                      placeholder={`Stop ${index + 1} address`}
-                      value={stop.location.address}
-                      onChange={(e) => {
-                        const updatedStops = bookingData.stops.map((s) =>
-                          s.id === stop.id
-                            ? {
-                                ...s,
-                                location: {
-                                  ...s.location,
-                                  address: e.target.value,
-                                },
-                              }
-                            : s,
-                        );
-                        setBookingData((prev) => ({
-                          ...prev,
-                          stops: updatedStops,
-                        }));
-                      }}
-                    />
-                    <Input
-                      type="number"
-                      placeholder="Wait time (min)"
-                      value={stop.duration}
-                      onChange={(e) => {
-                        const updatedStops = bookingData.stops.map((s) =>
-                          s.id === stop.id
-                            ? { ...s, duration: parseInt(e.target.value) || 0 }
-                            : s,
-                        );
-                        setBookingData((prev) => ({
-                          ...prev,
-                          stops: updatedStops,
-                        }));
-                      }}
-                      className="w-32"
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeStop(stop.id)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+              {/* Location Details */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Trip Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="pickup-address">Pickup Location</Label>
+                      <Input
+                        id="pickup-address"
+                        value={bookingData.pickup?.address || ""}
+                        placeholder="Enter pickup address"
+                        onChange={(e) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            pickup: prev.pickup
+                              ? { ...prev.pickup, address: e.target.value }
+                              : { lat: 0, lng: 0, address: e.target.value },
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="dropoff-address">Dropoff Location</Label>
+                      <Input
+                        id="dropoff-address"
+                        value={bookingData.dropoff?.address || ""}
+                        placeholder="Enter destination address"
+                        onChange={(e) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            dropoff: prev.dropoff
+                              ? { ...prev.dropoff, address: e.target.value }
+                              : { lat: 0, lng: 0, address: e.target.value },
+                          }))
+                        }
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
 
-              {/* Trip Options */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="scheduled"
-                    checked={bookingData.isScheduled}
-                    onCheckedChange={(checked) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        isScheduled: checked,
-                      }))
-                    }
-                  />
-                  <Label htmlFor="scheduled">Schedule for later</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="round-trip"
-                    checked={bookingData.isRoundTrip}
-                    onCheckedChange={(checked) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        isRoundTrip: checked,
-                      }))
-                    }
-                  />
-                  <Label htmlFor="round-trip">Round trip</Label>
-                </div>
-              </div>
+                  {/* Multiple Stops */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label>Additional Stops</Label>
+                      <Button variant="outline" size="sm" onClick={addStop}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Stop
+                      </Button>
+                    </div>
+                    {bookingData.stops.map((stop, index) => (
+                      <div
+                        key={stop.id}
+                        className="flex items-center space-x-2 mb-2"
+                      >
+                        <Input
+                          placeholder={`Stop ${index + 1} address`}
+                          value={stop.location.address}
+                          onChange={(e) => {
+                            const updatedStops = bookingData.stops.map((s) =>
+                              s.id === stop.id
+                                ? {
+                                    ...s,
+                                    location: {
+                                      ...s.location,
+                                      address: e.target.value,
+                                    },
+                                  }
+                                : s,
+                            );
+                            setBookingData((prev) => ({
+                              ...prev,
+                              stops: updatedStops,
+                            }));
+                          }}
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Wait time (min)"
+                          value={stop.duration}
+                          onChange={(e) => {
+                            const updatedStops = bookingData.stops.map((s) =>
+                              s.id === stop.id
+                                ? {
+                                    ...s,
+                                    duration: parseInt(e.target.value) || 0,
+                                  }
+                                : s,
+                            );
+                            setBookingData((prev) => ({
+                              ...prev,
+                              stops: updatedStops,
+                            }));
+                          }}
+                          className="w-32"
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removeStop(stop.id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
 
-              {bookingData.isScheduled && (
-                <div>
-                  <Label htmlFor="scheduled-time">Scheduled Time</Label>
-                  <Input
-                    id="scheduled-time"
-                    type="datetime-local"
-                    value={bookingData.scheduledTime}
-                    onChange={(e) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        scheduledTime: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+                  {/* Trip Options */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="scheduled"
+                        checked={bookingData.isScheduled}
+                        onCheckedChange={(checked) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            isScheduled: checked,
+                          }))
+                        }
+                      />
+                      <Label htmlFor="scheduled">Schedule for later</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="round-trip"
+                        checked={bookingData.isRoundTrip}
+                        onCheckedChange={(checked) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            isRoundTrip: checked,
+                          }))
+                        }
+                      />
+                      <Label htmlFor="round-trip">Round trip</Label>
+                    </div>
+                  </div>
+
+                  {bookingData.isScheduled && (
+                    <div>
+                      <Label htmlFor="scheduled-time">Scheduled Time</Label>
+                      <Input
+                        id="scheduled-time"
+                        type="datetime-local"
+                        value={bookingData.scheduledTime}
+                        onChange={(e) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            scheduledTime: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="passengers">Number of Passengers</Label>
+                      <Input
+                        id="passengers"
+                        type="number"
+                        min="1"
+                        max="8"
+                        value={bookingData.passengers}
+                        onChange={(e) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            passengers: parseInt(e.target.value) || 1,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="promo-code">Promo Code</Label>
+                      <Input
+                        id="promo-code"
+                        placeholder="Enter promo code"
+                        value={bookingData.promoCode}
+                        onChange={(e) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            promoCode: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="notes">Special Instructions</Label>
+                    <Textarea
+                      id="notes"
+                      placeholder="Any special instructions for the driver..."
+                      value={bookingData.notes}
+                      onChange={(e) =>
+                        setBookingData((prev) => ({
+                          ...prev,
+                          notes: e.target.value,
+                        }))
+                      }
+                      rows={3}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Vehicle Selection */}
+              {bookingData.pickup && bookingData.dropoff && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Choose Your Ride</CardTitle>
+                    {surgeMultiplier > 1.2 && (
+                      <Badge variant="destructive" className="mb-2">
+                        <Zap className="mr-1 h-3 w-3" />
+                        High demand in your area
+                      </Badge>
+                    )}
+                    <CardDescription>
+                      Select your preferred vehicle type for this trip
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <VehicleSelection
+                      distance={calculateDistance(
+                        bookingData.pickup,
+                        bookingData.dropoff,
+                      )}
+                      duration={Math.round(
+                        calculateDistance(
+                          bookingData.pickup,
+                          bookingData.dropoff,
+                        ) * 2.5,
+                      )}
+                      selectedVehicle={bookingData.vehicleType}
+                      onVehicleSelect={handleVehicleSelect}
+                      onBookRide={handleQuickBookRide}
+                      surgeMultiplier={surgeMultiplier}
+                    />
+                  </CardContent>
+                </Card>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="passengers">Number of Passengers</Label>
-                  <Input
-                    id="passengers"
-                    type="number"
-                    min="1"
-                    max="8"
-                    value={bookingData.passengers}
-                    onChange={(e) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        passengers: parseInt(e.target.value) || 1,
-                      }))
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="promo-code">Promo Code</Label>
-                  <Input
-                    id="promo-code"
-                    placeholder="Enter promo code"
-                    value={bookingData.promoCode}
-                    onChange={(e) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        promoCode: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="notes">Special Instructions</Label>
-                <Textarea
-                  id="notes"
-                  placeholder="Any special instructions for the driver..."
-                  value={bookingData.notes}
-                  onChange={(e) =>
-                    setBookingData((prev) => ({
-                      ...prev,
-                      notes: e.target.value,
-                    }))
-                  }
-                  rows={3}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Vehicle Selection */}
-          {bookingData.pickup && bookingData.dropoff && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Choose Your Ride</CardTitle>
-                {surgeMultiplier > 1.2 && (
-                  <Badge variant="destructive" className="mb-2">
-                    <Zap className="mr-1 h-3 w-3" />
-                    High demand in your area
-                  </Badge>
-                )}
-                <CardDescription>
-                  Select your preferred vehicle type for this trip
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <VehicleSelection
-                  distance={calculateDistance(
-                    bookingData.pickup,
-                    bookingData.dropoff,
-                  )}
-                  duration={Math.round(
-                    calculateDistance(bookingData.pickup, bookingData.dropoff) *
-                      2.5,
-                  )}
-                  selectedVehicle={bookingData.vehicleType}
-                  onVehicleSelect={handleVehicleSelect}
-                  onBookRide={handleQuickBookRide}
-                  surgeMultiplier={surgeMultiplier}
-                />
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Quick Book Confirmation */}
-          {quickBookConfirmation && (
-            <Card className="border-green-500/50 bg-green-500/10 animate-fade-in-up">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-full bg-green-500/20">
-                    <CheckCircle className="h-6 w-6 text-green-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-green-400">
-                      Your ride is confirmed!
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      {quickBookConfirmation.vehicleName} booked for{" "}
-                      {quickBookConfirmation.fare.toFixed(6)} TOKENS
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Driver will be assigned shortly...
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Safety & Sharing Options */}
-          {bookingData.vehicleType && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Shield className="mr-2 h-5 w-5" />
-                  Safety & Sharing
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="emergency-contact">Emergency Contact</Label>
-                  <Input
-                    id="emergency-contact"
-                    placeholder="Phone number for emergency contact"
-                    value={bookingData.emergencyContact}
-                    onChange={(e) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        emergencyContact: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="share-trip"
-                    checked={bookingData.shareTrip}
-                    onCheckedChange={(checked) =>
-                      setBookingData((prev) => ({
-                        ...prev,
-                        shareTrip: checked,
-                      }))
-                    }
-                  />
-                  <Label htmlFor="share-trip" className="flex items-center">
-                    <Share2 className="mr-2 h-4 w-4" />
-                    Share trip details with emergency contact
-                  </Label>
-                </div>
-
-                {/* Price Breakdown */}
-                <Separator />
-                <div className="space-y-2">
-                  <h4 className="font-medium">Price Breakdown</h4>
-                  <div className="text-sm space-y-1">
-                    <div className="flex justify-between">
-                      <span>Base fare</span>
-                      <span>
-                        {(
-                          (bookingData.fareEstimate / surgeMultiplier) *
-                          0.4
-                        ).toFixed(4)}{" "}
-                        TOKENS
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Distance & time</span>
-                      <span>
-                        {(
-                          (bookingData.fareEstimate / surgeMultiplier) *
-                          0.6
-                        ).toFixed(4)}{" "}
-                        TOKENS
-                      </span>
-                    </div>
-                    {surgeMultiplier > 1 && (
-                      <div className="flex justify-between text-red-600">
-                        <span>
-                          Surge pricing ({surgeMultiplier.toFixed(1)}x)
-                        </span>
-                        <span>
-                          +
-                          {(
-                            bookingData.fareEstimate -
-                            bookingData.fareEstimate / surgeMultiplier
-                          ).toFixed(4)}{" "}
-                          TOKENS
-                        </span>
+              {/* Quick Book Confirmation */}
+              {quickBookConfirmation && (
+                <Card className="border-green-500/50 bg-green-500/10 animate-fade-in-up">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 rounded-full bg-green-500/20">
+                        <CheckCircle className="h-6 w-6 text-green-400" />
                       </div>
-                    )}
-                    {bookingData.isRoundTrip && (
-                      <div className="flex justify-between">
-                        <span>Return trip</span>
-                        <span>
-                          +{bookingData.fareEstimate.toFixed(4)} TOKENS
-                        </span>
+                      <div>
+                        <h4 className="font-semibold text-green-400">
+                          Your ride is confirmed!
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {quickBookConfirmation.vehicleName} booked for{" "}
+                          {quickBookConfirmation.fare.toFixed(6)} TOKENS
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Driver will be assigned shortly...
+                        </p>
                       </div>
-                    )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Safety & Sharing Options */}
+              {bookingData.vehicleType && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Shield className="mr-2 h-5 w-5" />
+                      Safety & Sharing
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label htmlFor="emergency-contact">
+                        Emergency Contact
+                      </Label>
+                      <Input
+                        id="emergency-contact"
+                        placeholder="Phone number for emergency contact"
+                        value={bookingData.emergencyContact}
+                        onChange={(e) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            emergencyContact: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="share-trip"
+                        checked={bookingData.shareTrip}
+                        onCheckedChange={(checked) =>
+                          setBookingData((prev) => ({
+                            ...prev,
+                            shareTrip: checked,
+                          }))
+                        }
+                      />
+                      <Label htmlFor="share-trip" className="flex items-center">
+                        <Share2 className="mr-2 h-4 w-4" />
+                        Share trip details with emergency contact
+                      </Label>
+                    </div>
+
+                    {/* Price Breakdown */}
                     <Separator />
-                    <div className="flex justify-between font-bold text-lg">
-                      <span>Total</span>
-                      <span>
-                        {(
-                          bookingData.fareEstimate *
-                          (bookingData.isRoundTrip ? 2 : 1)
-                        ).toFixed(4)}{" "}
-                        TOKENS
-                      </span>
+                    <div className="space-y-2">
+                      <h4 className="font-medium">Price Breakdown</h4>
+                      <div className="text-sm space-y-1">
+                        <div className="flex justify-between">
+                          <span>Base fare</span>
+                          <span>
+                            {(
+                              (bookingData.fareEstimate / surgeMultiplier) *
+                              0.4
+                            ).toFixed(4)}{" "}
+                            TOKENS
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Distance & time</span>
+                          <span>
+                            {(
+                              (bookingData.fareEstimate / surgeMultiplier) *
+                              0.6
+                            ).toFixed(4)}{" "}
+                            TOKENS
+                          </span>
+                        </div>
+                        {surgeMultiplier > 1 && (
+                          <div className="flex justify-between text-red-600">
+                            <span>
+                              Surge pricing ({surgeMultiplier.toFixed(1)}x)
+                            </span>
+                            <span>
+                              +
+                              {(
+                                bookingData.fareEstimate -
+                                bookingData.fareEstimate / surgeMultiplier
+                              ).toFixed(4)}{" "}
+                              TOKENS
+                            </span>
+                          </div>
+                        )}
+                        {bookingData.isRoundTrip && (
+                          <div className="flex justify-between">
+                            <span>Return trip</span>
+                            <span>
+                              +{bookingData.fareEstimate.toFixed(4)} TOKENS
+                            </span>
+                          </div>
+                        )}
+                        <Separator />
+                        <div className="flex justify-between font-bold text-lg">
+                          <span>Total</span>
+                          <span>
+                            {(
+                              bookingData.fareEstimate *
+                              (bookingData.isRoundTrip ? 2 : 1)
+                            ).toFixed(4)}{" "}
+                            TOKENS
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <Button
-                  onClick={handleBookRide}
-                  disabled={isLoading || !bookingData.vehicleType}
-                  className="w-full bg-primary hover:bg-primary/90"
-                  size="lg"
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                      Booking Ride...
-                    </>
-                  ) : (
-                    <>
-                      <Car className="mr-2 h-4 w-4" />
-                      Confirm & Book Ride
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+                    <Button
+                      onClick={handleBookRide}
+                      disabled={isLoading || !bookingData.vehicleType}
+                      className="w-full bg-primary hover:bg-primary/90"
+                      size="lg"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                          Booking Ride...
+                        </>
+                      ) : (
+                        <>
+                          <Car className="mr-2 h-4 w-4" />
+                          Confirm & Book Ride
+                        </>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
             </>
           )}
         </TabsContent>

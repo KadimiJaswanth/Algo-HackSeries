@@ -41,7 +41,7 @@ interface DriverData {
 }
 
 interface BookingFlowStatesProps {
-  flowState: 'idle' | 'searching' | 'driver_found' | 'tracking';
+  flowState: "idle" | "searching" | "driver_found" | "tracking";
   searchingData: SearchingData | null;
   driverData: DriverData | null;
   onCancel: () => void;
@@ -58,22 +58,22 @@ export default function BookingFlowStates({
   const [searchTime, setSearchTime] = useState(0);
 
   useEffect(() => {
-    if (flowState === 'searching') {
+    if (flowState === "searching") {
       const timer = setInterval(() => {
-        setSearchTime(prev => prev + 1);
+        setSearchTime((prev) => prev + 1);
       }, 1000);
-      
+
       return () => clearInterval(timer);
     } else {
       setSearchTime(0);
     }
   }, [flowState]);
 
-  if (flowState === 'idle') {
+  if (flowState === "idle") {
     return null;
   }
 
-  if (flowState === 'searching' && searchingData) {
+  if (flowState === "searching" && searchingData) {
     return (
       <Card className="glass border-yellow-500/20 bg-yellow-500/5 animate-fade-in-up">
         <CardHeader>
@@ -82,7 +82,8 @@ export default function BookingFlowStates({
             Searching for Drivers...
           </CardTitle>
           <CardDescription>
-            We're finding the best driver for your {searchingData.vehicleName} ride
+            We're finding the best driver for your {searchingData.vehicleName}{" "}
+            ride
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -117,20 +118,23 @@ export default function BookingFlowStates({
               </span>
             </div>
           </div>
-          
+
           <div className="text-center py-4">
             <div className="inline-flex items-center space-x-2 text-sm text-muted-foreground">
               <Loader className="h-4 w-4 animate-spin" />
-              <span>Looking for nearby drivers... ({Math.floor(searchTime / 60)}:{(searchTime % 60).toString().padStart(2, '0')})</span>
+              <span>
+                Looking for nearby drivers... ({Math.floor(searchTime / 60)}:
+                {(searchTime % 60).toString().padStart(2, "0")})
+              </span>
             </div>
             <p className="text-xs text-muted-foreground mt-2">
               This usually takes 30-60 seconds
             </p>
           </div>
-          
-          <Button 
+
+          <Button
             onClick={onCancel}
-            variant="outline" 
+            variant="outline"
             className="w-full border-red-500 text-red-600 hover:bg-red-50"
           >
             <X className="mr-2 h-4 w-4" />
@@ -141,7 +145,7 @@ export default function BookingFlowStates({
     );
   }
 
-  if (flowState === 'driver_found' && driverData && searchingData) {
+  if (flowState === "driver_found" && driverData && searchingData) {
     return (
       <Card className="glass border-green-500/20 bg-green-500/5 animate-fade-in-up">
         <CardHeader>
@@ -192,9 +196,9 @@ export default function BookingFlowStates({
               <p className="text-sm text-muted-foreground">ETA</p>
             </div>
           </div>
-          
+
           <Separator />
-          
+
           <div className="space-y-3">
             <div className="flex items-start space-x-3">
               <div className="p-2 rounded-full bg-green-500/20 mt-0.5">
@@ -219,12 +223,13 @@ export default function BookingFlowStates({
               </div>
             </div>
           </div>
-          
+
           <div className="space-y-3">
             <p className="text-sm text-center text-muted-foreground">
-              🎉 Great! Your driver is on the way. You can call them or start tracking the ride.
+              🎉 Great! Your driver is on the way. You can call them or start
+              tracking the ride.
             </p>
-            
+
             <div className="grid grid-cols-2 gap-3">
               <Button
                 onClick={() => {

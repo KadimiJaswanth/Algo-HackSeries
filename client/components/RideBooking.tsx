@@ -218,6 +218,48 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     }));
   };
 
+  const startBookingFlow = async (fare: number, vehicleName: string) => {
+    if (!bookingData.pickup || !bookingData.dropoff) {
+      alert("Missing pickup or dropoff location");
+      return;
+    }
+
+    try {
+      // Start with searching state - shows waiting screen
+      const searchData = {
+        pickup: bookingData.pickup!,
+        dropoff: bookingData.dropoff!,
+        estimatedFare: fare,
+        vehicleName: vehicleName,
+      };
+
+      setSearchingData(searchData);
+      setBookingFlowState('searching');
+
+      // Simulate searching for driver (3-8 seconds)
+      setTimeout(() => {
+        // Simulate finding a driver
+        const driverData = {
+          name: "Driver Kumar",
+          phone: "6301214658",
+          carModel: vehicleName,
+          licensePlate: "RIDE-" + Math.floor(Math.random() * 1000).toString().padStart(3, '0'),
+          rating: 4.5 + Math.random() * 0.5,
+          eta: Math.floor(Math.random() * 8) + 3,
+        };
+
+        setFoundDriverData(driverData);
+        setBookingFlowState('driver_found');
+      }, 3000 + Math.random() * 5000);
+
+    } catch (error) {
+      console.error("Error booking ride:", error);
+      alert("Error booking ride. Please try again.");
+      setBookingFlowState('idle');
+      setSearchingData(null);
+    }
+  };
+
   const handleQuickBookRide = (
     vehicleId: string,
     vehicleName: string,

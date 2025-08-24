@@ -47,6 +47,7 @@ import GoogleMaps from "./GoogleMaps";
 import RideStatus from "./RideStatus";
 import EnhancedRideTracking from "./EnhancedRideTracking";
 import BookingFlowDebug from "./BookingFlowDebug";
+import BookingFlowStates from "./BookingFlowStates";
 import { useSmsNotification } from "@/lib/sms-service";
 
 interface Location {

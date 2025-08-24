@@ -236,6 +236,10 @@ export function createServer() {
   app.post("/api/sms/webhook", handleSmsWebhook);
   app.get("/api/sms/ride-status/:rideId", getRideStatus);
 
+  // SMS testing routes (for development)
+  app.post("/api/sms/simulate-response", simulateDriverSms);
+  app.get("/api/sms/test-commands/:rideId", getTestCommands);
+
   // Stricter rate limiting for sensitive endpoints
   app.use('/api/auth', rateLimit(securityConfig.authLimit.windowMs, securityConfig.authLimit.max));
   app.use('/api/transaction', rateLimit(securityConfig.strictLimit.windowMs, securityConfig.strictLimit.max));

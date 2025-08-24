@@ -119,11 +119,15 @@ export const handleSmsWebhook: RequestHandler = async (req, res) => {
     const messageBody = Body?.toUpperCase().trim();
     const fromNumber = From;
 
-    console.log("Received SMS webhook:", { Body, From });
+    console.log("📱 SMS WEBHOOK RECEIVED:");
+    console.log("- From:", fromNumber);
+    console.log("- Body:", Body);
+    console.log("- Expected Driver Phone:", DRIVER_PHONE);
+    console.log("- Twilio Configured:", !!(accountSid && authToken && twilioPhoneNumber));
 
     // Verify it's from the driver's phone
     if (fromNumber !== DRIVER_PHONE) {
-      console.log("SMS from unknown number:", fromNumber);
+      console.log("⚠️ SMS from unknown number:", fromNumber, "Expected:", DRIVER_PHONE);
       res.status(200).send("OK");
       return;
     }

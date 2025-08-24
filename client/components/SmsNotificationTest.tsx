@@ -95,13 +95,47 @@ export default function SmsNotificationTest() {
     try {
       const response = await fetch(`/api/sms/ride-status/${testResult.rideId}`);
       const data = await response.json();
-      
+
       if (data.success && data.ride) {
         setDriverResponseStatus(data.ride.status);
         console.log("Current ride status:", data.ride);
       }
     } catch (error) {
       console.error("Error checking ride status:", error);
+    }
+  };
+
+  const handleSimulateDriverResponse = async (action: 'ACCEPT' | 'IGNORE' | 'INVALID') => {
+    if (!testResult?.rideId) return;
+
+    try {
+      const message = action === 'INVALID'
+        ? `HELLO ${testResult.rideId}`
+        : `${action} ${testResult.rideId}`;
+
+      setTestMessage(message);
+
+      const response = await fetch('/api/sms/simulate-response', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          rideId: testResult.rideId,
+        }),
+      });
+
+      const result = await response.json();
+      console.log("Simulation result:", result);
+
+      // Refresh status after simulation
+      setTimeout(() => {
+        handleCheckRideStatus();
+      }, 1000);
+
+    } catch (error) {
+      console.error("Error simulating driver response:", error);
     }
   };
 

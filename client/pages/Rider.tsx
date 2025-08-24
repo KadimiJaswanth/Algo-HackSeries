@@ -185,9 +185,9 @@ export default function Rider() {
                   />
                 </div>
                 <div className="md:col-span-2 lg:col-span-1 space-y-4">
+                  <GoogleMapsStatus />
                   <SplitFare totalFare={currentFare} rideId={activeRideId} />
                   <PaymentInfo />
-                  <MapConfigInfo />
                 </div>
               </div>
 

@@ -85,7 +85,10 @@ export default function SmsTest() {
             </CardContent>
           </Card>
 
-          {/* SMS Test Component */}
+          {/* SMS Confirmation Flow Demo */}
+          <SmsConfirmationDemo />
+
+          {/* Advanced SMS Test Component */}
           <SmsNotificationTest />
 
           {/* API Information */}

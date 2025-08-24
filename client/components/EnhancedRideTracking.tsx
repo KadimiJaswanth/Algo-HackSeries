@@ -185,9 +185,8 @@ export default function EnhancedRideTracking({
     setRideStatus('accepted');
     setIsLoading(false);
 
-    // Simulate ride progression
-    setTimeout(() => setRideStatus('pickup'), 8000);
-    setTimeout(() => setRideStatus('in_progress'), 15000);
+    // NOTE: Removed automatic ride progression for more realistic behavior.
+    // In a real app, status would update based on driver's GPS location and manual updates.
   };
 
   const handleDriverIgnored = () => {

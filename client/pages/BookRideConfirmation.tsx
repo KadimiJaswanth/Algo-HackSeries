@@ -352,8 +352,8 @@ export default function BookRideConfirmation() {
               ⚠️ This page is for demo purposes only
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Real ride booking uses SMS-based driver assignment.
-              Please use the main booking flow for actual rides.
+              Real ride booking uses SMS-based driver assignment. Please use the
+              main booking flow for actual rides.
             </p>
           </CardContent>
         </Card>

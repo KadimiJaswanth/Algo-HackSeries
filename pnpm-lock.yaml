@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@googlemaps/js-api-loader':
-        specifier: ^1.16.10
-        version: 1.16.10
       '@noble/curves':
         specifier: ^1.9.7
         version: 1.9.7
@@ -520,9 +517,6 @@ packages:
     resolution: {integrity: sha512-vv9aozWnKrrPWQ3vIFcWk7yta4hQW1Ie0fsNNPeXnjAxkbXr2hqMagEptLuMxpEP2W3mnRu05VDNKzcvAuuZDw==}
     peerDependencies:
       viem: '>=2.0.0'
-
-  '@googlemaps/js-api-loader@1.16.10':
-    resolution: {integrity: sha512-c2erv2k7P2ilYzMmtYcMgAR21AULosQuUHJbStnrvRk2dG93k5cqptDrh9A8p+ZNlyhiqEOgHW7N9PAizdUM7Q==}
 
   '@hookform/resolvers@5.2.1':
     resolution: {integrity: sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ==}
@@ -4642,8 +4636,6 @@ snapshots:
       viem: 2.34.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)
     transitivePeerDependencies:
       - supports-color
-
-  '@googlemaps/js-api-loader@1.16.10': {}
 
   '@hookform/resolvers@5.2.1(react-hook-form@7.62.0(react@18.3.1))':
     dependencies:

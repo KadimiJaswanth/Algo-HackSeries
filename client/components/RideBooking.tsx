@@ -275,10 +275,10 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     // Set quick confirmation briefly
     setQuickBookConfirmation({ vehicleName, fare });
 
-    // Start the enhanced ride booking flow
+    // Start the new booking flow
     setTimeout(() => {
       setQuickBookConfirmation(null);
-      proceedWithEnhancedBooking(fare);
+      startBookingFlow(fare, vehicleName);
     }, 1500);
   };
 

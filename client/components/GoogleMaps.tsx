@@ -40,6 +40,7 @@ export default function GoogleMaps({
   const [directionsRenderer, setDirectionsRenderer] =
     useState<google.maps.DirectionsRenderer | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [isDemo, setIsDemo] = useState(false);
 
   // Initialize Google Maps
   useEffect(() => {

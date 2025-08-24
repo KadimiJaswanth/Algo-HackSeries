@@ -50,11 +50,19 @@ export default function GeoapifyMaps({
   useEffect(() => {
     const initMap = async () => {
       try {
+        // Don't initialize if map already exists
+        if (map) return;
+
         // Dynamically import Leaflet to avoid SSR issues
         const leaflet = await import("leaflet");
         setL(leaflet.default);
 
         if (mapRef.current && leaflet.default) {
+          // Check if the container already has a map instance
+          if ((mapRef.current as any)._leaflet_id) {
+            return;
+          }
+
           // Fix for default markers in Leaflet
           delete (leaflet.default.Icon.Default.prototype as any)._getIconUrl;
           leaflet.default.Icon.Default.mergeOptions({
@@ -97,20 +105,6 @@ export default function GeoapifyMaps({
               },
             );
           }
-
-          // Add click listener for location selection
-          if (mode === "select") {
-            mapInstance.on("click", (e: any) => {
-              if (selectingFor && onLocationSelect) {
-                const location = {
-                  lat: e.latlng.lat,
-                  lng: e.latlng.lng,
-                };
-                onLocationSelect(location, selectingFor);
-                setSelectingFor(null);
-              }
-            });
-          }
         }
       } catch (error) {
         console.error("Error loading Geoapify Maps:", error);
@@ -129,7 +123,37 @@ export default function GeoapifyMaps({
     };
 
     initMap();
-  }, [mode, selectingFor, onLocationSelect, API_KEY]);
+
+    // Cleanup function
+    return () => {
+      if (map) {
+        map.remove();
+        setMap(null);
+      }
+    };
+  }, []); // Remove problematic dependencies
+
+  // Separate effect for handling mode and click listeners
+  useEffect(() => {
+    if (!map) return;
+
+    // Remove any existing click listeners
+    map.off("click");
+
+    // Add click listener for location selection
+    if (mode === "select") {
+      map.on("click", (e: any) => {
+        if (selectingFor && onLocationSelect) {
+          const location = {
+            lat: e.latlng.lat,
+            lng: e.latlng.lng,
+          };
+          onLocationSelect(location, selectingFor);
+          setSelectingFor(null);
+        }
+      });
+    }
+  }, [map, mode, selectingFor, onLocationSelect]);
 
   // Update markers and route when locations change
   useEffect(() => {

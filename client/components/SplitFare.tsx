@@ -147,7 +147,8 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
             </Badge>
           </CardTitle>
           <p className="text-muted-foreground">
-            Share ride costs with friends using wallet tokens (0.0001-0.0009 range)
+            Share ride costs with friends using wallet tokens (0.0001-0.0009
+            range)
           </p>
         </CardHeader>
         <CardContent className="relative z-10">

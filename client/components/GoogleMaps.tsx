@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FiMapPin as MapPin, FiNavigation as Navigation, FiCrosshair as Crosshair } from "react-icons/fi";
+import {
+  FiMapPin as MapPin,
+  FiNavigation as Navigation,
+  FiCrosshair as Crosshair,
+} from "react-icons/fi";
 import { cn } from "@/lib/utils";
 
 interface Location {
@@ -67,14 +71,16 @@ export default function GoogleMaps({
           });
 
           const directionsServiceInstance = new google.maps.DirectionsService();
-          const directionsRendererInstance = new google.maps.DirectionsRenderer({
-            suppressMarkers: true, // We'll use our own markers
-            polylineOptions: {
-              strokeColor: "#4285F4", // Google Maps blue
-              strokeWeight: 5,
-              strokeOpacity: 0.8,
+          const directionsRendererInstance = new google.maps.DirectionsRenderer(
+            {
+              suppressMarkers: true, // We'll use our own markers
+              polylineOptions: {
+                strokeColor: "#4285F4", // Google Maps blue
+                strokeWeight: 5,
+                strokeOpacity: 0.8,
+              },
             },
-          });
+          );
 
           directionsRendererInstance.setMap(mapInstance);
 
@@ -134,7 +140,6 @@ export default function GoogleMaps({
 
     initMap();
   }, [mode, selectingFor, onLocationSelect]);
-
 
   // Update markers when locations change
   useEffect(() => {

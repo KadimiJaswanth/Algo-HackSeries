@@ -44,9 +44,7 @@ export default function PaymentInfo() {
           <div className="glass p-3 rounded-lg text-center">
             <Shield className="h-5 w-5 mx-auto mb-2 text-green-400" />
             <p className="text-xs font-medium">Secure</p>
-            <p className="text-xs text-muted-foreground">
-              Instant validation
-            </p>
+            <p className="text-xs text-muted-foreground">Instant validation</p>
           </div>
         </div>
 

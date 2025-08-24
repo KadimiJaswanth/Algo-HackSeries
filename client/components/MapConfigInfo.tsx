@@ -2,11 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   FiInfo as Info,
   FiMapPin as MapPin,
   FiExternalLink as ExternalLink,
-  FiSettings as Settings
+  FiSettings as Settings,
 } from "react-icons/fi";
 
 export default function MapConfigInfo() {
@@ -27,14 +27,20 @@ export default function MapConfigInfo() {
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Currently using <Badge className="mx-1 bg-blue-500/20 text-blue-400">Interactive Demo Map</Badge> 
-                - a fully functional map interface that doesn't require API keys.
+                Currently using{" "}
+                <Badge className="mx-1 bg-blue-500/20 text-blue-400">
+                  Interactive Demo Map
+                </Badge>
+                - a fully functional map interface that doesn't require API
+                keys.
               </AlertDescription>
             </Alert>
 
             {/* Demo Features */}
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gradient">Demo Features</h4>
+              <h4 className="text-sm font-medium text-gradient">
+                Demo Features
+              </h4>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center space-x-2">
                   <span className="text-green-400">✓</span>
@@ -65,7 +71,9 @@ export default function MapConfigInfo() {
 
             {/* Upgrade to Real Maps */}
             <div className="space-y-3 p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
-              <h4 className="text-sm font-medium text-blue-400">Upgrade to Real Google Maps</h4>
+              <h4 className="text-sm font-medium text-blue-400">
+                Upgrade to Real Google Maps
+              </h4>
               <p className="text-xs text-muted-foreground">
                 Get satellite imagery, real addresses, and live traffic data.
               </p>
@@ -91,7 +99,12 @@ export default function MapConfigInfo() {
                 size="sm"
                 variant="outline"
                 className="w-full"
-                onClick={() => window.open('https://console.cloud.google.com/apis/library/maps-backend.googleapis.com', '_blank')}
+                onClick={() =>
+                  window.open(
+                    "https://console.cloud.google.com/apis/library/maps-backend.googleapis.com",
+                    "_blank",
+                  )
+                }
               >
                 <ExternalLink className="mr-2 h-3 w-3" />
                 Get Google Maps API Key
@@ -104,14 +117,18 @@ export default function MapConfigInfo() {
             <Alert>
               <Settings className="h-4 w-4" />
               <AlertDescription>
-                <Badge className="mr-1 bg-green-500/20 text-green-400">Google Maps Active</Badge>
+                <Badge className="mr-1 bg-green-500/20 text-green-400">
+                  Google Maps Active
+                </Badge>
                 Using real Google Maps with satellite imagery and live data.
               </AlertDescription>
             </Alert>
 
             {/* Real Maps Features */}
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gradient">Active Features</h4>
+              <h4 className="text-sm font-medium text-gradient">
+                Active Features
+              </h4>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center space-x-2">
                   <span className="text-green-400">✓</span>

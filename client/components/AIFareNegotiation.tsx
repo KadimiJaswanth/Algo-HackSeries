@@ -291,8 +291,8 @@ export default function AIFareNegotiation({
               {basePrice.toFixed(4)} TOKENS
             </div>
             <p className="text-muted-foreground">
-              Standard wallet token pricing based on distance and
-              current conditions (0.0001-0.0009 range)
+              Standard wallet token pricing based on distance and current
+              conditions (0.0001-0.0009 range)
             </p>
             <div className="grid grid-cols-2 gap-3">
               <Button onClick={() => acceptOffer(basePrice)} className="glow">
@@ -324,7 +324,9 @@ export default function AIFareNegotiation({
                 </div>
                 <Slider
                   value={[currentOffer]}
-                  onValueChange={([value]) => setCurrentOffer(Math.max(0.0001, Math.min(0.0009, value)))}
+                  onValueChange={([value]) =>
+                    setCurrentOffer(Math.max(0.0001, Math.min(0.0009, value)))
+                  }
                   min={0.0001}
                   max={0.0009}
                   step={0.0001}

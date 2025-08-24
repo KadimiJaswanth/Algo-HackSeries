@@ -35,7 +35,7 @@ export default function GoogleMapsStatus() {
               </Badge>
             )}
           </div>
-          
+
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Map Type:</span>
             <Badge className="bg-blue-100 text-blue-800 border-blue-200">
@@ -59,7 +59,8 @@ export default function GoogleMapsStatus() {
                 </span>
               </div>
               <p className="text-xs text-green-700 mt-1">
-                You now have access to real satellite imagery, places search, and live traffic data.
+                You now have access to real satellite imagery, places search,
+                and live traffic data.
               </p>
             </div>
           )}

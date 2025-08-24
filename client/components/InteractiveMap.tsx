@@ -3,15 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { 
-  FiMapPin as MapPin, 
-  FiNavigation as Navigation, 
+import {
+  FiMapPin as MapPin,
+  FiNavigation as Navigation,
   FiCrosshair as Crosshair,
   FiZoomIn as ZoomIn,
   FiZoomOut as ZoomOut,
   FiLayers as Layers,
   FiRotateCcw as RotateCcw,
-  FiSearch as Search
+  FiSearch as Search,
 } from "react-icons/fi";
 import { cn } from "@/lib/utils";
 
@@ -65,7 +65,9 @@ export default function InteractiveMap({
   const mapRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(13);
   const [center, setCenter] = useState({ lat: 37.7749, lng: -122.4194 });
-  const [selectingFor, setSelectingFor] = useState<"pickup" | "dropoff" | null>(null);
+  const [selectingFor, setSelectingFor] = useState<"pickup" | "dropoff" | null>(
+    null,
+  );
   const [mapStyle, setMapStyle] = useState("standard");
   const [searchQuery, setSearchQuery] = useState("");
   const [markers, setMarkers] = useState<MapMarker[]>([]);
@@ -77,13 +79,13 @@ export default function InteractiveMap({
   const latLngToPixel = useCallback((lat: number, lng: number) => {
     const mapBounds = mapRef.current?.getBoundingClientRect();
     if (!mapBounds) return { x: 0, y: 0 };
-    
+
     // Simple mercator projection approximation
     const x = ((lng + 180) / 360) * mapBounds.width;
     const latRad = (lat * Math.PI) / 180;
     const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-    const y = (mapBounds.height / 2) - (mercN * mapBounds.height) / (2 * Math.PI);
-    
+    const y = mapBounds.height / 2 - (mercN * mapBounds.height) / (2 * Math.PI);
+
     return { x, y };
   }, []);
 
@@ -91,11 +93,12 @@ export default function InteractiveMap({
   const pixelToLatLng = useCallback((x: number, y: number) => {
     const mapBounds = mapRef.current?.getBoundingClientRect();
     if (!mapBounds) return { lat: 0, lng: 0 };
-    
+
     const lng = (x / mapBounds.width) * 360 - 180;
     const mercN = ((mapBounds.height / 2 - y) * 2 * Math.PI) / mapBounds.height;
-    const lat = (Math.atan(Math.exp(mercN)) - Math.PI / 4) * 2 * 180 / Math.PI;
-    
+    const lat =
+      ((Math.atan(Math.exp(mercN)) - Math.PI / 4) * 2 * 180) / Math.PI;
+
     return { lat, lng };
   }, []);
 
@@ -109,7 +112,7 @@ export default function InteractiveMap({
         position: pickup,
         type: "pickup",
         label: "P",
-        color: "#10B981"
+        color: "#10B981",
       });
     }
 
@@ -119,7 +122,7 @@ export default function InteractiveMap({
         position: dropoff,
         type: "dropoff",
         label: "D",
-        color: "#EF4444"
+        color: "#EF4444",
       });
     }
 
@@ -129,7 +132,7 @@ export default function InteractiveMap({
         position: driverLocation,
         type: "driver",
         label: "🚗",
-        color: "#3B82F6"
+        color: "#3B82F6",
       });
     }
 
@@ -154,7 +157,7 @@ export default function InteractiveMap({
     const location = {
       lat: adjustedLat,
       lng: adjustedLng,
-      address: `Location (${adjustedLat.toFixed(4)}, ${adjustedLng.toFixed(4)})`
+      address: `Location (${adjustedLat.toFixed(4)}, ${adjustedLng.toFixed(4)})`,
     };
 
     onLocationSelect(location, selectingFor);
@@ -164,16 +167,17 @@ export default function InteractiveMap({
   // Handle search
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
-    
+
     // Mock search - in real app this would use geocoding API
-    const randomLocation = mockLocations[Math.floor(Math.random() * mockLocations.length)];
+    const randomLocation =
+      mockLocations[Math.floor(Math.random() * mockLocations.length)];
     setCenter(randomLocation);
     setSearchQuery("");
   };
 
   // Handle zoom
   const handleZoom = (direction: "in" | "out") => {
-    setZoom(prev => {
+    setZoom((prev) => {
       const newZoom = direction === "in" ? prev + 1 : prev - 1;
       return Math.max(1, Math.min(20, newZoom));
     });
@@ -195,7 +199,7 @@ export default function InteractiveMap({
           console.warn("Geolocation error:", error);
           // Fallback to San Francisco
           setCenter({ lat: 37.7749, lng: -122.4194 });
-        }
+        },
       );
     }
   };
@@ -203,41 +207,52 @@ export default function InteractiveMap({
   // Generate route path between pickup and dropoff
   const generateRoutePath = () => {
     if (!pickup || !dropoff) return "";
-    
+
     const start = latLngToPixel(pickup.lat, pickup.lng);
     const end = latLngToPixel(dropoff.lat, dropoff.lng);
-    
+
     // Create curved path with control points
     const midX = (start.x + end.x) / 2;
     const midY = (start.y + end.y) / 2 - 50; // Curve upward
-    
+
     return `M ${start.x} ${start.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
   };
 
   return (
     <div className="relative rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
       {/* Map Container */}
-      <div 
-        ref={mapRef} 
+      <div
+        ref={mapRef}
         className={cn(className, "relative cursor-crosshair overflow-hidden")}
         onClick={handleMapClick}
         style={{
-          backgroundImage: mapStyle === "satellite" 
-            ? `url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23166534'/%3E%3Cpath d='M20 20h60v60H20z' fill='%23065f46'/%3E%3Ccircle cx='30' cy='30' r='5' fill='%23059669'/%3E%3Ccircle cx='70' cy='70' r='3' fill='%23047857'/%3E%3C/svg%3E")`
-            : mapStyle === "terrain"
-            ? `url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Cpath d='M0 80 Q25 60 50 80 T100 80 V100 H0 Z' fill='%23d1d5db'/%3E%3Cpath d='M0 90 Q25 70 50 90 T100 90 V100 H0 Z' fill='%23e5e7eb'/%3E%3C/svg%3E")`
-            : `linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)`,
-          backgroundSize: '100px 100px',
+          backgroundImage:
+            mapStyle === "satellite"
+              ? `url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23166534'/%3E%3Cpath d='M20 20h60v60H20z' fill='%23065f46'/%3E%3Ccircle cx='30' cy='30' r='5' fill='%23059669'/%3E%3Ccircle cx='70' cy='70' r='3' fill='%23047857'/%3E%3C/svg%3E")`
+              : mapStyle === "terrain"
+                ? `url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Cpath d='M0 80 Q25 60 50 80 T100 80 V100 H0 Z' fill='%23d1d5db'/%3E%3Cpath d='M0 90 Q25 70 50 90 T100 90 V100 H0 Z' fill='%23e5e7eb'/%3E%3C/svg%3E")`
+                : `linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)`,
+          backgroundSize: "100px 100px",
           transform: `scale(${1 + (zoom - 13) * 0.1})`,
-          transformOrigin: 'center'
+          transformOrigin: "center",
         }}
       >
         {/* Grid overlay for realistic map look */}
         <div className="absolute inset-0 opacity-20">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="mapGrid" width="50" height="50" patternUnits="userSpaceOnUse">
-                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#94a3b8" strokeWidth="1"/>
+              <pattern
+                id="mapGrid"
+                width="50"
+                height="50"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 50 0 L 0 0 0 50"
+                  fill="none"
+                  stroke="#94a3b8"
+                  strokeWidth="1"
+                />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#mapGrid)" />
@@ -247,20 +262,67 @@ export default function InteractiveMap({
         {/* Streets and roads */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           <defs>
-            <pattern id="road" width="20" height="4" patternUnits="userSpaceOnUse">
-              <rect width="20" height="4" fill="#64748b"/>
-              <rect x="0" y="1.5" width="8" height="1" fill="#f1f5f9"/>
-              <rect x="12" y="1.5" width="8" height="1" fill="#f1f5f9"/>
+            <pattern
+              id="road"
+              width="20"
+              height="4"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect width="20" height="4" fill="#64748b" />
+              <rect x="0" y="1.5" width="8" height="1" fill="#f1f5f9" />
+              <rect x="12" y="1.5" width="8" height="1" fill="#f1f5f9" />
             </pattern>
           </defs>
-          
+
           {/* Main roads */}
-          <rect x="0" y="45%" width="100%" height="8" fill="url(#road)" opacity="0.7"/>
-          <rect x="45%" y="0" width="8" height="100%" fill="url(#road)" opacity="0.7"/>
-          <rect x="0" y="25%" width="100%" height="6" fill="url(#road)" opacity="0.5"/>
-          <rect x="25%" y="0" width="6" height="100%" fill="url(#road)" opacity="0.5"/>
-          <rect x="0" y="75%" width="100%" height="6" fill="url(#road)" opacity="0.5"/>
-          <rect x="75%" y="0" width="6" height="100%" fill="url(#road)" opacity="0.5"/>
+          <rect
+            x="0"
+            y="45%"
+            width="100%"
+            height="8"
+            fill="url(#road)"
+            opacity="0.7"
+          />
+          <rect
+            x="45%"
+            y="0"
+            width="8"
+            height="100%"
+            fill="url(#road)"
+            opacity="0.7"
+          />
+          <rect
+            x="0"
+            y="25%"
+            width="100%"
+            height="6"
+            fill="url(#road)"
+            opacity="0.5"
+          />
+          <rect
+            x="25%"
+            y="0"
+            width="6"
+            height="100%"
+            fill="url(#road)"
+            opacity="0.5"
+          />
+          <rect
+            x="0"
+            y="75%"
+            width="100%"
+            height="6"
+            fill="url(#road)"
+            opacity="0.5"
+          />
+          <rect
+            x="75%"
+            y="0"
+            width="6"
+            height="100%"
+            fill="url(#road)"
+            opacity="0.5"
+          />
         </svg>
 
         {/* Landmarks and buildings */}
@@ -276,37 +338,47 @@ export default function InteractiveMap({
         {pickup && dropoff && (
           <svg className="absolute inset-0 w-full h-full pointer-events-none">
             <defs>
-              <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient
+                id="routeGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
                 <stop offset="0%" stopColor="#10B981" stopOpacity="1" />
                 <stop offset="100%" stopColor="#EF4444" stopOpacity="1" />
               </linearGradient>
             </defs>
-            <path 
-              d={generateRoutePath()} 
-              stroke="url(#routeGradient)" 
-              strokeWidth="4" 
-              fill="none" 
+            <path
+              d={generateRoutePath()}
+              stroke="url(#routeGradient)"
+              strokeWidth="4"
+              fill="none"
               strokeDasharray="8,4"
               className="animate-pulse"
-              style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
+              style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}
             />
           </svg>
         )}
 
         {/* Markers */}
         {markers.map((marker) => {
-          const { x, y } = latLngToPixel(marker.position.lat, marker.position.lng);
+          const { x, y } = latLngToPixel(
+            marker.position.lat,
+            marker.position.lng,
+          );
           return (
             <div
               key={marker.id}
               className="absolute transform -translate-x-1/2 -translate-y-full animate-bounce"
               style={{ left: x, top: y }}
             >
-              <div 
+              <div
                 className="w-8 h-10 rounded-full rounded-b-none flex items-center justify-center text-white text-sm font-bold shadow-lg"
-                style={{ 
+                style={{
                   backgroundColor: marker.color,
-                  clipPath: 'polygon(50% 100%, 0% 75%, 0% 0%, 100% 0%, 100% 75%)'
+                  clipPath:
+                    "polygon(50% 100%, 0% 75%, 0% 0%, 100% 0%, 100% 75%)",
                 }}
               >
                 {marker.label}
@@ -324,7 +396,7 @@ export default function InteractiveMap({
               placeholder="Search for places..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="glass pr-10"
             />
             <Button
@@ -431,13 +503,13 @@ export default function InteractiveMap({
         {pickup && (
           <Badge className="glass bg-green-500/20 text-green-400 border-green-500/30">
             <MapPin className="mr-1 h-3 w-3" />
-            Pickup: {pickup.address || 'Selected'}
+            Pickup: {pickup.address || "Selected"}
           </Badge>
         )}
         {dropoff && (
           <Badge className="glass bg-red-500/20 text-red-400 border-red-500/30">
             <MapPin className="mr-1 h-3 w-3" />
-            Dropoff: {dropoff.address || 'Selected'}
+            Dropoff: {dropoff.address || "Selected"}
           </Badge>
         )}
         {driverLocation && (

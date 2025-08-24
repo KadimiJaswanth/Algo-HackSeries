@@ -144,24 +144,18 @@ export default function GoogleMaps({
 
     const newMarkers: google.maps.Marker[] = [];
 
-    // Add pickup marker
+    // Add pickup marker with standard Google Maps styling
     if (pickup) {
       const pickupMarker = new google.maps.Marker({
         position: pickup,
         map: map,
         title: "Pickup Location",
-        icon: {
-          url:
-            "data:image/svg+xml;charset=UTF-8," +
-            encodeURIComponent(`
-            <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 0C6.716 0 0 6.716 0 15c0 15 15 25 15 25s15-10 15-25C30 6.716 23.284 0 15 0z" fill="#10B981"/>
-              <circle cx="15" cy="15" r="8" fill="white"/>
-              <text x="15" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#10B981">P</text>
-            </svg>
-          `),
-          scaledSize: new google.maps.Size(30, 40),
+        label: {
+          text: "A",
+          color: "white",
+          fontWeight: "bold",
         },
+        // Use default Google Maps marker color for pickup (green)
       });
       newMarkers.push(pickupMarker);
     }

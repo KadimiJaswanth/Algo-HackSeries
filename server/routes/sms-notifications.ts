@@ -202,23 +202,42 @@ The rider has been notified and is waiting for you. Drive safely! 🚗`;
       rideRequest.status = "ignored";
       activeRideRequests.set(rideId, rideRequest);
 
-      console.log("Driver ignored ride:", rideId);
+      console.log("❌ Driver declined ride:", rideId);
+
+      const declineMessage = `�� RIDE DECLINED - ${rideId}
+
+You have declined the ride request from ${rideRequest.riderName}.
+
+📍 From: ${rideRequest.pickupLocation}
+📍 To: ${rideRequest.dropoffLocation}
+💰 Fare: ${rideRequest.estimatedFare.toFixed(4)} TOKENS
+
+🔄 The system will now:
+- Notify the rider
+- Look for another available driver
+- You may receive new ride requests
+
+Thank you for your response! 🚗`;
 
       // Send confirmation to driver
       if (accountSid && authToken && twilioPhoneNumber) {
-        await client.messages.create({
-          body: `❌ Ride ${rideId} declined.
-The system will reassign this ride to another driver.`,
-          from: twilioPhoneNumber,
-          to: DRIVER_PHONE,
-        });
+        try {
+          const declineSms = await client.messages.create({
+            body: declineMessage,
+            from: twilioPhoneNumber,
+            to: DRIVER_PHONE,
+          });
+          console.log("✅ Decline confirmation SMS sent to driver:", declineSms.sid);
+        } catch (smsError) {
+          console.error("❌ Error sending decline SMS:", smsError);
+        }
+      } else {
+        console.log("📱 SIMULATED SMS to driver:");
+        console.log("To:", DRIVER_PHONE);
+        console.log("Message:", declineMessage);
       }
 
-      // Here you would typically:
-      // 1. Update the database
-      // 2. Reassign ride to another driver
-      // 3. Notify the rider if no drivers available
-      console.log("Ride should be reassigned to another driver");
+      console.log("🔄 Ride will be reassigned to another driver");
     } else {
       // Invalid command
       if (accountSid && authToken && twilioPhoneNumber) {

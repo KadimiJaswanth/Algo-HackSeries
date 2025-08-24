@@ -345,13 +345,15 @@ export default function BookRideConfirmation() {
           </Card>
         )}
 
-        {/* Auto-redirect Notice */}
-        <Card className="border-primary/30 bg-primary/10">
+        {/* Deprecated Page Notice */}
+        <Card className="border-yellow-500/30 bg-yellow-500/10">
           <CardContent className="p-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              Automatically redirecting to tracking in{" "}
-              <span className="font-bold text-primary">{countdown}</span>{" "}
-              seconds
+            <p className="text-sm text-yellow-600 font-medium">
+              ⚠️ This page is for demo purposes only
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Real ride booking uses SMS-based driver assignment.
+              Please use the main booking flow for actual rides.
             </p>
           </CardContent>
         </Card>

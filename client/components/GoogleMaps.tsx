@@ -48,8 +48,17 @@ export default function GoogleMaps({
   useEffect(() => {
     const initMap = async () => {
       try {
+        // Debug environment variables
+        console.log("Environment check:", {
+          VITE_GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+          allEnvVars: import.meta.env
+        });
+
+        const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key";
+        console.log("Using API key:", apiKey);
+
         const loader = new Loader({
-          apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key",
+          apiKey: apiKey,
           version: "weekly",
           libraries: ["places", "geometry"],
         });

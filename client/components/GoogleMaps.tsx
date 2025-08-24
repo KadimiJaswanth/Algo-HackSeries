@@ -54,7 +54,7 @@ export default function GoogleMaps({
           allEnvVars: import.meta.env
         });
 
-        const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "demo-key";
+        const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "9b9e7b2848814e95a77d475c086aad2c";
         console.log("Using API key:", apiKey);
 
         const loader = new Loader({

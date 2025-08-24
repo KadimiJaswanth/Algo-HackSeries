@@ -286,6 +286,7 @@ export function createServer() {
   // SMS testing routes (for development)
   app.post("/api/sms/simulate-response", simulateDriverSms);
   app.get("/api/sms/test-commands/:rideId", getTestCommands);
+  app.post("/api/sms/test-direct", testDirectSms);
 
   // Stricter rate limiting for sensitive endpoints
   app.use(

@@ -262,33 +262,67 @@ export default function GeoapifyMaps({
     }
   }, [map, L, pickup, dropoff, driverLocation]);
 
-  // Fetch route from Geoapify Routing API
+  // Fetch route from server-side Geoapify proxy
   const fetchRoute = async (start: Location, end: Location) => {
     try {
+      console.log("Fetching route from server proxy...");
+
       const response = await fetch(
-        `https://api.geoapify.com/v1/routing?waypoints=${start.lat},${start.lng}|${end.lat},${end.lng}&mode=drive&apiKey=${API_KEY}`
+        `/api/routing?start_lat=${start.lat}&start_lng=${start.lng}&end_lat=${end.lat}&end_lng=${end.lng}`
       );
-      
+
       if (!response.ok) {
-        throw new Error("Failed to fetch route");
+        const errorText = await response.text();
+        console.warn("Routing API failed:", response.status, errorText);
+        // Fall back to showing a straight line between points
+        drawStraightLine(start, end);
+        return;
       }
 
       const data = await response.json();
-      
+
       if (data.features && data.features.length > 0) {
         const route = data.features[0];
         const coordinates = route.geometry.coordinates[0].map((coord: number[]) => [coord[1], coord[0]]);
-        
+
         const routePolyline = L.polyline(coordinates, {
           color: "#3B82F6",
           weight: 5,
           opacity: 0.8,
         }).addTo(map);
-        
+
         setRouteLayer(routePolyline);
+        console.log("Route successfully displayed");
+      } else {
+        console.warn("No route found in response, falling back to straight line");
+        drawStraightLine(start, end);
       }
     } catch (error) {
       console.error("Error fetching route:", error);
+      // Fall back to showing a straight line between points
+      drawStraightLine(start, end);
+    }
+  };
+
+  // Fallback function to draw a straight line when routing fails
+  const drawStraightLine = (start: Location, end: Location) => {
+    try {
+      if (!L || !map) return;
+
+      console.log("Drawing straight line fallback");
+      const straightLine = L.polyline(
+        [[start.lat, start.lng], [end.lat, end.lng]],
+        {
+          color: "#94A3B8", // Gray color to indicate it's not a real route
+          weight: 3,
+          opacity: 0.6,
+          dashArray: "10, 10", // Dashed line to show it's estimated
+        }
+      ).addTo(map);
+
+      setRouteLayer(straightLine);
+    } catch (error) {
+      console.error("Error drawing straight line:", error);
     }
   };
 

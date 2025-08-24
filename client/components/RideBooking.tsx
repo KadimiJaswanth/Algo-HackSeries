@@ -126,8 +126,16 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   } | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
-    pickup: null,
-    dropoff: null,
+    pickup: {
+      lat: 37.7749,
+      lng: -122.4194,
+      address: "Downtown San Francisco",
+    },
+    dropoff: {
+      lat: 37.6213,
+      lng: -122.379,
+      address: "San Francisco Airport",
+    },
     stops: [],
     vehicleType: "",
     scheduledTime: "",

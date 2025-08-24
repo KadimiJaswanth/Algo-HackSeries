@@ -111,32 +111,31 @@ export const testDirectSms: RequestHandler = async (req, res) => {
     // Twilio client setup
     const client = twilio(
       process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN
+      process.env.TWILIO_AUTH_TOKEN,
     );
 
     // Send SMS (your code logic)
     const message = await client.messages.create({
-      body: body || 'Your ride is confirmed!',
+      body: body || "Your ride is confirmed!",
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: to || '+919876543210' // must be in E.164 format
+      to: to || "+919876543210", // must be in E.164 format
     });
 
-    console.log('Message sent:', message.sid);
+    console.log("Message sent:", message.sid);
 
     res.json({
       success: true,
       message: "SMS sent successfully",
       sid: message.sid,
-      to: to || '+919876543210',
-      body: body || 'Your ride is confirmed!'
+      to: to || "+919876543210",
+      body: body || "Your ride is confirmed!",
     });
-
   } catch (error) {
-    console.error('Twilio error:', error);
+    console.error("Twilio error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to send SMS",
-      details: error instanceof Error ? error.message : "Unknown error"
+      details: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };

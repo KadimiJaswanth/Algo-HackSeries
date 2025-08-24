@@ -8,7 +8,11 @@ import {
   handleSmsWebhook,
   getRideStatus,
 } from "./routes/sms-notifications";
-import { simulateDriverSms, getTestCommands, testDirectSms } from "./routes/sms-test";
+import {
+  simulateDriverSms,
+  getTestCommands,
+  testDirectSms,
+} from "./routes/sms-test";
 
 // Security configuration
 const securityConfig = {

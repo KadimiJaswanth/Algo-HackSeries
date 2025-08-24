@@ -403,7 +403,7 @@ export default function Rider() {
                       <span className="text-sm text-muted-foreground">
                         Total Spent
                       </span>
-                      <span className="font-semibold">1,248.50 AVAX</span>
+                      <span className="font-semibold">1.2485 TOKENS</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">

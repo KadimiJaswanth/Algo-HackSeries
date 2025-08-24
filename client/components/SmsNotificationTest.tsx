@@ -333,14 +333,56 @@ export default function SmsNotificationTest() {
                     )}
 
                     {driverResponseStatus === 'pending' && (
-                      <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
-                        <strong>Instructions for Driver (6301214658):</strong>
-                        <br />
-                        Reply to the SMS with:
-                        <br />
-                        • <code>ACCEPT {testResult.rideId}</code> - to accept the ride
-                        <br />
-                        • <code>IGNORE {testResult.rideId}</code> - to decline the ride
+                      <div className="mt-3 space-y-3">
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                          <strong>Instructions for Driver (6301214658):</strong>
+                          <br />
+                          Reply to the SMS with:
+                          <br />
+                          • <code>ACCEPT {testResult.rideId}</code> - to accept the ride
+                          <br />
+                          • <code>IGNORE {testResult.rideId}</code> - to decline the ride
+                        </div>
+
+                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <strong className="text-sm text-green-800">
+                              🧪 Test Driver Responses:
+                            </strong>
+                            <Badge variant="outline" className="text-xs">
+                              Development Mode
+                            </Badge>
+                          </div>
+                          <div className="grid grid-cols-3 gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => handleSimulateDriverResponse('ACCEPT')}
+                              className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                            >
+                              Simulate Accept
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => handleSimulateDriverResponse('IGNORE')}
+                              className="bg-red-600 hover:bg-red-700 text-white text-xs"
+                            >
+                              Simulate Ignore
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => handleSimulateDriverResponse('INVALID')}
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              Test Invalid
+                            </Button>
+                          </div>
+                          {testMessage && (
+                            <div className="mt-2 text-xs text-gray-600">
+                              Last simulated: <code>{testMessage}</code>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </CardContent>

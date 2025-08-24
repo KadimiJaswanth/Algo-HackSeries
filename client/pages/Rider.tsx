@@ -53,6 +53,9 @@ export default function Rider() {
     const tabParam = searchParams.get("tab");
     if (tabParam) {
       setActiveTab(tabParam);
+    } else {
+      // Ensure book tab is active by default
+      setActiveTab("book");
     }
   }, [searchParams]);
 

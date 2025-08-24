@@ -580,6 +580,36 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
         </TabsList>
 
         <TabsContent value="book" className="space-y-6">
+          {/* Booking Flow States - Searching and Driver Found */}
+          <BookingFlowStates
+            flowState={bookingFlowState}
+            searchingData={searchingData}
+            driverData={foundDriverData}
+            onCancel={() => {
+              setBookingFlowState('idle');
+              setSearchingData(null);
+              setFoundDriverData(null);
+            }}
+            onStartTracking={() => {
+              if (searchingData) {
+                const rideData = {
+                  pickup: searchingData.pickup!,
+                  dropoff: searchingData.dropoff!,
+                  estimatedFare: searchingData.estimatedFare,
+                  riderName: "Rider User",
+                };
+
+                setEnhancedRideData(rideData);
+                setUseEnhancedTracking(true);
+                setBookingFlowState('tracking');
+                onTabChange?.("tracking");
+              }
+            }}
+          />
+
+          {/* Normal booking interface - only show when in idle state */}
+          {bookingFlowState === 'idle' && (
+            <>
           {/* Map View */}
           <Card>
             <CardHeader>
@@ -987,6 +1017,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                 </Button>
               </CardContent>
             </Card>
+          )}
+            </>
           )}
         </TabsContent>
 

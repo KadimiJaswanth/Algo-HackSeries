@@ -117,7 +117,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
   const sendInvitation = (participant: Participant) => {
     // In a real app, this would send an invitation via email/SMS
     console.log(
-      `Sending invitation to ${participant.name} for ${participant.amount.toFixed(6)} AVAX`,
+      `Sending invitation to ${participant.name} for ${participant.amount.toFixed(4)} TOKENS`,
     );
   };
 
@@ -143,11 +143,11 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               Split Fare
             </span>
             <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-              {totalFare.toFixed(6)} AVAX Total
+              {totalFare.toFixed(4)} TOKENS Total
             </Badge>
           </CardTitle>
           <p className="text-muted-foreground">
-            Share ride costs with friends using Avalanche Fuji tokens
+            Share ride costs with friends using wallet tokens (0.0001-0.0009 range)
           </p>
         </CardHeader>
         <CardContent className="relative z-10">
@@ -161,12 +161,12 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
             <div className="text-center glass p-3 rounded-lg">
               <DollarSign className="h-5 w-5 mx-auto mb-1 text-green-400" />
               <p className="text-sm font-medium">
-                {(totalFare / participants.length).toFixed(6)} AVAX Each
+                {(totalFare / participants.length).toFixed(4)} TOKENS Each
               </p>
             </div>
             <div className="text-center glass p-3 rounded-lg">
               <Wallet className="h-5 w-5 mx-auto mb-1 text-purple-400" />
-              <p className="text-sm font-medium">AVAX Payments</p>
+              <p className="text-sm font-medium">Token Payments</p>
             </div>
           </div>
         </CardContent>
@@ -178,7 +178,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
           <CardTitle className="flex items-center justify-between text-gradient">
             <span>Payment Progress</span>
             <span className="text-sm text-muted-foreground">
-              {paidAmount.toFixed(6)} / {totalFare.toFixed(6)} AVAX
+              {paidAmount.toFixed(4)} / {totalFare.toFixed(4)} TOKENS
             </span>
           </CardTitle>
         </CardHeader>
@@ -186,7 +186,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
           <Progress value={paymentProgress} className="h-3 mb-2" />
           <div className="flex justify-between text-sm text-muted-foreground">
             <span>{Math.round(paymentProgress)}% Complete</span>
-            <span>{(totalFare - paidAmount).toFixed(6)} AVAX Remaining</span>
+            <span>{(totalFare - paidAmount).toFixed(4)} TOKENS Remaining</span>
           </div>
         </CardContent>
       </Card>
@@ -301,7 +301,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                         <Minus className="h-3 w-3" />
                       </Button>
                       <span className="font-medium min-w-[60px] text-center">
-                        {participant.amount.toFixed(6)} AVAX
+                        {participant.amount.toFixed(4)} TOKENS
                       </span>
                       <Button
                         size="sm"
@@ -316,7 +316,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                     </div>
                   ) : (
                     <span className="font-medium text-primary">
-                      {participant.amount.toFixed(6)} AVAX
+                      {participant.amount.toFixed(4)} TOKENS
                     </span>
                   )}
 
@@ -353,8 +353,8 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               <Calculator className="h-4 w-4" />
               <AlertDescription>
                 {difference > 0
-                  ? `Split total is ${difference.toFixed(6)} AVAX over the ride fare`
-                  : `Split total is ${Math.abs(difference).toFixed(6)} AVAX under the ride fare`}
+                  ? `Split total is ${difference.toFixed(4)} TOKENS over the ride fare`
+                  : `Split total is ${Math.abs(difference).toFixed(4)} TOKENS under the ride fare`}
               </AlertDescription>
             </Alert>
           )}
@@ -406,13 +406,13 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span>Total Ride Fare</span>
-              <span className="font-medium">{totalFare.toFixed(6)} AVAX</span>
+              <span className="font-medium">{totalFare.toFixed(4)} TOKENS</span>
             </div>
             <div className="flex justify-between">
               <span>Your Share</span>
               <span className="font-medium text-primary">
-                {participants.find((p) => p.id === "self")?.amount.toFixed(6)}{" "}
-                AVAX
+                {participants.find((p) => p.id === "self")?.amount.toFixed(4)}{" "}
+                TOKENS
               </span>
             </div>
             <div className="flex justify-between">
@@ -432,8 +432,8 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
                 Pay Your Share (
                 {participants
                   .find((p) => p.id === "self")
-                  ?.amount.toFixed(6)}{" "}
-                AVAX)
+                  ?.amount.toFixed(4)}{" "}
+                TOKENS)
               </Button>
             </div>
           </div>

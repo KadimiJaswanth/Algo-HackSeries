@@ -77,22 +77,9 @@ export default function BookRideConfirmation() {
       // Use Enhanced Ride Tracking component instead for real SMS-based driver assignment.
     }
 
-    // Start countdown for auto-redirect
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          // Use setTimeout to avoid state update during render
-          setTimeout(() => {
-            navigate("/rider?tab=tracking");
-          }, 0);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    // NOTE: Removed auto-redirect timer.
+    // This page should not automatically redirect.
+    // Users should use the Enhanced Ride Tracking flow instead.
   }, [searchParams, navigate]);
 
   const getVehicleIcon = (vehicleId: string) => {

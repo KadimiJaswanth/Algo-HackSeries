@@ -377,13 +377,13 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
   const handleCancelRide = () => {
     setActiveRide(null);
-    setActiveTab("book");
+    onTabChange?.("book");
   };
 
   const handleCompleteRide = () => {
     alert("Ride completed! Payment processed via smart contract.");
     setActiveRide(null);
-    setActiveTab("book");
+    onTabChange?.("book");
   };
 
   const handleRateDriver = (rating: number) => {

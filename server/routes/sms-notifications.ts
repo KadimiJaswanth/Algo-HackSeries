@@ -1,12 +1,5 @@
 import { RequestHandler } from "express";
-import twilio from "twilio";
-
-// Twilio configuration
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
-
-const client = twilio(accountSid, authToken);
+import { sendSms, isTwilioConfigured } from "../lib/twilio";
 
 // Driver phone number (hardcoded as requested)
 const DRIVER_PHONE = "+916301214658";
@@ -82,7 +75,7 @@ IGNORE ${rideId} - to decline
 Request ID: ${rideId}`;
 
     // Check if Twilio is configured
-    if (!accountSid || !authToken || !twilioPhoneNumber) {
+    if (!isTwilioConfigured()) {
       console.log("Twilio not configured, simulating SMS:");
       console.log("To:", DRIVER_PHONE);
       console.log("Message:", message);
@@ -97,14 +90,8 @@ Request ID: ${rideId}`;
       return;
     }
 
-    // Send actual SMS
-    const twilioMessage = await client.messages.create({
-      body: message,
-      from: twilioPhoneNumber,
-      to: DRIVER_PHONE,
-    });
-
-    console.log("SMS sent successfully:", twilioMessage.sid);
+    // Send actual SMS using the new utility
+    const twilioMessage = await sendSms(DRIVER_PHONE, message);
 
     res.json({
       success: true,

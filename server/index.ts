@@ -8,7 +8,11 @@ import {
   handleSmsWebhook,
   getRideStatus,
 } from "./routes/sms-notifications";
-import { simulateDriverSms, getTestCommands } from "./routes/sms-test";
+import {
+  simulateDriverSms,
+  getTestCommands,
+  testDirectSms,
+} from "./routes/sms-test";
 
 // Security configuration
 const securityConfig = {
@@ -286,6 +290,7 @@ export function createServer() {
   // SMS testing routes (for development)
   app.post("/api/sms/simulate-response", simulateDriverSms);
   app.get("/api/sms/test-commands/:rideId", getTestCommands);
+  app.post("/api/sms/test-direct", testDirectSms);
 
   // Stricter rate limiting for sensitive endpoints
   app.use(

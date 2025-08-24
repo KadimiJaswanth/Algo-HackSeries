@@ -42,12 +42,15 @@ import SOSButton from "@/components/SOSButton";
 import LiveTracking from "@/components/LiveTracking";
 import SplitFare from "@/components/SplitFare";
 import OnChainReview from "@/components/OnChainReview";
+import PaymentInfo from "@/components/PaymentInfo";
+import MapConfigInfo from "@/components/MapConfigInfo";
+import GoogleMapsStatus from "@/components/GoogleMapsStatus";
 
 export default function Rider() {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("book");
   const [activeRideId] = useState("ride-123");
-  const [currentFare] = useState(25.5);
+  const [currentFare] = useState(0.0005); // Default fare within token limits
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
@@ -177,12 +180,14 @@ export default function Rider() {
                   <AIFareNegotiation
                     basePrice={currentFare}
                     onFareAgreed={(price) =>
-                      console.log(`Fare agreed: ${price.toFixed(6)} AVAX`)
+                      console.log(`Fare agreed: ${price.toFixed(4)} TOKENS`)
                     }
                   />
                 </div>
-                <div className="md:col-span-2 lg:col-span-1">
+                <div className="md:col-span-2 lg:col-span-1 space-y-4">
+                  <GoogleMapsStatus />
                   <SplitFare totalFare={currentFare} rideId={activeRideId} />
+                  <PaymentInfo />
                 </div>
               </div>
 
@@ -403,7 +408,7 @@ export default function Rider() {
                       <span className="text-sm text-muted-foreground">
                         Total Spent
                       </span>
-                      <span className="font-semibold">1,248.50 AVAX</span>
+                      <span className="font-semibold">1.2485 TOKENS</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">

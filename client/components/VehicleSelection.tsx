@@ -32,11 +32,11 @@ const vehicleTypes: VehicleType[] = [
     icon: <Bike className="h-6 w-6" />,
     description: "Quick & affordable bike rides",
     basePrice: 0.0001,
-    pricePerKm: 0.00005,
-    pricePerMin: 0.00002,
+    pricePerKm: 0.00002,
+    pricePerMin: 0.00001,
     capacity: 1,
     eta: "2-5 min",
-    features: ["Fastest arrival", "Best for short trips", "Affordable"],
+    features: ["Fastest arrival", "Best for short trips", "Token payment only"],
     category: "bike",
   },
   {
@@ -45,11 +45,11 @@ const vehicleTypes: VehicleType[] = [
     icon: <Truck className="h-6 w-6" />,
     description: "Comfortable auto-rickshaw",
     basePrice: 0.0002,
-    pricePerKm: 0.00008,
-    pricePerMin: 0.00003,
+    pricePerKm: 0.00004,
+    pricePerMin: 0.00002,
     capacity: 3,
     eta: "3-8 min",
-    features: ["AC available", "Good for city rides", "Moderate pricing"],
+    features: ["AC available", "Good for city rides", "Token payment only"],
     category: "auto",
   },
   {
@@ -58,11 +58,11 @@ const vehicleTypes: VehicleType[] = [
     icon: <Car className="h-6 w-6" />,
     description: "Affordable car rides",
     basePrice: 0.0003,
-    pricePerKm: 0.00012,
-    pricePerMin: 0.00005,
+    pricePerKm: 0.00006,
+    pricePerMin: 0.00003,
     capacity: 4,
     eta: "5-12 min",
-    features: ["AC car", "Safe & reliable", "Budget-friendly"],
+    features: ["AC car", "Safe & reliable", "Token payment only"],
     category: "car",
   },
   {
@@ -70,12 +70,12 @@ const vehicleTypes: VehicleType[] = [
     name: "RideComfort",
     icon: <Car className="h-6 w-6" />,
     description: "More spacious rides",
-    basePrice: 0.0004,
-    pricePerKm: 0.00015,
-    pricePerMin: 0.00007,
+    basePrice: 0.0005,
+    pricePerKm: 0.00008,
+    pricePerMin: 0.00004,
     capacity: 4,
     eta: "6-15 min",
-    features: ["Spacious cars", "Professional drivers", "Extra legroom"],
+    features: ["Spacious cars", "Professional drivers", "Token payment only"],
     category: "car",
   },
   {
@@ -83,12 +83,12 @@ const vehicleTypes: VehicleType[] = [
     name: "RidePremium",
     icon: <Car className="h-6 w-6" />,
     description: "Luxury car experience",
-    basePrice: 0.0005,
-    pricePerKm: 0.0002,
-    pricePerMin: 0.0001,
+    basePrice: 0.0007,
+    pricePerKm: 0.0001,
+    pricePerMin: 0.00005,
     capacity: 4,
     eta: "8-20 min",
-    features: ["Luxury cars", "Top-rated drivers", "Premium service"],
+    features: ["Luxury cars", "Top-rated drivers", "Token payment only"],
     category: "premium",
   },
   {
@@ -96,12 +96,12 @@ const vehicleTypes: VehicleType[] = [
     name: "RideXL",
     icon: <Truck className="h-6 w-6" />,
     description: "Large group rides",
-    basePrice: 0.0004,
-    pricePerKm: 0.00018,
-    pricePerMin: 0.00008,
+    basePrice: 0.0006,
+    pricePerKm: 0.00009,
+    pricePerMin: 0.00004,
     capacity: 6,
     eta: "10-25 min",
-    features: ["6+ seater", "Extra luggage space", "Group rides"],
+    features: ["6+ seater", "Extra luggage space", "Token payment only"],
     category: "car",
   },
 ];
@@ -129,7 +129,11 @@ export default function VehicleSelection({
     const distanceFare = distance * vehicle.pricePerKm;
     const timeFare = duration * vehicle.pricePerMin;
     const subtotal = baseFare + distanceFare + timeFare;
-    return Math.round(subtotal * surgeMultiplier * 10000) / 10000;
+    const fareWithSurge = subtotal * surgeMultiplier;
+
+    // Enforce payment limits: 0.0001 to 0.0009 tokens
+    const constrainedFare = Math.max(0.0001, Math.min(0.0009, fareWithSurge));
+    return Math.round(constrainedFare * 10000) / 10000;
   };
 
   const getCategoryColor = (category: string) => {
@@ -203,15 +207,25 @@ export default function VehicleSelection({
                 </div>
 
                 <div className="text-right space-y-2">
-                  <div className="text-lg font-bold">
-                    {fare.toFixed(6)} AVAX
+                  <div className="text-lg font-bold text-primary">
+                    {fare.toFixed(4)} TOKENS
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Avalanche Fuji
+                    Wallet Payment Only
                   </div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
-                      +{(fare - fare / surgeMultiplier).toFixed(6)} AVAX surge
+                      +{(fare - fare / surgeMultiplier).toFixed(4)} TOKENS surge
+                    </div>
+                  )}
+                  {fare >= 0.0009 && (
+                    <div className="text-xs text-amber-600">
+                      ⚠️ Max fare limit reached
+                    </div>
+                  )}
+                  {fare <= 0.0001 && (
+                    <div className="text-xs text-green-600">
+                      ✓ Minimum fare applied
                     </div>
                   )}
 
@@ -239,9 +253,12 @@ export default function VehicleSelection({
                     ))}
                   </div>
                   <div className="mt-2 text-xs text-muted-foreground">
-                    Base: {vehicle.basePrice.toFixed(6)} + Distance:
-                    {(distance * vehicle.pricePerKm).toFixed(6)} + Time:
-                    {(duration * vehicle.pricePerMin).toFixed(6)} AVAX
+                    Base: {vehicle.basePrice.toFixed(4)} + Distance:
+                    {(distance * vehicle.pricePerKm).toFixed(4)} + Time:
+                    {(duration * vehicle.pricePerMin).toFixed(4)} TOKENS
+                  </div>
+                  <div className="mt-1 text-xs text-blue-600 font-medium">
+                    💳 Payment: Wallet tokens only | Range: 0.0001-0.0009 TOKENS
                   </div>
                 </div>
               )}

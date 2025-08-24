@@ -204,7 +204,7 @@ The rider has been notified and is waiting for you. Drive safely! 🚗`;
 
       console.log("❌ Driver declined ride:", rideId);
 
-      const declineMessage = `�� RIDE DECLINED - ${rideId}
+      const declineMessage = `❌ RIDE DECLINED - ${rideId}
 
 You have declined the ride request from ${rideRequest.riderName}.
 
@@ -240,15 +240,40 @@ Thank you for your response! 🚗`;
       console.log("🔄 Ride will be reassigned to another driver");
     } else {
       // Invalid command
+      console.log("❓ Invalid command received:", messageBody);
+
+      const helpMessage = `❓ INVALID COMMAND: "${Body}"
+
+📋 Valid commands for ride ${rideId}:
+
+✅ ACCEPT ${rideId}
+   - To accept the ride request
+
+❌ IGNORE ${rideId}
+   - To decline the ride request
+
+💡 Tips:
+- Reply with the exact format above
+- Include the ride ID: ${rideId}
+- Commands are case-insensitive
+
+Please try again! 🚗`;
+
       if (accountSid && authToken && twilioPhoneNumber) {
-        await client.messages.create({
-          body: `❓ Invalid command: "${messageBody}"
-Please reply with:
-ACCEPT ${rideId} - to accept ride
-IGNORE ${rideId} - to decline ride`,
-          from: twilioPhoneNumber,
-          to: DRIVER_PHONE,
-        });
+        try {
+          const helpSms = await client.messages.create({
+            body: helpMessage,
+            from: twilioPhoneNumber,
+            to: DRIVER_PHONE,
+          });
+          console.log("✅ Help SMS sent to driver:", helpSms.sid);
+        } catch (smsError) {
+          console.error("❌ Error sending help SMS:", smsError);
+        }
+      } else {
+        console.log("📱 SIMULATED SMS to driver:");
+        console.log("To:", DRIVER_PHONE);
+        console.log("Message:", helpMessage);
       }
     }
 

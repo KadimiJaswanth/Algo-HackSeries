@@ -391,29 +391,17 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     setRideConfirmed(false);
 
     try {
-      // Prepare enhanced ride data for tracking
-      const rideData = {
-        pickup: bookingData.pickup!,
-        dropoff: bookingData.dropoff!,
-        estimatedFare: bookingData.fareEstimate,
-        riderName: "Rider User", // In real app, get from user profile
-      };
+      // Find vehicle name from bookingData
+      const vehicleName = bookingData.vehicleType || "Standard Car";
 
-      setEnhancedRideData(rideData);
-      setUseEnhancedTracking(true);
-      onTabChange?.("tracking");
-      setIsLoading(false);
+      // Start the new booking flow
+      await startBookingFlow(bookingData.fareEstimate, vehicleName);
 
-      // Note: The enhanced tracking component will handle:
-      // 1. Sending SMS to 6301214658
-      // 2. 5-minute auto-cancel timer
-      // 3. Live tracking when accepted
-      // 4. Call/message options
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
-      setUseEnhancedTracking(false);
-      setEnhancedRideData(null);
+      setBookingFlowState('idle');
+      setSearchingData(null);
     } finally {
       setIsLoading(false);
     }

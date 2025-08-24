@@ -10,8 +10,7 @@ import {
 } from "react-icons/fi";
 
 export default function MapConfigInfo() {
-  const isDemo = !import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 
-                 import.meta.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key";
+  const isDemo = false; // Now using real Google Maps
 
   return (
     <Card className="glass border-primary/20">

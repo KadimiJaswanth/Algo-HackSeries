@@ -160,23 +160,18 @@ export default function GoogleMaps({
       newMarkers.push(pickupMarker);
     }
 
-    // Add dropoff marker
+    // Add dropoff marker with standard Google Maps styling
     if (dropoff) {
       const dropoffMarker = new google.maps.Marker({
         position: dropoff,
         map: map,
         title: "Drop-off Location",
-        icon: {
-          url:
-            "data:image/svg+xml;charset=UTF-8," +
-            encodeURIComponent(`
-            <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 0C6.716 0 0 6.716 0 15c0 15 15 25 15 25s15-10 15-25C30 6.716 23.284 0 15 0z" fill="#EF4444"/>
-              <circle cx="15" cy="15" r="8" fill="white"/>
-              <text x="15" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#EF4444">D</text>
-            </svg>
-          `),
+        label: {
+          text: "B",
+          color: "white",
+          fontWeight: "bold",
         },
+        // Use default Google Maps marker (red) for dropoff
       });
       newMarkers.push(dropoffMarker);
     }

@@ -334,10 +334,10 @@ export default function GoogleMaps({
       )}
 
       {selectingFor && (
-        <div className="absolute bottom-4 left-4 animate-fade-in-up">
-          <Badge className="glass bg-primary/20 text-primary border-primary/30 animate-glow">
-            <span className="animate-pulse">🎯</span>
-            <span className="ml-2">Tap on map to set {selectingFor} location</span>
+        <div className="absolute bottom-4 left-4">
+          <Badge className="bg-white shadow-md text-gray-700 border border-gray-200">
+            <span className="mr-2">🎯</span>
+            <span>Tap on map to set {selectingFor} location</span>
           </Badge>
         </div>
       )}

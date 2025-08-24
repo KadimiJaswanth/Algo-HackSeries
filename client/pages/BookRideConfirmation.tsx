@@ -384,12 +384,12 @@ export default function BookRideConfirmation() {
           )}
 
           <Button
-            onClick={() => navigate("/rider?tab=tracking")}
+            onClick={() => navigate("/rider?tab=track")}
             className="w-full bg-primary hover:bg-primary/90 glow"
             size="lg"
           >
             <Navigation className="mr-2 h-5 w-5" />
-            Track My Ride Live
+            Go to Ride Tracking
           </Button>
 
           <Button

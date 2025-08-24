@@ -67,13 +67,12 @@ export default function GoogleMaps({
           const mapInstance = new google.maps.Map(mapRef.current, {
             center: { lat: 37.7749, lng: -122.4194 }, // San Francisco default
             zoom: 13,
-            styles: [
-              {
-                featureType: "poi",
-                elementType: "labels",
-                stylers: [{ visibility: "off" }],
-              },
-            ],
+            mapTypeControl: true,
+            streetViewControl: true,
+            fullscreenControl: true,
+            zoomControl: true,
+            // Remove custom styling to get exact Google Maps UI
+            styles: [],
           });
 
           const directionsServiceInstance = new google.maps.DirectionsService();

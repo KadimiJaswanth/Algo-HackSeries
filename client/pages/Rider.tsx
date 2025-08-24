@@ -177,7 +177,7 @@ export default function Rider() {
                   <AIFareNegotiation
                     basePrice={currentFare}
                     onFareAgreed={(price) =>
-                      console.log(`Fare agreed: ${price.toFixed(6)} AVAX`)
+                      console.log(`Fare agreed: ${price.toFixed(4)} TOKENS`)
                     }
                   />
                 </div>

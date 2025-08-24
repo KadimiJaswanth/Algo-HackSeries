@@ -52,14 +52,7 @@ export default function GoogleMaps({
           libraries: ["places", "geometry"],
         });
 
-        // For demo purposes, use InteractiveMap if no API key
-        if (
-          !import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
-          import.meta.env.VITE_GOOGLE_MAPS_API_KEY === "demo-key"
-        ) {
-          setIsDemo(true);
-          return;
-        }
+        // Always use Google Maps with the provided API key
 
         await loader.load();
 

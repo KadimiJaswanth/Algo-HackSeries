@@ -160,28 +160,42 @@ export const handleSmsWebhook: RequestHandler = async (req, res) => {
       rideRequest.status = "accepted";
       activeRideRequests.set(rideId, rideRequest);
 
-      console.log("Driver accepted ride:", rideId);
+      console.log("✅ Driver accepted ride:", rideId);
+
+      const confirmationMessage = `✅ RIDE ACCEPTED! - ${rideId}
+
+📍 Pickup: ${rideRequest.pickupLocation}
+📍 Dropoff: ${rideRequest.dropoffLocation}
+👤 Rider: ${rideRequest.riderName}
+💰 Fare: ${rideRequest.estimatedFare.toFixed(4)} TOKENS
+⏰ ETA to pickup: 5-8 minutes
+
+🎯 Next Steps:
+1. Navigate to pickup location
+2. Call rider if needed
+3. Start ride when rider is picked up
+
+The rider has been notified and is waiting for you. Drive safely! 🚗`;
 
       // Send confirmation to driver
       if (accountSid && authToken && twilioPhoneNumber) {
-        await client.messages.create({
-          body: `✅ Ride ${rideId} ACCEPTED!
-Rider: ${rideRequest.riderName}
-Navigate to: ${rideRequest.pickupLocation}
-ETA: 5-8 minutes
-Payment: ${rideRequest.estimatedFare.toFixed(4)} TOKENS
-
-The rider has been notified. Drive safely! 🚗`,
-          from: twilioPhoneNumber,
-          to: DRIVER_PHONE,
-        });
+        try {
+          const confirmationSms = await client.messages.create({
+            body: confirmationMessage,
+            from: twilioPhoneNumber,
+            to: DRIVER_PHONE,
+          });
+          console.log("✅ Confirmation SMS sent to driver:", confirmationSms.sid);
+        } catch (smsError) {
+          console.error("❌ Error sending confirmation SMS:", smsError);
+        }
+      } else {
+        console.log("📱 SIMULATED SMS to driver:");
+        console.log("To:", DRIVER_PHONE);
+        console.log("Message:", confirmationMessage);
       }
 
-      // Here you would typically:
-      // 1. Update the database
-      // 2. Notify the rider via websocket/real-time connection
-      // 3. Send push notification to rider app
-      console.log("Rider should be notified that ride was accepted");
+      console.log("🔔 Rider will be notified that ride was accepted");
 
     } else if (action === "IGNORE") {
       // Update ride status

@@ -69,15 +69,14 @@ export default function GoogleMaps({
           });
 
           const directionsServiceInstance = new google.maps.DirectionsService();
-          const directionsRendererInstance = new google.maps.DirectionsRenderer(
-            {
-              suppressMarkers: false,
-              polylineOptions: {
-                strokeColor: "#4F46E5",
-                strokeWeight: 4,
-              },
+          const directionsRendererInstance = new google.maps.DirectionsRenderer({
+            suppressMarkers: true, // We'll use our own markers
+            polylineOptions: {
+              strokeColor: "#4285F4", // Google Maps blue
+              strokeWeight: 5,
+              strokeOpacity: 0.8,
             },
-          );
+          });
 
           directionsRendererInstance.setMap(mapInstance);
 

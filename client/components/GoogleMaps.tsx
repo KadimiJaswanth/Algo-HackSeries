@@ -135,11 +135,6 @@ export default function GoogleMaps({
     initMap();
   }, [mode, selectingFor, onLocationSelect]);
 
-  // Create demo map for when Google Maps API is not available
-  const createDemoMap = () => {
-    // We'll render the InteractiveMap component instead of static HTML
-    return;
-  };
 
   // Update markers when locations change
   useEffect(() => {

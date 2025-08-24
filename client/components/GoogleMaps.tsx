@@ -285,6 +285,20 @@ export default function GoogleMaps({
     }
   };
 
+  // If in demo mode, use the InteractiveMap component
+  if (isDemo) {
+    return (
+      <InteractiveMap
+        pickup={pickup}
+        dropoff={dropoff}
+        driverLocation={driverLocation}
+        onLocationSelect={onLocationSelect}
+        mode={mode}
+        className={className}
+      />
+    );
+  }
+
   return (
     <div className="relative rounded-lg overflow-hidden">
       <div ref={mapRef} className={cn(className, "rounded-lg")} />

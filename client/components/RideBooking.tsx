@@ -91,7 +91,11 @@ interface ActiveRide {
   };
 }
 
-export default function RideBooking() {
+interface RideBookingProps {
+  onTabChange?: (tab: string) => void;
+}
+
+export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   const { address, isConnected } = useAccount();
   const { sendNotification, pollStatus, formatDetails, getEstimatedResponseTime } = useSmsNotification();
   const [activeTab, setActiveTab] = useState("book");

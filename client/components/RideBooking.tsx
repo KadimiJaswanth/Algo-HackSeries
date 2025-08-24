@@ -431,6 +431,16 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
   return (
     <div className="space-y-6">
+      {/* Debug Info for Development */}
+      {process.env.NODE_ENV === 'development' && (
+        <BookingFlowDebug
+          isEnhancedTracking={useEnhancedTracking}
+          hasRideData={!!enhancedRideData}
+          currentTab={activeTab}
+          driverPhone="6301214658"
+        />
+      )}
+
       {demoMode && (
         <Card className="border-orange-500/50 bg-orange-500/10">
           <CardHeader className="pb-2">

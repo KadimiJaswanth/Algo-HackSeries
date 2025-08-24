@@ -207,7 +207,7 @@ export default function BookRideConfirmation() {
             <CardTitle className="text-xl">{rideDetails.vehicleName}</CardTitle>
             <div className="mt-2">
               <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                {rideDetails.fare.toFixed(6)} TOKENS
+                {rideDetails.fare.toFixed(6)} AVAX
               </Badge>
             </div>
             <CardDescription className="mt-2">

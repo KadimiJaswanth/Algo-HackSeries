@@ -277,23 +277,23 @@ export default function GoogleMaps({
 
       {/* Control buttons for selection mode */}
       {mode === "select" && (
-        <div className="absolute top-4 left-4 space-y-2 animate-slide-in-left">
+        <div className="absolute top-4 left-4 space-y-2">
           <Button
             size="sm"
             variant={selectingFor === "pickup" ? "default" : "outline"}
             onClick={() => setSelectingFor("pickup")}
-            className="glass glass-hover glow-hover border-green-500/30"
+            className="bg-white shadow-md hover:shadow-lg"
           >
-            <MapPin className="mr-2 h-4 w-4 text-green-400 glow-accent" />
+            <MapPin className="mr-2 h-4 w-4 text-green-600" />
             Set Pickup
           </Button>
           <Button
             size="sm"
             variant={selectingFor === "dropoff" ? "default" : "outline"}
             onClick={() => setSelectingFor("dropoff")}
-            className="glass glass-hover glow-hover border-red-500/30"
+            className="bg-white shadow-md hover:shadow-lg"
           >
-            <MapPin className="mr-2 h-4 w-4 text-red-400 glow-accent" />
+            <MapPin className="mr-2 h-4 w-4 text-red-600" />
             Set Dropoff
           </Button>
         </div>

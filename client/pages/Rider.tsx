@@ -42,6 +42,7 @@ import SOSButton from "@/components/SOSButton";
 import LiveTracking from "@/components/LiveTracking";
 import SplitFare from "@/components/SplitFare";
 import OnChainReview from "@/components/OnChainReview";
+import PaymentInfo from "@/components/PaymentInfo";
 
 export default function Rider() {
   const [searchParams] = useSearchParams();

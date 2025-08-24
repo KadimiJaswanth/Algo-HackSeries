@@ -206,7 +206,8 @@ export default function AIFareNegotiation({
             )}
           </CardTitle>
           <p className="text-muted-foreground">
-            Let our AI negotiate the best AVAX token fare for both you and the driver
+            Let our AI negotiate the best AVAX token fare for both you and the
+            driver
           </p>
         </CardHeader>
         <CardContent className="relative z-10">
@@ -286,7 +287,8 @@ export default function AIFareNegotiation({
               {basePrice.toFixed(6)} AVAX
             </div>
             <p className="text-muted-foreground">
-              Standard pricing in Avalanche Fuji tokens based on distance and current conditions
+              Standard pricing in Avalanche Fuji tokens based on distance and
+              current conditions
             </p>
             <div className="grid grid-cols-2 gap-3">
               <Button onClick={() => acceptOffer(basePrice)} className="glow">

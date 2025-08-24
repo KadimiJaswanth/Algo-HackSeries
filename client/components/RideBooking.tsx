@@ -495,7 +495,9 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   };
 
   const handleCompleteRide = () => {
-    alert("Ride completed! Payment processed via smart contract on Avalanche Fuji.");
+    alert(
+      "Ride completed! Payment processed via smart contract on Avalanche Fuji.",
+    );
     setActiveRide(null);
     onTabChange?.("book");
   };
@@ -1047,8 +1049,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
               }}
               onComplete={() => {
                 alert(
-        "🎉 Ride completed successfully! Payment processed via smart contract on Avalanche Fuji.",
-      );
+                  "🎉 Ride completed successfully! Payment processed via smart contract on Avalanche Fuji.",
+                );
                 setUseEnhancedTracking(false);
                 setEnhancedRideData(null);
                 onTabChange?.("book");

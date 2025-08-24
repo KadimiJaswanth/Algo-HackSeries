@@ -353,8 +353,8 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               <Calculator className="h-4 w-4" />
               <AlertDescription>
                 {difference > 0
-                ? `Split total is ${difference.toFixed(6)} AVAX over the ride fare`
-                : `Split total is ${Math.abs(difference).toFixed(6)} AVAX under the ride fare`}
+                  ? `Split total is ${difference.toFixed(6)} AVAX over the ride fare`
+                  : `Split total is ${Math.abs(difference).toFixed(6)} AVAX under the ride fare`}
               </AlertDescription>
             </Alert>
           )}
@@ -411,7 +411,8 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
             <div className="flex justify-between">
               <span>Your Share</span>
               <span className="font-medium text-primary">
-                {participants.find((p) => p.id === "self")?.amount.toFixed(6)} AVAX
+                {participants.find((p) => p.id === "self")?.amount.toFixed(6)}{" "}
+                AVAX
               </span>
             </div>
             <div className="flex justify-between">
@@ -429,7 +430,10 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               >
                 <CreditCard className="mr-2 h-4 w-4" />
                 Pay Your Share (
-                {participants.find((p) => p.id === "self")?.amount.toFixed(6)} AVAX)
+                {participants
+                  .find((p) => p.id === "self")
+                  ?.amount.toFixed(6)}{" "}
+                AVAX)
               </Button>
             </div>
           </div>

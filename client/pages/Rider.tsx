@@ -317,7 +317,9 @@ export default function Rider() {
                         <label className="text-sm font-medium">
                           Preferred Payment
                         </label>
-                        <p className="text-muted-foreground">Avalanche Wallet</p>
+                        <p className="text-muted-foreground">
+                          Avalanche Wallet
+                        </p>
                       </div>
                     </div>
 

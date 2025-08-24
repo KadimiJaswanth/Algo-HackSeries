@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -124,7 +123,6 @@ export default function VehicleSelection({
   surgeMultiplier = 1,
   onBookRide,
 }: VehicleSelectionProps) {
-  const navigate = useNavigate();
   const [bookedVehicle, setBookedVehicle] = useState<string | null>(null);
   const calculateFare = (vehicle: VehicleType): number => {
     const baseFare = vehicle.basePrice;
@@ -221,14 +219,7 @@ export default function VehicleSelection({
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Navigate to confirmation page with ride details
-                      const params = new URLSearchParams({
-                        vehicleId: vehicle.id,
-                        vehicleName: vehicle.name,
-                        fare: fare.toString(),
-                        estimatedTime: vehicle.eta,
-                      });
-                      navigate(`/book-ride-confirmation?${params.toString()}`);
+                      // Call the booking function directly instead of navigating to mock page
                       onBookRide?.(vehicle.id, vehicle.name, fare);
                     }}
                     className="w-full"

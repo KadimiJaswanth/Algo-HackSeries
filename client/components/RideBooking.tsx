@@ -108,7 +108,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
   const [surgeMultiplier, setSurgeMultiplier] = useState(1);
-  const [demoMode, setDemoMode] = useState(false);
+  const [demoMode, setDemoMode] = useState(true);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [rideConfirmed, setRideConfirmed] = useState(false);
@@ -126,8 +126,16 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   } | null>(null);
 
   const [bookingData, setBookingData] = useState<RideBookingData>({
-    pickup: null,
-    dropoff: null,
+    pickup: {
+      lat: 37.7749,
+      lng: -122.4194,
+      address: "Downtown San Francisco",
+    },
+    dropoff: {
+      lat: 37.6213,
+      lng: -122.379,
+      address: "San Francisco Airport",
+    },
     stops: [],
     vehicleType: "",
     scheduledTime: "",
@@ -197,12 +205,58 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     vehicleName: string,
     fare: number,
   ) => {
+    // Update booking data and trigger the enhanced ride booking flow
+    setBookingData((prev) => ({
+      ...prev,
+      vehicleType: vehicleId,
+      fareEstimate: fare,
+    }));
+
+    // Set quick confirmation briefly
     setQuickBookConfirmation({ vehicleName, fare });
 
-    // Clear confirmation after 3 seconds
+    // Start the enhanced ride booking flow
     setTimeout(() => {
       setQuickBookConfirmation(null);
-    }, 3000);
+      proceedWithEnhancedBooking(fare);
+    }, 1500);
+  };
+
+  const proceedWithEnhancedBooking = async (fare: number) => {
+    if (!bookingData.pickup || !bookingData.dropoff) {
+      alert("Missing pickup or dropoff location");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Prepare enhanced ride data for tracking
+      const rideData = {
+        pickup: bookingData.pickup!,
+        dropoff: bookingData.dropoff!,
+        estimatedFare: fare,
+        riderName: "Rider User", // In real app, get from user profile
+      };
+
+      setEnhancedRideData(rideData);
+      setUseEnhancedTracking(true);
+      onTabChange?.("tracking");
+      setIsLoading(false);
+
+      // Note: The enhanced tracking component will handle:
+      // 1. Sending SMS to 6301214658
+      // 2. 5-minute auto-cancel timer
+      // 3. Live tracking when accepted
+      // 4. Call/message options
+    } catch (error) {
+      console.error("Error booking ride:", error);
+      alert("Error booking ride. Please try again.");
+      setUseEnhancedTracking(false);
+      setEnhancedRideData(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const addStop = () => {
@@ -287,7 +341,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
       setEnhancedRideData(rideData);
       setUseEnhancedTracking(true);
-      onTabChange?.("track");
+      onTabChange?.("tracking");
       setIsLoading(false);
 
       // Note: The enhanced tracking component will handle:

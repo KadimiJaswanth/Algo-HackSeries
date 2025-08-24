@@ -72,38 +72,14 @@ export default function BookRideConfirmation() {
         dropoffLocation: dropoffLocation || "Selected Destination",
       });
 
-      // Simulate driver assignment after 2 seconds
-      setTimeout(() => {
-        setDriverInfo({
-          name: getRandomDriverName(),
-          rating: 4.5 + Math.random() * 0.5,
-          avatar: `https://api.dicebear.com/7.x/avatars/svg?seed=${Math.random()}`,
-          vehicle: {
-            model: getRandomCarModel(vehicleId),
-            licensePlate: generateLicensePlate(),
-          },
-          phone: generatePhoneNumber(),
-        });
-        setShowDriverInfo(true);
-      }, 2000);
+      // NOTE: Removed automatic fake driver assignment.
+      // This page should not be used in the production flow.
+      // Use Enhanced Ride Tracking component instead for real SMS-based driver assignment.
     }
 
-    // Start countdown for auto-redirect
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          // Use setTimeout to avoid state update during render
-          setTimeout(() => {
-            navigate("/rider?tab=tracking");
-          }, 0);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    // NOTE: Removed auto-redirect timer.
+    // This page should not automatically redirect.
+    // Users should use the Enhanced Ride Tracking flow instead.
   }, [searchParams, navigate]);
 
   const getVehicleIcon = (vehicleId: string) => {
@@ -369,13 +345,15 @@ export default function BookRideConfirmation() {
           </Card>
         )}
 
-        {/* Auto-redirect Notice */}
-        <Card className="border-primary/30 bg-primary/10">
+        {/* Deprecated Page Notice */}
+        <Card className="border-yellow-500/30 bg-yellow-500/10">
           <CardContent className="p-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              Automatically redirecting to tracking in{" "}
-              <span className="font-bold text-primary">{countdown}</span>{" "}
-              seconds
+            <p className="text-sm text-yellow-600 font-medium">
+              ⚠️ This page is for demo purposes only
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Real ride booking uses SMS-based driver assignment. Please use the
+              main booking flow for actual rides.
             </p>
           </CardContent>
         </Card>
@@ -406,12 +384,12 @@ export default function BookRideConfirmation() {
           )}
 
           <Button
-            onClick={() => navigate("/rider?tab=tracking")}
+            onClick={() => navigate("/rider?tab=track")}
             className="w-full bg-primary hover:bg-primary/90 glow"
             size="lg"
           >
             <Navigation className="mr-2 h-5 w-5" />
-            Track My Ride Live
+            Go to Ride Tracking
           </Button>
 
           <Button

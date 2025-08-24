@@ -57,7 +57,14 @@ interface DriverInfo {
   currentLocation?: Location;
 }
 
-type RideStatus = 'searching' | 'pending' | 'accepted' | 'pickup' | 'in_progress' | 'completed' | 'cancelled';
+type RideStatus =
+  | "searching"
+  | "pending"
+  | "accepted"
+  | "pickup"
+  | "in_progress"
+  | "completed"
+  | "cancelled";
 
 interface EnhancedRideTrackingProps {
   rideData: RideData;
@@ -65,22 +72,22 @@ interface EnhancedRideTrackingProps {
   onComplete: () => void;
 }
 
-export default function EnhancedRideTracking({ 
-  rideData, 
-  onCancel, 
-  onComplete 
+export default function EnhancedRideTracking({
+  rideData,
+  onCancel,
+  onComplete,
 }: EnhancedRideTrackingProps) {
   const { sendNotification, pollStatus } = useSmsNotification();
-  
+
   // Ride state management
-  const [rideStatus, setRideStatus] = useState<RideStatus>('searching');
+  const [rideStatus, setRideStatus] = useState<RideStatus>("searching");
   const [currentRideId, setCurrentRideId] = useState<string | null>(null);
   const [driverInfo, setDriverInfo] = useState<DriverInfo | null>(null);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [showCommunicationDialog, setShowCommunicationDialog] = useState(false);
   const [showAutoCancel, setShowAutoCancel] = useState(false);
-  
+
   // Auto-cancel timeout
   const autoCancel = useRef<NodeJS.Timeout | null>(null);
   const statusPolling = useRef<boolean>(false);
@@ -101,7 +108,7 @@ export default function EnhancedRideTracking({
   useEffect(() => {
     // Timer for elapsed time
     const timer = setInterval(() => {
-      setTimeElapsed(prev => prev + 1);
+      setTimeElapsed((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(timer);
@@ -110,25 +117,28 @@ export default function EnhancedRideTracking({
   const initializeRideRequest = async () => {
     try {
       setIsLoading(true);
-      setRideStatus('searching');
+      setRideStatus("searching");
 
       // Send SMS notification to driver
       const notificationResult = await sendNotification(
         rideData.riderName,
         rideData.pickup.address,
         rideData.dropoff.address,
-        rideData.estimatedFare
+        rideData.estimatedFare,
       );
 
       if (notificationResult.success) {
         setCurrentRideId(notificationResult.rideId);
-        setRideStatus('pending');
+        setRideStatus("pending");
         setIsLoading(false);
 
         // Start auto-cancel timer (5 minutes)
-        autoCancel.current = setTimeout(() => {
-          handleAutoCancel();
-        }, 5 * 60 * 1000); // 5 minutes
+        autoCancel.current = setTimeout(
+          () => {
+            handleAutoCancel();
+          },
+          5 * 60 * 1000,
+        ); // 5 minutes
 
         // Start polling for driver response
         startStatusPolling(notificationResult.rideId);
@@ -137,27 +147,29 @@ export default function EnhancedRideTracking({
       }
     } catch (error) {
       console.error("Error initializing ride request:", error);
-      setRideStatus('cancelled');
+      setRideStatus("cancelled");
       setIsLoading(false);
     }
   };
 
   const startStatusPolling = (rideId: string) => {
     if (statusPolling.current) return;
-    
+
     statusPolling.current = true;
-    
+
     pollStatus(rideId, (status) => {
-      if (status === 'accepted') {
+      if (status === "accepted") {
         handleDriverAccepted();
-      } else if (status === 'ignored') {
+      } else if (status === "ignored") {
         handleDriverIgnored();
       }
-    }).catch(error => {
-      console.error("Error polling driver response:", error);
-    }).finally(() => {
-      statusPolling.current = false;
-    });
+    })
+      .catch((error) => {
+        console.error("Error polling driver response:", error);
+      })
+      .finally(() => {
+        statusPolling.current = false;
+      });
   };
 
   const handleDriverAccepted = () => {
@@ -182,18 +194,17 @@ export default function EnhancedRideTracking({
       },
     });
 
-    setRideStatus('accepted');
+    setRideStatus("accepted");
     setIsLoading(false);
 
-    // Simulate ride progression
-    setTimeout(() => setRideStatus('pickup'), 8000);
-    setTimeout(() => setRideStatus('in_progress'), 15000);
+    // NOTE: Removed automatic ride progression for more realistic behavior.
+    // In a real app, status would update based on driver's GPS location and manual updates.
   };
 
   const handleDriverIgnored = () => {
-    setRideStatus('cancelled');
+    setRideStatus("cancelled");
     setIsLoading(false);
-    
+
     // Clear auto-cancel timer
     if (autoCancel.current) {
       clearTimeout(autoCancel.current);
@@ -202,7 +213,7 @@ export default function EnhancedRideTracking({
   };
 
   const handleAutoCancel = () => {
-    setRideStatus('cancelled');
+    setRideStatus("cancelled");
     setShowAutoCancel(true);
     setIsLoading(false);
   };
@@ -212,64 +223,66 @@ export default function EnhancedRideTracking({
       clearTimeout(autoCancel.current);
       autoCancel.current = null;
     }
-    setRideStatus('cancelled');
+    setRideStatus("cancelled");
     onCancel();
   };
 
   const handleCallDriver = () => {
     if (driverInfo) {
-      window.open(`tel:+91${driverInfo.phone}`, '_self');
+      window.open(`tel:+91${driverInfo.phone}`, "_self");
     }
   };
 
   const handleMessageDriver = () => {
     if (driverInfo) {
-      const message = encodeURIComponent(`Hi, this is your rider. I'm waiting at ${rideData.pickup.address}`);
-      window.open(`sms:+91${driverInfo.phone}?body=${message}`, '_self');
+      const message = encodeURIComponent(
+        `Hi, this is your rider. I'm waiting at ${rideData.pickup.address}`,
+      );
+      window.open(`sms:+91${driverInfo.phone}?body=${message}`, "_self");
     }
   };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getStatusBadgeColor = () => {
     switch (rideStatus) {
-      case 'searching':
-        return 'bg-blue-500';
-      case 'pending':
-        return 'bg-yellow-500 animate-pulse';
-      case 'accepted':
-        return 'bg-green-500';
-      case 'pickup':
-        return 'bg-orange-500';
-      case 'in_progress':
-        return 'bg-purple-500';
-      case 'cancelled':
-        return 'bg-red-500';
+      case "searching":
+        return "bg-blue-500";
+      case "pending":
+        return "bg-yellow-500 animate-pulse";
+      case "accepted":
+        return "bg-green-500";
+      case "pickup":
+        return "bg-orange-500";
+      case "in_progress":
+        return "bg-purple-500";
+      case "cancelled":
+        return "bg-red-500";
       default:
-        return 'bg-gray-500';
+        return "bg-gray-500";
     }
   };
 
   const getStatusText = () => {
     switch (rideStatus) {
-      case 'searching':
-        return 'Searching for driver...';
-      case 'pending':
-        return 'Waiting for driver response...';
-      case 'accepted':
-        return 'Driver accepted! Coming to pick you up';
-      case 'pickup':
-        return 'Driver is on the way to pickup';
-      case 'in_progress':
-        return 'Ride in progress';
-      case 'cancelled':
-        return 'Ride cancelled';
+      case "searching":
+        return "Searching for driver...";
+      case "pending":
+        return "Waiting for driver response...";
+      case "accepted":
+        return "Driver accepted! Coming to pick you up";
+      case "pickup":
+        return "Driver is on the way to pickup";
+      case "in_progress":
+        return "Ride in progress";
+      case "cancelled":
+        return "Ride cancelled";
       default:
-        return 'Unknown status';
+        return "Unknown status";
     }
   };
 
@@ -298,7 +311,7 @@ export default function EnhancedRideTracking({
         </CardHeader>
         <CardContent>
           {/* Progress Bar for Pending Status */}
-          {rideStatus === 'pending' && (
+          {rideStatus === "pending" && (
             <div className="space-y-2 mb-4">
               <div className="flex justify-between text-sm">
                 <span>Waiting for driver response...</span>
@@ -359,7 +372,7 @@ export default function EnhancedRideTracking({
       </Card>
 
       {/* Driver Information (when accepted) */}
-      {rideStatus === 'accepted' && driverInfo && (
+      {rideStatus === "accepted" && driverInfo && (
         <Card className="glass border-green-500/20 bg-green-500/5">
           <CardHeader>
             <CardTitle className="flex items-center text-green-600">
@@ -386,8 +399,8 @@ export default function EnhancedRideTracking({
                           key={i}
                           className={`w-3 h-3 ${
                             i < Math.floor(driverInfo.rating)
-                              ? 'text-yellow-400'
-                              : 'text-gray-300'
+                              ? "text-yellow-400"
+                              : "text-gray-300"
                           }`}
                         >
                           ⭐
@@ -456,7 +469,7 @@ export default function EnhancedRideTracking({
 
       {/* Action Buttons */}
       <div className="flex space-x-3">
-        {(rideStatus === 'pending' || rideStatus === 'searching') && (
+        {(rideStatus === "pending" || rideStatus === "searching") && (
           <Button
             onClick={handleManualCancel}
             variant="outline"
@@ -466,8 +479,8 @@ export default function EnhancedRideTracking({
             Cancel Ride
           </Button>
         )}
-        
-        {rideStatus === 'accepted' && (
+
+        {rideStatus === "accepted" && (
           <Button
             onClick={() => setShowCommunicationDialog(true)}
             className="flex-1"
@@ -477,7 +490,7 @@ export default function EnhancedRideTracking({
           </Button>
         )}
 
-        {rideStatus === 'in_progress' && (
+        {rideStatus === "in_progress" && (
           <Button
             onClick={onComplete}
             className="flex-1 bg-green-600 hover:bg-green-700"
@@ -497,15 +510,17 @@ export default function EnhancedRideTracking({
               Ride Auto-Cancelled
             </DialogTitle>
             <DialogDescription>
-              The ride was automatically cancelled because the driver didn't respond within 5 minutes.
+              The ride was automatically cancelled because the driver didn't
+              respond within 5 minutes.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Card className="border-red-200 bg-red-50">
               <CardContent className="p-4">
                 <p className="text-sm text-red-800">
-                  📱 Driver ({DRIVER_PHONE}) didn't respond to the ride request in time.
-                  You can try booking another ride or contact support if needed.
+                  📱 Driver ({DRIVER_PHONE}) didn't respond to the ride request
+                  in time. You can try booking another ride or contact support
+                  if needed.
                 </p>
               </CardContent>
             </Card>
@@ -523,7 +538,10 @@ export default function EnhancedRideTracking({
       </Dialog>
 
       {/* Communication Dialog */}
-      <Dialog open={showCommunicationDialog} onOpenChange={setShowCommunicationDialog}>
+      <Dialog
+        open={showCommunicationDialog}
+        onOpenChange={setShowCommunicationDialog}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Contact Your Driver</DialogTitle>
@@ -549,7 +567,7 @@ export default function EnhancedRideTracking({
                 </CardContent>
               </Card>
             )}
-            
+
             <div className="grid grid-cols-2 gap-3">
               <Button
                 onClick={() => {

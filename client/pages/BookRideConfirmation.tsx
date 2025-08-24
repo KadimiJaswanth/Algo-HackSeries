@@ -72,20 +72,9 @@ export default function BookRideConfirmation() {
         dropoffLocation: dropoffLocation || "Selected Destination",
       });
 
-      // Simulate driver assignment after 2 seconds
-      setTimeout(() => {
-        setDriverInfo({
-          name: getRandomDriverName(),
-          rating: 4.5 + Math.random() * 0.5,
-          avatar: `https://api.dicebear.com/7.x/avatars/svg?seed=${Math.random()}`,
-          vehicle: {
-            model: getRandomCarModel(vehicleId),
-            licensePlate: generateLicensePlate(),
-          },
-          phone: generatePhoneNumber(),
-        });
-        setShowDriverInfo(true);
-      }, 2000);
+      // NOTE: Removed automatic fake driver assignment.
+      // This page should not be used in the production flow.
+      // Use Enhanced Ride Tracking component instead for real SMS-based driver assignment.
     }
 
     // Start countdown for auto-redirect

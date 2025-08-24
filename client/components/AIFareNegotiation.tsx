@@ -324,8 +324,7 @@ export default function AIFareNegotiation({
                 </div>
                 <Slider
                   value={[currentOffer]}
-                  onValueChange={([value]) => setCurrentOffer(value)}
-                  max={basePrice * 1.5}
+                  onValueChange={([value]) => setCurrentOffer(Math.max(0.0001, Math.min(0.0009, value)))}
                   min={0.0001}
                   max={0.0009}
                   step={0.0001}

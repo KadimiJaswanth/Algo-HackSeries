@@ -311,21 +311,21 @@ export default function GoogleMaps({
 
       {/* Location indicators */}
       {mode !== "select" && (
-        <div className="absolute top-4 right-4 space-y-2 animate-slide-in-right">
+        <div className="absolute top-4 right-4 space-y-2">
           {pickup && (
-            <Badge className="glass bg-green-500/20 text-green-400 border-green-500/30 glow-accent">
+            <Badge className="bg-white shadow-md text-green-700 border border-green-200">
               <MapPin className="mr-1 h-3 w-3" />
               Pickup Set
             </Badge>
           )}
           {dropoff && (
-            <Badge className="glass bg-red-500/20 text-red-400 border-red-500/30 glow-accent">
+            <Badge className="bg-white shadow-md text-red-700 border border-red-200">
               <MapPin className="mr-1 h-3 w-3" />
               Dropoff Set
             </Badge>
           )}
           {driverLocation && (
-            <Badge className="glass bg-blue-500/20 text-blue-400 border-blue-500/30 glow-accent">
+            <Badge className="bg-white shadow-md text-blue-700 border border-blue-200">
               <Navigation className="mr-1 h-3 w-3" />
               Driver Tracking
             </Badge>

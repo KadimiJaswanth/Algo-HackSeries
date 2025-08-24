@@ -41,6 +41,8 @@ export default function SmsNotificationTest() {
 
   const [driverResponseStatus, setDriverResponseStatus] = useState<'pending' | 'accepted' | 'ignored' | null>(null);
   const [isPolling, setIsPolling] = useState(false);
+  const [simulationMode, setSimulationMode] = useState(false);
+  const [testMessage, setTestMessage] = useState("");
 
   const handleSendTestNotification = async () => {
     setIsLoading(true);

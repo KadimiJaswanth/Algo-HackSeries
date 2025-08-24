@@ -129,7 +129,7 @@ export default function GoogleMaps({
         }
       } catch (error) {
         console.error("Error loading Google Maps:", error);
-        createDemoMap();
+        setIsDemo(true);
       }
     };
 

@@ -167,7 +167,7 @@ export default function Rider() {
           <TabsContent value="book" className="space-y-6 animate-fade-in-up">
             {/* Main Ride Booking */}
             <div className="w-full">
-              <RideBooking />
+              <RideBooking onTabChange={setActiveTab} />
             </div>
 
             {/* Centered Wide Containers */}

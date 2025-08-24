@@ -880,13 +880,13 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
               onCancel={() => {
                 setUseEnhancedTracking(false);
                 setEnhancedRideData(null);
-                setActiveTab("book");
+                onTabChange?.("book");
               }}
               onComplete={() => {
                 alert("🎉 Ride completed successfully! Payment processed via smart contract.");
                 setUseEnhancedTracking(false);
                 setEnhancedRideData(null);
-                setActiveTab("book");
+                onTabChange?.("book");
               }}
             />
           ) : activeRide ? (

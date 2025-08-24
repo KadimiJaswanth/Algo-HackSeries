@@ -266,19 +266,7 @@ export default function GoogleMaps({
     }
   };
 
-  // If in demo mode, use the InteractiveMap component
-  if (isDemo) {
-    return (
-      <InteractiveMap
-        pickup={pickup}
-        dropoff={dropoff}
-        driverLocation={driverLocation}
-        onLocationSelect={onLocationSelect}
-        mode={mode}
-        className={className}
-      />
-    );
-  }
+  // Always render Google Maps container
 
   return (
     <div className="relative rounded-lg overflow-hidden">

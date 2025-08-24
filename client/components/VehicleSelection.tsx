@@ -219,14 +219,7 @@ export default function VehicleSelection({
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Navigate to confirmation page with ride details
-                      const params = new URLSearchParams({
-                        vehicleId: vehicle.id,
-                        vehicleName: vehicle.name,
-                        fare: fare.toString(),
-                        estimatedTime: vehicle.eta,
-                      });
-                      navigate(`/book-ride-confirmation?${params.toString()}`);
+                      // Call the booking function directly instead of navigating to mock page
                       onBookRide?.(vehicle.id, vehicle.name, fare);
                     }}
                     className="w-full"

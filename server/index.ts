@@ -3,7 +3,11 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 import { handleDemo } from "./routes/demo";
-import { sendDriverNotification, handleSmsWebhook, getRideStatus } from "./routes/sms-notifications";
+import {
+  sendDriverNotification,
+  handleSmsWebhook,
+  getRideStatus,
+} from "./routes/sms-notifications";
 import { simulateDriverSms, getTestCommands } from "./routes/sms-test";
 
 // Security configuration
@@ -15,26 +19,36 @@ const securityConfig = {
 
   // CORS configuration
   corsOptions: {
-    origin: process.env.NODE_ENV === 'development' ? true : [
-      'https://yourdomain.com', // Add your production domains
-      'https://metamask.io',
-      'https://*.metamask.io',
-    ],
+    origin:
+      process.env.NODE_ENV === "development"
+        ? true
+        : [
+            "https://yourdomain.com", // Add your production domains
+            "https://metamask.io",
+            "https://*.metamask.io",
+          ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With'],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-CSRF-Token",
+      "X-Requested-With",
+    ],
   },
 
   // Session configuration
   sessionConfig: {
-    secret: process.env.SESSION_SECRET || 'ridechain-security-secret-change-in-production',
+    secret:
+      process.env.SESSION_SECRET ||
+      "ridechain-security-secret-change-in-production",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       maxAge: 30 * 60 * 1000, // 30 minutes
-      sameSite: 'strict' as const,
+      sameSite: "strict" as const,
     },
   },
 };
@@ -43,8 +57,12 @@ const securityConfig = {
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 function rateLimit(windowMs: number, max: number) {
-  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+  return (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    const ip = req.ip || req.socket.remoteAddress || "unknown";
     const now = Date.now();
     const key = `${ip}:${req.path}`;
 
@@ -59,17 +77,17 @@ function rateLimit(windowMs: number, max: number) {
 
     if (bucket.count > max) {
       return res.status(429).json({
-        error: 'Too many requests',
-        message: 'Rate limit exceeded',
+        error: "Too many requests",
+        message: "Rate limit exceeded",
         retryAfter: Math.ceil((bucket.resetTime - now) / 1000),
       });
     }
 
     // Add rate limit headers
     res.set({
-      'X-RateLimit-Limit': max.toString(),
-      'X-RateLimit-Remaining': Math.max(0, max - bucket.count).toString(),
-      'X-RateLimit-Reset': new Date(bucket.resetTime).toISOString(),
+      "X-RateLimit-Limit": max.toString(),
+      "X-RateLimit-Remaining": Math.max(0, max - bucket.count).toString(),
+      "X-RateLimit-Reset": new Date(bucket.resetTime).toISOString(),
     });
 
     next();
@@ -77,15 +95,19 @@ function rateLimit(windowMs: number, max: number) {
 }
 
 // Input sanitization
-function sanitizeInput(req: express.Request, res: express.Response, next: express.NextFunction) {
+function sanitizeInput(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
   try {
-    if (req.body && typeof req.body === 'object') {
+    if (req.body && typeof req.body === "object") {
       req.body = sanitizeObject(req.body);
     }
     // Skip query sanitization to avoid readonly property issues
     next();
   } catch (error) {
-    console.error('Input sanitization error:', error);
+    console.error("Input sanitization error:", error);
     next(error);
   }
 }
@@ -93,12 +115,12 @@ function sanitizeInput(req: express.Request, res: express.Response, next: expres
 function sanitizeObject(obj: any): any {
   if (obj === null || obj === undefined) return obj;
 
-  if (typeof obj === 'string') {
+  if (typeof obj === "string") {
     return obj
-      .replace(/[<>]/g, '')
-      .replace(/javascript:/gi, '')
-      .replace(/on\w+=/gi, '')
-      .replace(/script/gi, '')
+      .replace(/[<>]/g, "")
+      .replace(/javascript:/gi, "")
+      .replace(/on\w+=/gi, "")
+      .replace(/script/gi, "")
       .trim();
   }
 
@@ -106,7 +128,7 @@ function sanitizeObject(obj: any): any {
     return obj.map(sanitizeObject);
   }
 
-  if (typeof obj === 'object') {
+  if (typeof obj === "object") {
     const sanitized: any = {};
     for (const [key, value] of Object.entries(obj)) {
       sanitized[key] = sanitizeObject(value);
@@ -118,18 +140,27 @@ function sanitizeObject(obj: any): any {
 }
 
 // CSRF protection
-function csrfProtection(req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (req.method === 'GET' || req.path.includes('/ping') || req.path.includes('/demo') || req.path.includes('/csrf-token')) {
+function csrfProtection(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
+  if (
+    req.method === "GET" ||
+    req.path.includes("/ping") ||
+    req.path.includes("/demo") ||
+    req.path.includes("/csrf-token")
+  ) {
     return next();
   }
 
-  const token = req.headers['x-csrf-token'] as string;
+  const token = req.headers["x-csrf-token"] as string;
   const sessionToken = (req.session as any)?.csrfToken;
 
   if (!token || !sessionToken || token !== sessionToken) {
     return res.status(403).json({
-      error: 'CSRF token validation failed',
-      message: 'Invalid or missing CSRF token',
+      error: "CSRF token validation failed",
+      message: "Invalid or missing CSRF token",
     });
   }
 
@@ -137,22 +168,29 @@ function csrfProtection(req: express.Request, res: express.Response, next: expre
 }
 
 // Security headers
-function securityHeaders(req: express.Request, res: express.Response, next: express.NextFunction) {
+function securityHeaders(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
   const headers: Record<string, string> = {
-    'X-Content-Type-Options': 'nosniff',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    "X-Content-Type-Options": "nosniff",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
   };
 
   // Allow iframe embedding in development for Builder.io preview
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     // Allow iframe embedding from any origin in development
-    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss: ws:; frame-ancestors *;";
+    headers["Content-Security-Policy"] =
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss: ws:; frame-ancestors *;";
   } else {
     // Production security - deny iframe embedding
-    headers['X-Frame-Options'] = 'DENY';
-    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
-    headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss:; frame-ancestors 'none';";
+    headers["X-Frame-Options"] = "DENY";
+    headers["Strict-Transport-Security"] =
+      "max-age=31536000; includeSubDomains";
+    headers["Content-Security-Policy"] =
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss:; frame-ancestors 'none';";
   }
 
   res.set(headers);
@@ -160,13 +198,19 @@ function securityHeaders(req: express.Request, res: express.Response, next: expr
 }
 
 // Request logging
-function requestLogger(req: express.Request, res: express.Response, next: express.NextFunction) {
+function requestLogger(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
   const startTime = Date.now();
   const originalSend = res.send;
 
-  res.send = function(data) {
+  res.send = function (data) {
     const duration = Date.now() - startTime;
-    console.log(`${req.method} ${req.path} - ${res.statusCode} - ${duration}ms - IP: ${req.ip}`);
+    console.log(
+      `${req.method} ${req.path} - ${res.statusCode} - ${duration}ms - IP: ${req.ip}`,
+    );
     return originalSend.call(this, data);
   };
 
@@ -177,7 +221,7 @@ export function createServer() {
   const app = express();
 
   // Trust proxy for accurate IP detection
-  app.set('trust proxy', 1);
+  app.set("trust proxy", 1);
 
   // Security headers (first)
   app.use(securityHeaders);
@@ -192,26 +236,29 @@ export function createServer() {
   app.use(session(securityConfig.sessionConfig));
 
   // Body parsing with limits
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+  app.use(express.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
   // Input sanitization
   app.use(sanitizeInput);
 
   // Rate limiting for API endpoints
-  app.use('/api', rateLimit(securityConfig.apiLimit.windowMs, securityConfig.apiLimit.max));
+  app.use(
+    "/api",
+    rateLimit(securityConfig.apiLimit.windowMs, securityConfig.apiLimit.max),
+  );
 
   // CSRF token generation
-  app.get('/api/csrf-token', (req, res) => {
+  app.get("/api/csrf-token", (req, res) => {
     try {
-      const token = require('crypto').randomBytes(16).toString('hex');
+      const token = require("crypto").randomBytes(16).toString("hex");
       if (req.session) {
         (req.session as any).csrfToken = token;
       }
       res.json({ csrfToken: token });
     } catch (error) {
-      console.error('CSRF token generation error:', error);
-      res.status(500).json({ error: 'Failed to generate CSRF token' });
+      console.error("CSRF token generation error:", error);
+      res.status(500).json({ error: "Failed to generate CSRF token" });
     }
   });
 
@@ -222,10 +269,10 @@ export function createServer() {
       message: ping,
       timestamp: new Date().toISOString(),
       security: {
-        headers: 'secured',
-        rateLimit: 'active',
-        sanitization: 'active',
-      }
+        headers: "secured",
+        rateLimit: "active",
+        sanitization: "active",
+      },
     });
   });
 
@@ -241,16 +288,25 @@ export function createServer() {
   app.get("/api/sms/test-commands/:rideId", getTestCommands);
 
   // Stricter rate limiting for sensitive endpoints
-  app.use('/api/auth', rateLimit(securityConfig.authLimit.windowMs, securityConfig.authLimit.max));
-  app.use('/api/transaction', rateLimit(securityConfig.strictLimit.windowMs, securityConfig.strictLimit.max));
+  app.use(
+    "/api/auth",
+    rateLimit(securityConfig.authLimit.windowMs, securityConfig.authLimit.max),
+  );
+  app.use(
+    "/api/transaction",
+    rateLimit(
+      securityConfig.strictLimit.windowMs,
+      securityConfig.strictLimit.max,
+    ),
+  );
 
   // CSRF protection for state-changing operations
-  app.use('/api', csrfProtection);
+  app.use("/api", csrfProtection);
 
   // Example secure endpoints
-  app.post('/api/transaction/submit', (req, res) => {
+  app.post("/api/transaction/submit", (req, res) => {
     res.json({
-      message: 'Secure transaction endpoint',
+      message: "Secure transaction endpoint",
       security: {
         csrfProtected: true,
         rateLimited: true,
@@ -260,9 +316,9 @@ export function createServer() {
     });
   });
 
-  app.post('/api/auth/login', (req, res) => {
+  app.post("/api/auth/login", (req, res) => {
     res.json({
-      message: 'Secure login endpoint',
+      message: "Secure login endpoint",
       security: {
         authRateLimited: true,
         csrfProtected: true,
@@ -273,51 +329,65 @@ export function createServer() {
   });
 
   // Health check with security info
-  app.get('/api/health', (req, res) => {
+  app.get("/api/health", (req, res) => {
     res.json({
-      status: 'healthy',
+      status: "healthy",
       timestamp: new Date().toISOString(),
       security: {
-        version: '1.0.0',
-        features: ['rate-limiting', 'csrf-protection', 'input-sanitization', 'security-headers'],
+        version: "1.0.0",
+        features: [
+          "rate-limiting",
+          "csrf-protection",
+          "input-sanitization",
+          "security-headers",
+        ],
       },
     });
   });
 
   // Security test endpoint (development only)
-  if (process.env.NODE_ENV === 'development') {
-    app.get('/api/security/test', (req, res) => {
+  if (process.env.NODE_ENV === "development") {
+    app.get("/api/security/test", (req, res) => {
       res.json({
-        message: 'Security features test',
+        message: "Security features test",
         tests: {
-          csrfToken: (req.session as any)?.csrfToken ? 'Generated' : 'Not generated',
-          sanitization: 'Active',
-          headers: 'Secured',
-          rateLimit: 'Active',
-          cors: 'Configured',
+          csrfToken: (req.session as any)?.csrfToken
+            ? "Generated"
+            : "Not generated",
+          sanitization: "Active",
+          headers: "Secured",
+          rateLimit: "Active",
+          cors: "Configured",
         },
-        note: 'This endpoint is only available in development mode',
+        note: "This endpoint is only available in development mode",
       });
     });
   }
 
   // Global error handler
-  app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error('Server error:', error);
+  app.use(
+    (
+      error: any,
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
+      console.error("Server error:", error);
 
-    if (process.env.NODE_ENV === 'production') {
-      res.status(500).json({
-        error: 'Internal server error',
-        message: 'An error occurred while processing your request',
-      });
-    } else {
-      res.status(500).json({
-        error: 'Internal server error',
-        message: error.message,
-        stack: error.stack,
-      });
-    }
-  });
+      if (process.env.NODE_ENV === "production") {
+        res.status(500).json({
+          error: "Internal server error",
+          message: "An error occurred while processing your request",
+        });
+      } else {
+        res.status(500).json({
+          error: "Internal server error",
+          message: error.message,
+          stack: error.stack,
+        });
+      }
+    },
+  );
 
   return app;
 }

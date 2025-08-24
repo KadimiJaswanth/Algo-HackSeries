@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, TestTube, Phone, MessageSquare } from "lucide-react";
 import SmsNotificationTest from "@/components/SmsNotificationTest";
@@ -50,7 +56,8 @@ export default function SmsTest() {
                 Real SMS Notification Testing
               </CardTitle>
               <CardDescription>
-                Test the complete SMS notification flow with the actual driver phone number
+                Test the complete SMS notification flow with the actual driver
+                phone number
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -61,7 +68,10 @@ export default function SmsTest() {
                     How it works:
                   </h3>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• Real SMS is sent to driver: <strong>+91 6301214658</strong></li>
+                    <li>
+                      • Real SMS is sent to driver:{" "}
+                      <strong>+91 6301214658</strong>
+                    </li>
                     <li>• Driver receives ride details via SMS</li>
                     <li>• Driver can reply with ACCEPT or IGNORE</li>
                     <li>• System tracks responses in real-time</li>
@@ -126,8 +136,16 @@ export default function SmsTest() {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex justify-between">
                   <span>Twilio SMS Service:</span>
-                  <Badge variant={process.env.NODE_ENV === 'development' ? 'secondary' : 'default'}>
-                    {process.env.NODE_ENV === 'development' ? 'Simulated' : 'Production'}
+                  <Badge
+                    variant={
+                      process.env.NODE_ENV === "development"
+                        ? "secondary"
+                        : "default"
+                    }
+                  >
+                    {process.env.NODE_ENV === "development"
+                      ? "Simulated"
+                      : "Production"}
                   </Badge>
                 </div>
                 <div className="flex justify-between">

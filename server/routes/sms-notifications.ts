@@ -12,16 +12,19 @@ const client = twilio(accountSid, authToken);
 const DRIVER_PHONE = "+916301214658";
 
 // In-memory storage for active ride requests (in production, use a database)
-const activeRideRequests = new Map<string, {
-  id: string;
-  riderId: string;
-  riderName: string;
-  pickupLocation: string;
-  dropoffLocation: string;
-  estimatedFare: number;
-  timestamp: Date;
-  status: "pending" | "accepted" | "ignored";
-}>();
+const activeRideRequests = new Map<
+  string,
+  {
+    id: string;
+    riderId: string;
+    riderName: string;
+    pickupLocation: string;
+    dropoffLocation: string;
+    estimatedFare: number;
+    timestamp: Date;
+    status: "pending" | "accepted" | "ignored";
+  }
+>();
 
 interface SendNotificationRequest {
   rideId: string;
@@ -44,7 +47,13 @@ export const sendDriverNotification: RequestHandler = async (req, res) => {
     }: SendNotificationRequest = req.body;
 
     console.log("Sending SMS notification to driver:", DRIVER_PHONE);
-    console.log("Ride details:", { rideId, riderName, pickupLocation, dropoffLocation, estimatedFare });
+    console.log("Ride details:", {
+      rideId,
+      riderName,
+      pickupLocation,
+      dropoffLocation,
+      estimatedFare,
+    });
 
     // Store ride request
     activeRideRequests.set(rideId, {
@@ -77,7 +86,7 @@ Request ID: ${rideId}`;
       console.log("Twilio not configured, simulating SMS:");
       console.log("To:", DRIVER_PHONE);
       console.log("Message:", message);
-      
+
       // Simulate successful SMS for development
       res.json({
         success: true,
@@ -123,11 +132,19 @@ export const handleSmsWebhook: RequestHandler = async (req, res) => {
     console.log("- From:", fromNumber);
     console.log("- Body:", Body);
     console.log("- Expected Driver Phone:", DRIVER_PHONE);
-    console.log("- Twilio Configured:", !!(accountSid && authToken && twilioPhoneNumber));
+    console.log(
+      "- Twilio Configured:",
+      !!(accountSid && authToken && twilioPhoneNumber),
+    );
 
     // Verify it's from the driver's phone
     if (fromNumber !== DRIVER_PHONE) {
-      console.log("⚠️ SMS from unknown number:", fromNumber, "Expected:", DRIVER_PHONE);
+      console.log(
+        "⚠️ SMS from unknown number:",
+        fromNumber,
+        "Expected:",
+        DRIVER_PHONE,
+      );
       res.status(200).send("OK");
       return;
     }
@@ -139,7 +156,7 @@ export const handleSmsWebhook: RequestHandler = async (req, res) => {
 
     if (!rideId || !activeRideRequests.has(rideId)) {
       console.log("Invalid ride ID or ride not found:", rideId);
-      
+
       // Send error message to driver
       if (accountSid && authToken && twilioPhoneNumber) {
         await client.messages.create({
@@ -148,7 +165,7 @@ export const handleSmsWebhook: RequestHandler = async (req, res) => {
           to: DRIVER_PHONE,
         });
       }
-      
+
       res.status(200).send("OK");
       return;
     }
@@ -185,7 +202,10 @@ The rider has been notified and is waiting for you. Drive safely! 🚗`;
             from: twilioPhoneNumber,
             to: DRIVER_PHONE,
           });
-          console.log("✅ Confirmation SMS sent to driver:", confirmationSms.sid);
+          console.log(
+            "✅ Confirmation SMS sent to driver:",
+            confirmationSms.sid,
+          );
         } catch (smsError) {
           console.error("❌ Error sending confirmation SMS:", smsError);
         }
@@ -196,7 +216,6 @@ The rider has been notified and is waiting for you. Drive safely! 🚗`;
       }
 
       console.log("🔔 Rider will be notified that ride was accepted");
-
     } else if (action === "IGNORE") {
       // Update ride status
       rideRequest.status = "ignored";
@@ -227,7 +246,10 @@ Thank you for your response! 🚗`;
             from: twilioPhoneNumber,
             to: DRIVER_PHONE,
           });
-          console.log("✅ Decline confirmation SMS sent to driver:", declineSms.sid);
+          console.log(
+            "✅ Decline confirmation SMS sent to driver:",
+            declineSms.sid,
+          );
         } catch (smsError) {
           console.error("❌ Error sending decline SMS:", smsError);
         }
@@ -315,17 +337,20 @@ export const getRideStatus: RequestHandler = async (req, res) => {
 };
 
 // Cleanup old ride requests (runs every 30 minutes)
-setInterval(() => {
-  const now = new Date();
-  const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
+setInterval(
+  () => {
+    const now = new Date();
+    const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
 
-  for (const [rideId, request] of activeRideRequests.entries()) {
-    if (request.timestamp < thirtyMinutesAgo) {
-      activeRideRequests.delete(rideId);
-      console.log("Cleaned up old ride request:", rideId);
+    for (const [rideId, request] of activeRideRequests.entries()) {
+      if (request.timestamp < thirtyMinutesAgo) {
+        activeRideRequests.delete(rideId);
+        console.log("Cleaned up old ride request:", rideId);
+      }
     }
-  }
-}, 30 * 60 * 1000);
+  },
+  30 * 60 * 1000,
+);
 
 export default {
   sendDriverNotification,

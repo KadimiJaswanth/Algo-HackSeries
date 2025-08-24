@@ -35,14 +35,14 @@ export default function SmsConfirmationDemo() {
     setStep(2);
 
     try {
-      const response = await fetch('/api/sms/send-notification', {
-        method: 'POST',
+      const response = await fetch("/api/sms/send-notification", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           rideId: `demo-${Date.now()}`,
-          riderId: 'demo-rider',
+          riderId: "demo-rider",
           riderName: demoData.riderName,
           pickupLocation: demoData.pickupLocation,
           dropoffLocation: demoData.dropoffLocation,
@@ -62,16 +62,16 @@ export default function SmsConfirmationDemo() {
     }
   };
 
-  const handleSimulateResponse = async (action: 'ACCEPT' | 'IGNORE') => {
+  const handleSimulateResponse = async (action: "ACCEPT" | "IGNORE") => {
     if (!testRideId) return;
 
     setIsLoading(true);
-    
+
     try {
-      const response = await fetch('/api/sms/simulate-response', {
-        method: 'POST',
+      const response = await fetch("/api/sms/simulate-response", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: `${action} ${testRideId}`,
@@ -81,7 +81,7 @@ export default function SmsConfirmationDemo() {
 
       const result = await response.json();
       if (result.success) {
-        setStep(action === 'ACCEPT' ? 4 : 5);
+        setStep(action === "ACCEPT" ? 4 : 5);
       }
     } catch (error) {
       console.error("Error simulating response:", error);
@@ -120,17 +120,21 @@ export default function SmsConfirmationDemo() {
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                   s.active
-                    ? 'bg-primary text-white'
-                    : 'bg-muted text-muted-foreground'
+                    ? "bg-primary text-white"
+                    : "bg-muted text-muted-foreground"
                 }`}
               >
                 {s.num}
               </div>
-              <span className={`ml-2 text-sm ${s.active ? 'text-foreground' : 'text-muted-foreground'}`}>
+              <span
+                className={`ml-2 text-sm ${s.active ? "text-foreground" : "text-muted-foreground"}`}
+              >
                 {s.label}
               </span>
               {index < 3 && (
-                <ArrowRight className={`mx-3 h-4 w-4 ${s.active ? 'text-primary' : 'text-muted-foreground'}`} />
+                <ArrowRight
+                  className={`mx-3 h-4 w-4 ${s.active ? "text-primary" : "text-muted-foreground"}`}
+                />
               )}
             </div>
           ))}
@@ -151,7 +155,8 @@ export default function SmsConfirmationDemo() {
                   <strong>Rider:</strong> {demoData.riderName}
                 </div>
                 <div>
-                  <strong>Fare:</strong> {demoData.estimatedFare.toFixed(4)} TOKENS
+                  <strong>Fare:</strong> {demoData.estimatedFare.toFixed(4)}{" "}
+                  TOKENS
                 </div>
                 <div className="col-span-2">
                   <strong>From:</strong> {demoData.pickupLocation}
@@ -196,16 +201,25 @@ export default function SmsConfirmationDemo() {
                   SMS Delivered to +91 6301214658
                 </Badge>
                 <div className="p-3 bg-muted/50 rounded border font-mono text-sm">
-                  🚗 NEW RIDE REQUEST!<br />
-                  Rider: {demoData.riderName}<br />
-                  From: {demoData.pickupLocation}<br />
-                  To: {demoData.dropoffLocation}<br />
-                  Fare: {demoData.estimatedFare.toFixed(4)} TOKENS<br />
-                  ETA to pickup: 5-8 mins<br />
+                  🚗 NEW RIDE REQUEST!
                   <br />
-                  Reply:<br />
-                  ACCEPT [RIDE_ID] - to accept<br />
-                  IGNORE [RIDE_ID] - to decline<br />
+                  Rider: {demoData.riderName}
+                  <br />
+                  From: {demoData.pickupLocation}
+                  <br />
+                  To: {demoData.dropoffLocation}
+                  <br />
+                  Fare: {demoData.estimatedFare.toFixed(4)} TOKENS
+                  <br />
+                  ETA to pickup: 5-8 mins
+                  <br />
+                  <br />
+                  Reply:
+                  <br />
+                  ACCEPT [RIDE_ID] - to accept
+                  <br />
+                  IGNORE [RIDE_ID] - to decline
+                  <br />
                   <br />
                   Request ID: {testRideId}
                 </div>
@@ -235,7 +249,7 @@ export default function SmsConfirmationDemo() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <Button
-                  onClick={() => handleSimulateResponse('ACCEPT')}
+                  onClick={() => handleSimulateResponse("ACCEPT")}
                   disabled={isLoading}
                   className="bg-green-600 hover:bg-green-700 text-white"
                 >
@@ -247,7 +261,7 @@ export default function SmsConfirmationDemo() {
                   Simulate "ACCEPT"
                 </Button>
                 <Button
-                  onClick={() => handleSimulateResponse('IGNORE')}
+                  onClick={() => handleSimulateResponse("IGNORE")}
                   disabled={isLoading}
                   className="bg-red-600 hover:bg-red-700 text-white"
                 >
@@ -260,7 +274,9 @@ export default function SmsConfirmationDemo() {
                 </Button>
               </div>
               <div className="text-sm text-muted-foreground text-center">
-                In real usage, driver would reply via SMS: <code>ACCEPT {testRideId}</code> or <code>IGNORE {testRideId}</code>
+                In real usage, driver would reply via SMS:{" "}
+                <code>ACCEPT {testRideId}</code> or{" "}
+                <code>IGNORE {testRideId}</code>
               </div>
             </CardContent>
           </Card>
@@ -283,25 +299,37 @@ export default function SmsConfirmationDemo() {
                 ✅ Confirmation SMS Sent to Driver
               </Badge>
               <div className="p-3 bg-muted/50 rounded border font-mono text-sm">
-                ✅ RIDE ACCEPTED! - {testRideId}<br />
+                ✅ RIDE ACCEPTED! - {testRideId}
                 <br />
-                📍 Pickup: {demoData.pickupLocation}<br />
-                📍 Dropoff: {demoData.dropoffLocation}<br />
-                👤 Rider: {demoData.riderName}<br />
-                💰 Fare: {demoData.estimatedFare.toFixed(4)} TOKENS<br />
-                ⏰ ETA to pickup: 5-8 minutes<br />
                 <br />
-                🎯 Next Steps:<br />
-                1. Navigate to pickup location<br />
-                2. Call rider if needed<br />
-                3. Start ride when rider is picked up<br />
+                📍 Pickup: {demoData.pickupLocation}
                 <br />
-                The rider has been notified and is waiting for you. Drive safely! 🚗
+                📍 Dropoff: {demoData.dropoffLocation}
+                <br />
+                👤 Rider: {demoData.riderName}
+                <br />
+                💰 Fare: {demoData.estimatedFare.toFixed(4)} TOKENS
+                <br />
+                ⏰ ETA to pickup: 5-8 minutes
+                <br />
+                <br />
+                🎯 Next Steps:
+                <br />
+                1. Navigate to pickup location
+                <br />
+                2. Call rider if needed
+                <br />
+                3. Start ride when rider is picked up
+                <br />
+                <br />
+                The rider has been notified and is waiting for you. Drive
+                safely! 🚗
               </div>
               <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                 <div className="text-sm text-green-800">
-                  <strong>✅ Success!</strong> The driver now has all the details needed to complete the ride,
-                  and the rider has been notified that their ride was accepted.
+                  <strong>✅ Success!</strong> The driver now has all the
+                  details needed to complete the ride, and the rider has been
+                  notified that their ride was accepted.
                 </div>
               </div>
             </CardContent>
@@ -325,25 +353,35 @@ export default function SmsConfirmationDemo() {
                 ❌ Decline Confirmation SMS Sent to Driver
               </Badge>
               <div className="p-3 bg-muted/50 rounded border font-mono text-sm">
-                ❌ RIDE DECLINED - {testRideId}<br />
+                ❌ RIDE DECLINED - {testRideId}
                 <br />
-                You have declined the ride request from {demoData.riderName}.<br />
                 <br />
-                📍 From: {demoData.pickupLocation}<br />
-                📍 To: {demoData.dropoffLocation}<br />
-                💰 Fare: {demoData.estimatedFare.toFixed(4)} TOKENS<br />
+                You have declined the ride request from {demoData.riderName}.
                 <br />
-                🔄 The system will now:<br />
-                - Notify the rider<br />
-                - Look for another available driver<br />
-                - You may receive new ride requests<br />
+                <br />
+                📍 From: {demoData.pickupLocation}
+                <br />
+                📍 To: {demoData.dropoffLocation}
+                <br />
+                💰 Fare: {demoData.estimatedFare.toFixed(4)} TOKENS
+                <br />
+                <br />
+                🔄 The system will now:
+                <br />
+                - Notify the rider
+                <br />
+                - Look for another available driver
+                <br />
+                - You may receive new ride requests
+                <br />
                 <br />
                 Thank you for your response! 🚗
               </div>
               <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                 <div className="text-sm text-red-800">
-                  <strong>ℹ️ Info:</strong> The driver has been confirmed of their decline, 
-                  and the system will now look for another available driver for the rider.
+                  <strong>ℹ️ Info:</strong> The driver has been confirmed of
+                  their decline, and the system will now look for another
+                  available driver for the rider.
                 </div>
               </div>
             </CardContent>

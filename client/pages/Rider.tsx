@@ -225,15 +225,16 @@ export default function Rider() {
                   <Navigation className="mr-2 h-5 w-5" />
                   Live Tracking
                 </CardTitle>
-                <CardDescription>
-                  Track your ride in real-time
-                </CardDescription>
+                <CardDescription>Track your ride in real-time</CardDescription>
               </CardHeader>
               <CardContent className="text-center py-8">
                 <Navigation className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground mb-2">No active ride to track</p>
+                <p className="text-muted-foreground mb-2">
+                  No active ride to track
+                </p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Book a ride first, and tracking will appear here once the driver accepts via SMS
+                  Book a ride first, and tracking will appear here once the
+                  driver accepts via SMS
                 </p>
                 <Button
                   onClick={() => setActiveTab("book")}

@@ -98,7 +98,12 @@ interface RideBookingProps {
 
 export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   const { address, isConnected } = useAccount();
-  const { sendNotification, pollStatus, formatDetails, getEstimatedResponseTime } = useSmsNotification();
+  const {
+    sendNotification,
+    pollStatus,
+    formatDetails,
+    getEstimatedResponseTime,
+  } = useSmsNotification();
   const [activeTab, setActiveTab] = useState("book");
   const [isLoading, setIsLoading] = useState(false);
   const [activeRide, setActiveRide] = useState<ActiveRide | null>(null);
@@ -290,7 +295,6 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
       // 2. 5-minute auto-cancel timer
       // 3. Live tracking when accepted
       // 4. Call/message options
-
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
@@ -432,7 +436,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   return (
     <div className="space-y-6">
       {/* Debug Info for Development */}
-      {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === "development" && (
         <BookingFlowDebug
           isEnhancedTracking={useEnhancedTracking}
           hasRideData={!!enhancedRideData}
@@ -894,7 +898,9 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                 onTabChange?.("book");
               }}
               onComplete={() => {
-                alert("🎉 Ride completed successfully! Payment processed via smart contract.");
+                alert(
+                  "🎉 Ride completed successfully! Payment processed via smart contract.",
+                );
                 setUseEnhancedTracking(false);
                 setEnhancedRideData(null);
                 onTabChange?.("book");
@@ -1042,7 +1048,6 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
           </div>
         </DialogContent>
       </Dialog>
-
     </div>
   );
 }

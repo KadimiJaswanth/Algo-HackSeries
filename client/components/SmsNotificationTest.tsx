@@ -39,7 +39,9 @@ export default function SmsNotificationTest() {
     estimatedFare: 0.0025,
   });
 
-  const [driverResponseStatus, setDriverResponseStatus] = useState<'pending' | 'accepted' | 'ignored' | null>(null);
+  const [driverResponseStatus, setDriverResponseStatus] = useState<
+    "pending" | "accepted" | "ignored" | null
+  >(null);
   const [isPolling, setIsPolling] = useState(false);
   const [simulationMode, setSimulationMode] = useState(false);
   const [testMessage, setTestMessage] = useState("");
@@ -51,12 +53,12 @@ export default function SmsNotificationTest() {
 
     try {
       console.log("Sending test SMS notification...");
-      
+
       const result = await sendNotification(
         testData.riderName,
         testData.pickupLocation,
         testData.dropoffLocation,
-        testData.estimatedFare
+        testData.estimatedFare,
       );
 
       setTestResult(result);
@@ -64,16 +66,16 @@ export default function SmsNotificationTest() {
       if (result.success && result.rideId) {
         // Start polling for driver response
         setIsPolling(true);
-        setDriverResponseStatus('pending');
+        setDriverResponseStatus("pending");
 
         pollStatus(result.rideId, (status) => {
           console.log("Driver response status:", status);
           setDriverResponseStatus(status);
-          
-          if (status === 'accepted' || status === 'ignored') {
+
+          if (status === "accepted" || status === "ignored") {
             setIsPolling(false);
           }
-        }).catch(error => {
+        }).catch((error) => {
           console.error("Error polling status:", error);
           setIsPolling(false);
         });
@@ -105,20 +107,23 @@ export default function SmsNotificationTest() {
     }
   };
 
-  const handleSimulateDriverResponse = async (action: 'ACCEPT' | 'IGNORE' | 'INVALID') => {
+  const handleSimulateDriverResponse = async (
+    action: "ACCEPT" | "IGNORE" | "INVALID",
+  ) => {
     if (!testResult?.rideId) return;
 
     try {
-      const message = action === 'INVALID'
-        ? `HELLO ${testResult.rideId}`
-        : `${action} ${testResult.rideId}`;
+      const message =
+        action === "INVALID"
+          ? `HELLO ${testResult.rideId}`
+          : `${action} ${testResult.rideId}`;
 
       setTestMessage(message);
 
-      const response = await fetch('/api/sms/simulate-response', {
-        method: 'POST',
+      const response = await fetch("/api/sms/simulate-response", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message,
@@ -133,7 +138,6 @@ export default function SmsNotificationTest() {
       setTimeout(() => {
         handleCheckRideStatus();
       }, 1000);
-
     } catch (error) {
       console.error("Error simulating driver response:", error);
     }
@@ -147,7 +151,8 @@ export default function SmsNotificationTest() {
           SMS Notification Test
         </CardTitle>
         <CardDescription>
-          Test the real SMS notification system with driver number: +91 6301214658
+          Test the real SMS notification system with driver number: +91
+          6301214658
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -161,7 +166,10 @@ export default function SmsNotificationTest() {
                 id="rider-name"
                 value={testData.riderName}
                 onChange={(e) =>
-                  setTestData(prev => ({ ...prev, riderName: e.target.value }))
+                  setTestData((prev) => ({
+                    ...prev,
+                    riderName: e.target.value,
+                  }))
                 }
               />
             </div>
@@ -171,7 +179,10 @@ export default function SmsNotificationTest() {
                 id="pickup"
                 value={testData.pickupLocation}
                 onChange={(e) =>
-                  setTestData(prev => ({ ...prev, pickupLocation: e.target.value }))
+                  setTestData((prev) => ({
+                    ...prev,
+                    pickupLocation: e.target.value,
+                  }))
                 }
               />
             </div>
@@ -181,7 +192,10 @@ export default function SmsNotificationTest() {
                 id="dropoff"
                 value={testData.dropoffLocation}
                 onChange={(e) =>
-                  setTestData(prev => ({ ...prev, dropoffLocation: e.target.value }))
+                  setTestData((prev) => ({
+                    ...prev,
+                    dropoffLocation: e.target.value,
+                  }))
                 }
               />
             </div>
@@ -193,9 +207,9 @@ export default function SmsNotificationTest() {
                 step="0.0001"
                 value={testData.estimatedFare}
                 onChange={(e) =>
-                  setTestData(prev => ({ 
-                    ...prev, 
-                    estimatedFare: parseFloat(e.target.value) || 0 
+                  setTestData((prev) => ({
+                    ...prev,
+                    estimatedFare: parseFloat(e.target.value) || 0,
                   }))
                 }
               />
@@ -211,7 +225,7 @@ export default function SmsNotificationTest() {
             <h3 className="font-semibold">Send Test SMS</h3>
             <Badge variant="outline">Driver: +91 6301214658</Badge>
           </div>
-          
+
           <Button
             onClick={handleSendTestNotification}
             disabled={isLoading}
@@ -237,12 +251,14 @@ export default function SmsNotificationTest() {
             <Separator />
             <div className="space-y-4">
               <h3 className="font-semibold">Test Results</h3>
-              
-              <Card className={`border-2 ${
-                testResult.success 
-                  ? 'border-green-500/50 bg-green-500/5' 
-                  : 'border-red-500/50 bg-red-500/5'
-              }`}>
+
+              <Card
+                className={`border-2 ${
+                  testResult.success
+                    ? "border-green-500/50 bg-green-500/5"
+                    : "border-red-500/50 bg-red-500/5"
+                }`}
+              >
                 <CardContent className="p-4">
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2">
@@ -252,20 +268,22 @@ export default function SmsNotificationTest() {
                         <X className="h-5 w-5 text-red-500" />
                       )}
                       <span className="font-medium">
-                        {testResult.success ? 'SMS Sent Successfully!' : 'SMS Failed to Send'}
+                        {testResult.success
+                          ? "SMS Sent Successfully!"
+                          : "SMS Failed to Send"}
                       </span>
                     </div>
-                    
+
                     {testResult.rideId && (
                       <div className="text-sm">
                         <strong>Ride ID:</strong> {testResult.rideId}
                       </div>
                     )}
-                    
+
                     <div className="text-sm">
                       <strong>Message:</strong> {testResult.message}
                     </div>
-                    
+
                     {testResult.error && (
                       <div className="text-sm text-red-600">
                         <strong>Error:</strong> {testResult.error}
@@ -280,68 +298,75 @@ export default function SmsNotificationTest() {
                 <Card className="border-primary/20">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Driver Response Status</CardTitle>
+                      <CardTitle className="text-lg">
+                        Driver Response Status
+                      </CardTitle>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={handleCheckRideStatus}
                         disabled={isPolling}
                       >
-                        <RefreshCw className={`h-4 w-4 mr-2 ${isPolling ? 'animate-spin' : ''}`} />
+                        <RefreshCw
+                          className={`h-4 w-4 mr-2 ${isPolling ? "animate-spin" : ""}`}
+                        />
                         Refresh
                       </Button>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center space-x-3">
-                      <div className={`h-4 w-4 rounded-full ${
-                        driverResponseStatus === 'pending' 
-                          ? 'bg-yellow-500 animate-pulse' 
-                          : driverResponseStatus === 'accepted'
-                          ? 'bg-green-500'
-                          : driverResponseStatus === 'ignored'
-                          ? 'bg-red-500'
-                          : 'bg-gray-500'
-                      }`} />
+                      <div
+                        className={`h-4 w-4 rounded-full ${
+                          driverResponseStatus === "pending"
+                            ? "bg-yellow-500 animate-pulse"
+                            : driverResponseStatus === "accepted"
+                              ? "bg-green-500"
+                              : driverResponseStatus === "ignored"
+                                ? "bg-red-500"
+                                : "bg-gray-500"
+                        }`}
+                      />
                       <span className="font-medium">
-                        {driverResponseStatus === 'pending' && (
+                        {driverResponseStatus === "pending" && (
                           <>
                             <Clock className="inline h-4 w-4 mr-1" />
                             Waiting for driver response...
                           </>
                         )}
-                        {driverResponseStatus === 'accepted' && (
+                        {driverResponseStatus === "accepted" && (
                           <>
                             <CheckCircle className="inline h-4 w-4 mr-1" />
                             Driver accepted the ride!
                           </>
                         )}
-                        {driverResponseStatus === 'ignored' && (
+                        {driverResponseStatus === "ignored" && (
                           <>
                             <X className="inline h-4 w-4 mr-1" />
                             Driver declined the ride
                           </>
                         )}
-                        {!driverResponseStatus && 'No response yet'}
+                        {!driverResponseStatus && "No response yet"}
                       </span>
                     </div>
-                    
+
                     {isPolling && (
                       <div className="mt-3 text-sm text-muted-foreground">
-                        📱 Continuously checking for SMS responses from driver...
+                        📱 Continuously checking for SMS responses from
+                        driver...
                       </div>
                     )}
 
-                    {driverResponseStatus === 'pending' && (
+                    {driverResponseStatus === "pending" && (
                       <div className="mt-3 space-y-3">
                         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
                           <strong>Instructions for Driver (6301214658):</strong>
                           <br />
                           Reply to the SMS with:
-                          <br />
-                          • <code>ACCEPT {testResult.rideId}</code> - to accept the ride
-                          <br />
-                          • <code>IGNORE {testResult.rideId}</code> - to decline the ride
+                          <br />• <code>ACCEPT {testResult.rideId}</code> - to
+                          accept the ride
+                          <br />• <code>IGNORE {testResult.rideId}</code> - to
+                          decline the ride
                         </div>
 
                         <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
@@ -356,21 +381,27 @@ export default function SmsNotificationTest() {
                           <div className="grid grid-cols-3 gap-2">
                             <Button
                               size="sm"
-                              onClick={() => handleSimulateDriverResponse('ACCEPT')}
+                              onClick={() =>
+                                handleSimulateDriverResponse("ACCEPT")
+                              }
                               className="bg-green-600 hover:bg-green-700 text-white text-xs"
                             >
                               Simulate Accept
                             </Button>
                             <Button
                               size="sm"
-                              onClick={() => handleSimulateDriverResponse('IGNORE')}
+                              onClick={() =>
+                                handleSimulateDriverResponse("IGNORE")
+                              }
                               className="bg-red-600 hover:bg-red-700 text-white text-xs"
                             >
                               Simulate Ignore
                             </Button>
                             <Button
                               size="sm"
-                              onClick={() => handleSimulateDriverResponse('INVALID')}
+                              onClick={() =>
+                                handleSimulateDriverResponse("INVALID")
+                              }
                               variant="outline"
                               className="text-xs"
                             >
@@ -399,7 +430,7 @@ export default function SmsNotificationTest() {
           <Card className="border-muted">
             <CardContent className="p-4">
               <div className="font-mono text-sm bg-muted/50 p-3 rounded whitespace-pre-line">
-{`🚗 NEW RIDE REQUEST!
+                {`🚗 NEW RIDE REQUEST!
 Rider: ${testData.riderName}
 From: ${testData.pickupLocation}
 To: ${testData.dropoffLocation}

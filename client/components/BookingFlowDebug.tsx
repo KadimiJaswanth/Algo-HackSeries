@@ -1,6 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FiInfo as Info, FiCheckCircle as CheckCircle, FiX as X } from "react-icons/fi";
+import {
+  FiInfo as Info,
+  FiCheckCircle as CheckCircle,
+  FiX as X,
+} from "react-icons/fi";
 
 interface BookingFlowDebugProps {
   isEnhancedTracking: boolean;
@@ -9,11 +13,11 @@ interface BookingFlowDebugProps {
   driverPhone: string;
 }
 
-export default function BookingFlowDebug({ 
-  isEnhancedTracking, 
-  hasRideData, 
+export default function BookingFlowDebug({
+  isEnhancedTracking,
+  hasRideData,
   currentTab,
-  driverPhone 
+  driverPhone,
 }: BookingFlowDebugProps) {
   return (
     <Card className="border-blue-500/20 bg-blue-500/5">
@@ -28,9 +32,13 @@ export default function BookingFlowDebug({
           <span>Enhanced Tracking Active:</span>
           <Badge variant={isEnhancedTracking ? "default" : "secondary"}>
             {isEnhancedTracking ? (
-              <><CheckCircle className="mr-1 h-3 w-3" /> YES</>
+              <>
+                <CheckCircle className="mr-1 h-3 w-3" /> YES
+              </>
             ) : (
-              <><X className="mr-1 h-3 w-3" /> NO</>
+              <>
+                <X className="mr-1 h-3 w-3" /> NO
+              </>
             )}
           </Badge>
         </div>
@@ -38,9 +46,13 @@ export default function BookingFlowDebug({
           <span>Has Ride Data:</span>
           <Badge variant={hasRideData ? "default" : "secondary"}>
             {hasRideData ? (
-              <><CheckCircle className="mr-1 h-3 w-3" /> YES</>
+              <>
+                <CheckCircle className="mr-1 h-3 w-3" /> YES
+              </>
             ) : (
-              <><X className="mr-1 h-3 w-3" /> NO</>
+              <>
+                <X className="mr-1 h-3 w-3" /> NO
+              </>
             )}
           </Badge>
         </div>
@@ -53,10 +65,14 @@ export default function BookingFlowDebug({
           <Badge variant="outline">{driverPhone}</Badge>
         </div>
         <div className="text-xs text-muted-foreground mt-2 p-2 bg-muted/50 rounded">
-          <strong>✅ Expected Flow:</strong><br />
-          1. Book ride → Enhanced tracking activates<br />
-          2. SMS sent to {driverPhone}<br />
-          3. Wait for SMS response (5min timeout)<br />
+          <strong>✅ Expected Flow:</strong>
+          <br />
+          1. Book ride → Enhanced tracking activates
+          <br />
+          2. SMS sent to {driverPhone}
+          <br />
+          3. Wait for SMS response (5min timeout)
+          <br />
           4. Show driver details when accepted
         </div>
       </CardContent>

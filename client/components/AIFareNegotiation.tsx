@@ -74,34 +74,38 @@ export default function AIFareNegotiation({
 
   // AI Response Generator
   const generateAIResponse = (userOffer: number) => {
+    // Ensure offers stay within token limits
+    const constrainedOffer = Math.max(0.0001, Math.min(0.0009, userOffer));
     const priceDiff =
-      ((userOffer - marketData.basePrice) / marketData.basePrice) * 100;
+      ((constrainedOffer - marketData.basePrice) / marketData.basePrice) * 100;
     let reasoning = "";
     let confidence = 0;
-    let counterOffer = userOffer;
+    let counterOffer = constrainedOffer;
 
-    if (priceDiff < -20) {
+    if (constrainedOffer <= 0.0002) {
       reasoning =
-        "Market analysis shows this price is below fair value considering current demand and operational costs.";
+        "This is near minimum token payment. Considering operational costs, a small increase would be appreciated.";
       confidence = 85;
-      counterOffer = marketData.basePrice * 0.9;
-    } else if (priceDiff < -10) {
+      counterOffer = Math.min(0.0003, marketData.basePrice);
+    } else if (constrainedOffer <= 0.0004) {
       reasoning =
-        "Your offer is considered, but current surge pricing and demand suggest a slight increase.";
-      confidence = 70;
-      counterOffer = marketData.basePrice * 0.95;
-    } else if (priceDiff < 5) {
+        "Your offer is reasonable for current market conditions. This price works well.";
+      confidence = 90;
+      counterOffer = constrainedOffer;
+    } else if (constrainedOffer <= 0.0007) {
       reasoning =
         "This price aligns well with market conditions. I can accept this offer.";
       confidence = 95;
-      counterOffer = userOffer;
+      counterOffer = constrainedOffer;
     } else {
       reasoning =
-        "Current market data suggests a lower price would be more appropriate.";
-      confidence = 60;
-      counterOffer = marketData.basePrice * 1.05;
+        "Your offer is generous, but let's find a more balanced price that works for both parties.";
+      confidence = 80;
+      counterOffer = Math.max(0.0005, Math.min(0.0007, marketData.basePrice));
     }
 
+    // Final constraint check
+    counterOffer = Math.max(0.0001, Math.min(0.0009, counterOffer));
     return { counterOffer, reasoning, confidence };
   };
 

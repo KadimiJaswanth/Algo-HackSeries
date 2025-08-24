@@ -281,7 +281,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
       setEnhancedRideData(rideData);
       setUseEnhancedTracking(true);
-      setActiveTab("track");
+      onTabChange?.("track");
       setIsLoading(false);
 
       // Note: The enhanced tracking component will handle:

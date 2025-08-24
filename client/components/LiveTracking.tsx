@@ -320,7 +320,7 @@ export default function LiveTracking({
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <GoogleMaps
+          <GeoapifyMaps
             pickup={{ lat: 37.7849, lng: -122.4194, address: "Your Location" }}
             dropoff={{ lat: 37.7649, lng: -122.4094, address: "Destination" }}
             driverLocation={driver.location}

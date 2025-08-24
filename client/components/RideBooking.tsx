@@ -631,7 +631,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <GoogleMaps
+                  <GeoapifyMaps
                     pickup={bookingData.pickup}
                     dropoff={bookingData.dropoff}
                     onLocationSelect={handleLocationSelect}

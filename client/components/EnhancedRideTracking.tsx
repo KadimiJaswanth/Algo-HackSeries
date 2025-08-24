@@ -456,11 +456,11 @@ export default function EnhancedRideTracking({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <GoogleMaps
+            <GeoapifyMaps
               pickup={rideData.pickup}
               dropoff={rideData.dropoff}
               driverLocation={driverInfo.currentLocation}
-              mode="tracking"
+              mode="track"
               className="w-full h-64 rounded-lg border"
             />
           </CardContent>

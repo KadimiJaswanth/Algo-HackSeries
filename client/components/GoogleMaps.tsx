@@ -304,9 +304,9 @@ export default function GoogleMaps({
         size="sm"
         variant="outline"
         onClick={getCurrentLocation}
-        className="absolute bottom-4 right-4 glass glass-hover glow animate-float"
+        className="absolute bottom-4 right-4 bg-white shadow-md hover:shadow-lg w-10 h-10 p-0"
       >
-        <Crosshair className="h-4 w-4 text-primary" />
+        <Crosshair className="h-4 w-4 text-gray-600" />
       </Button>
 
       {/* Location indicators */}

@@ -174,10 +174,10 @@ export default function AIFareNegotiation({
         <CardContent>
           <div className="text-center space-y-4">
             <div className="text-3xl font-bold text-green-400">
-              {agreedPrice.toFixed(6)} AVAX
+              {agreedPrice.toFixed(4)} TOKENS
             </div>
             <p className="text-muted-foreground">
-              Successfully negotiated AVAX token fare through AI mediation
+              Successfully negotiated wallet token fare (0.0001-0.0009 range)
             </p>
             <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
               Negotiation Complete
@@ -206,8 +206,8 @@ export default function AIFareNegotiation({
             )}
           </CardTitle>
           <p className="text-muted-foreground">
-            Let our AI negotiate the best AVAX token fare for both you and the
-            driver
+            Let our AI negotiate the best wallet token fare for both you and the
+            driver (0.0001-0.0009 range)
           </p>
         </CardHeader>
         <CardContent className="relative z-10">
@@ -240,7 +240,7 @@ export default function AIFareNegotiation({
             <div className="flex items-center justify-between">
               <span className="text-sm">Base Price</span>
               <span className="font-medium">
-                {marketData.basePrice.toFixed(6)} AVAX
+                {marketData.basePrice.toFixed(4)} TOKENS
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -268,8 +268,8 @@ export default function AIFareNegotiation({
             <div className="flex items-center justify-between">
               <span className="text-sm">Competitor Range</span>
               <span className="font-medium">
-                {Math.min(...marketData.competitorPrices).toFixed(6)} -
-                {Math.max(...marketData.competitorPrices).toFixed(6)} AVAX
+                {Math.min(...marketData.competitorPrices).toFixed(4)} -
+                {Math.max(...marketData.competitorPrices).toFixed(4)} TOKENS
               </span>
             </div>
           </div>
@@ -284,11 +284,11 @@ export default function AIFareNegotiation({
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <div className="text-4xl font-bold text-primary">
-              {basePrice.toFixed(6)} AVAX
+              {basePrice.toFixed(4)} TOKENS
             </div>
             <p className="text-muted-foreground">
-              Standard pricing in Avalanche Fuji tokens based on distance and
-              current conditions
+              Standard wallet token pricing based on distance and
+              current conditions (0.0001-0.0009 range)
             </p>
             <div className="grid grid-cols-2 gap-3">
               <Button onClick={() => acceptOffer(basePrice)} className="glow">
@@ -316,19 +316,20 @@ export default function AIFareNegotiation({
             <CardContent className="space-y-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary mb-2">
-                  {currentOffer.toFixed(6)} AVAX
+                  {currentOffer.toFixed(4)} TOKENS
                 </div>
                 <Slider
                   value={[currentOffer]}
                   onValueChange={([value]) => setCurrentOffer(value)}
                   max={basePrice * 1.5}
-                  min={basePrice * 0.5}
-                  step={0.5}
+                  min={0.0001}
+                  max={0.0009}
+                  step={0.0001}
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                  <span>{(basePrice * 0.5).toFixed(6)} AVAX</span>
-                  <span>{(basePrice * 1.5).toFixed(6)} AVAX</span>
+                  <span>0.0001 TOKENS</span>
+                  <span>0.0009 TOKENS</span>
                 </div>
               </div>
               <Button
@@ -385,7 +386,7 @@ export default function AIFareNegotiation({
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-lg">
-                          {offer.amount.toFixed(6)} AVAX
+                          {offer.amount.toFixed(4)} TOKENS
                         </span>
                         <Badge className="text-xs">
                           {offer.confidence}% confidence

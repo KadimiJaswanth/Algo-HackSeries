@@ -960,8 +960,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                             {(
                               (bookingData.fareEstimate / surgeMultiplier) *
                               0.4
-                            ).toFixed(4)}{" "}
-                            TOKENS
+                            ).toFixed(6)}{" "}
+                            AVAX
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -970,8 +970,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                             {(
                               (bookingData.fareEstimate / surgeMultiplier) *
                               0.6
-                            ).toFixed(4)}{" "}
-                            TOKENS
+                            ).toFixed(6)}{" "}
+                            AVAX
                           </span>
                         </div>
                         {surgeMultiplier > 1 && (
@@ -984,8 +984,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                               {(
                                 bookingData.fareEstimate -
                                 bookingData.fareEstimate / surgeMultiplier
-                              ).toFixed(4)}{" "}
-                              TOKENS
+                              ).toFixed(6)}{" "}
+                              AVAX
                             </span>
                           </div>
                         )}
@@ -993,7 +993,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                           <div className="flex justify-between">
                             <span>Return trip</span>
                             <span>
-                              +{bookingData.fareEstimate.toFixed(4)} TOKENS
+                              +{bookingData.fareEstimate.toFixed(6)} AVAX
                             </span>
                           </div>
                         )}
@@ -1004,8 +1004,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                             {(
                               bookingData.fareEstimate *
                               (bookingData.isRoundTrip ? 2 : 1)
-                            ).toFixed(4)}{" "}
-                            TOKENS
+                            ).toFixed(6)}{" "}
+                            AVAX
                           </span>
                         </div>
                       </div>

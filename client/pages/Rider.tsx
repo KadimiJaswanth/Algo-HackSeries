@@ -177,7 +177,7 @@ export default function Rider() {
                   <AIFareNegotiation
                     basePrice={currentFare}
                     onFareAgreed={(price) =>
-                      console.log(`Fare agreed: $${price}`)
+                      console.log(`Fare agreed: ${price.toFixed(6)} AVAX`)
                     }
                   />
                 </div>
@@ -317,7 +317,9 @@ export default function Rider() {
                         <label className="text-sm font-medium">
                           Preferred Payment
                         </label>
-                        <p className="text-muted-foreground">USDC Wallet</p>
+                        <p className="text-muted-foreground">
+                          Avalanche Wallet
+                        </p>
                       </div>
                     </div>
 
@@ -401,7 +403,7 @@ export default function Rider() {
                       <span className="text-sm text-muted-foreground">
                         Total Spent
                       </span>
-                      <span className="font-semibold">$1,248.50</span>
+                      <span className="font-semibold">1,248.50 AVAX</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">

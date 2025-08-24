@@ -204,14 +204,14 @@ export default function VehicleSelection({
 
                 <div className="text-right space-y-2">
                   <div className="text-lg font-bold">
-                    {fare.toFixed(6)} TOKENS
+                    {fare.toFixed(6)} AVAX
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Blockchain
+                    Avalanche Fuji
                   </div>
                   {surgeMultiplier > 1 && (
                     <div className="text-xs text-red-600">
-                      +{(fare - fare / surgeMultiplier).toFixed(6)} TOKENS surge
+                      +{(fare - fare / surgeMultiplier).toFixed(6)} AVAX surge
                     </div>
                   )}
 
@@ -241,7 +241,7 @@ export default function VehicleSelection({
                   <div className="mt-2 text-xs text-muted-foreground">
                     Base: {vehicle.basePrice.toFixed(6)} + Distance:
                     {(distance * vehicle.pricePerKm).toFixed(6)} + Time:
-                    {(duration * vehicle.pricePerMin).toFixed(6)} TOKENS
+                    {(duration * vehicle.pricePerMin).toFixed(6)} AVAX
                   </div>
                 </div>
               )}

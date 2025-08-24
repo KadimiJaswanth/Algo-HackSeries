@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   FiCpu as Brain,
-  FiDollarSign as DollarSign,
+  FiZap as Lightning,
   FiTrendingUp as TrendingUp,
   FiTrendingDown as TrendingDown,
   FiClock as Clock,
@@ -174,10 +174,10 @@ export default function AIFareNegotiation({
         <CardContent>
           <div className="text-center space-y-4">
             <div className="text-3xl font-bold text-green-400">
-              ${agreedPrice.toFixed(2)}
+              {agreedPrice.toFixed(6)} AVAX
             </div>
             <p className="text-muted-foreground">
-              Successfully negotiated fare through AI mediation
+              Successfully negotiated AVAX token fare through AI mediation
             </p>
             <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
               Negotiation Complete
@@ -206,7 +206,8 @@ export default function AIFareNegotiation({
             )}
           </CardTitle>
           <p className="text-muted-foreground">
-            Let our AI negotiate the best fare for both you and the driver
+            Let our AI negotiate the best AVAX token fare for both you and the
+            driver
           </p>
         </CardHeader>
         <CardContent className="relative z-10">
@@ -239,7 +240,7 @@ export default function AIFareNegotiation({
             <div className="flex items-center justify-between">
               <span className="text-sm">Base Price</span>
               <span className="font-medium">
-                ${marketData.basePrice.toFixed(2)}
+                {marketData.basePrice.toFixed(6)} AVAX
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -267,8 +268,8 @@ export default function AIFareNegotiation({
             <div className="flex items-center justify-between">
               <span className="text-sm">Competitor Range</span>
               <span className="font-medium">
-                ${Math.min(...marketData.competitorPrices).toFixed(2)} - $
-                {Math.max(...marketData.competitorPrices).toFixed(2)}
+                {Math.min(...marketData.competitorPrices).toFixed(6)} -
+                {Math.max(...marketData.competitorPrices).toFixed(6)} AVAX
               </span>
             </div>
           </div>
@@ -283,10 +284,11 @@ export default function AIFareNegotiation({
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <div className="text-4xl font-bold text-primary">
-              ${basePrice.toFixed(2)}
+              {basePrice.toFixed(6)} AVAX
             </div>
             <p className="text-muted-foreground">
-              Standard pricing based on distance and current conditions
+              Standard pricing in Avalanche Fuji tokens based on distance and
+              current conditions
             </p>
             <div className="grid grid-cols-2 gap-3">
               <Button onClick={() => acceptOffer(basePrice)} className="glow">
@@ -314,7 +316,7 @@ export default function AIFareNegotiation({
             <CardContent className="space-y-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary mb-2">
-                  ${currentOffer.toFixed(2)}
+                  {currentOffer.toFixed(6)} AVAX
                 </div>
                 <Slider
                   value={[currentOffer]}
@@ -325,8 +327,8 @@ export default function AIFareNegotiation({
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                  <span>${(basePrice * 0.5).toFixed(2)}</span>
-                  <span>${(basePrice * 1.5).toFixed(2)}</span>
+                  <span>{(basePrice * 0.5).toFixed(6)} AVAX</span>
+                  <span>{(basePrice * 1.5).toFixed(6)} AVAX</span>
                 </div>
               </div>
               <Button
@@ -383,7 +385,7 @@ export default function AIFareNegotiation({
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-lg">
-                          ${offer.amount.toFixed(2)}
+                          {offer.amount.toFixed(6)} AVAX
                         </span>
                         <Badge className="text-xs">
                           {offer.confidence}% confidence

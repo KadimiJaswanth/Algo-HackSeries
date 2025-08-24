@@ -352,7 +352,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
   const handleBookRide = async () => {
     if (!isConnected && !demoMode) {
-      alert("Please connect your wallet or try demo mode");
+      alert("Please connect your Avalanche wallet or try demo mode");
       return;
     }
 
@@ -375,7 +375,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     setPaymentProcessing(true);
 
     try {
-      // Simulate token payment processing
+      // Simulate AVAX token payment processing on Avalanche Fuji
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Payment successful - show confirmation
@@ -495,7 +495,9 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
   };
 
   const handleCompleteRide = () => {
-    alert("Ride completed! Payment processed via smart contract.");
+    alert(
+      "Ride completed! Payment processed via smart contract on Avalanche Fuji.",
+    );
     setActiveRide(null);
     onTabChange?.("book");
   };
@@ -894,7 +896,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                         </h4>
                         <p className="text-sm text-muted-foreground">
                           {quickBookConfirmation.vehicleName} booked for{" "}
-                          {quickBookConfirmation.fare.toFixed(6)} TOKENS
+                          {quickBookConfirmation.fare.toFixed(6)} AVAX
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           Driver will be assigned shortly...
@@ -960,8 +962,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                             {(
                               (bookingData.fareEstimate / surgeMultiplier) *
                               0.4
-                            ).toFixed(4)}{" "}
-                            TOKENS
+                            ).toFixed(6)}{" "}
+                            AVAX
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -970,8 +972,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                             {(
                               (bookingData.fareEstimate / surgeMultiplier) *
                               0.6
-                            ).toFixed(4)}{" "}
-                            TOKENS
+                            ).toFixed(6)}{" "}
+                            AVAX
                           </span>
                         </div>
                         {surgeMultiplier > 1 && (
@@ -984,8 +986,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                               {(
                                 bookingData.fareEstimate -
                                 bookingData.fareEstimate / surgeMultiplier
-                              ).toFixed(4)}{" "}
-                              TOKENS
+                              ).toFixed(6)}{" "}
+                              AVAX
                             </span>
                           </div>
                         )}
@@ -993,7 +995,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                           <div className="flex justify-between">
                             <span>Return trip</span>
                             <span>
-                              +{bookingData.fareEstimate.toFixed(4)} TOKENS
+                              +{bookingData.fareEstimate.toFixed(6)} AVAX
                             </span>
                           </div>
                         )}
@@ -1004,8 +1006,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                             {(
                               bookingData.fareEstimate *
                               (bookingData.isRoundTrip ? 2 : 1)
-                            ).toFixed(4)}{" "}
-                            TOKENS
+                            ).toFixed(6)}{" "}
+                            AVAX
                           </span>
                         </div>
                       </div>
@@ -1047,7 +1049,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
               }}
               onComplete={() => {
                 alert(
-                  "🎉 Ride completed successfully! Payment processed via smart contract.",
+                  "🎉 Ride completed successfully! Payment processed via smart contract on Avalanche Fuji.",
                 );
                 setUseEnhancedTracking(false);
                 setEnhancedRideData(null);
@@ -1102,7 +1104,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <Wallet className="mr-2 h-5 w-5 text-primary" />
-              Pay with TOKENS Tokens
+              Pay with AVAX
             </DialogTitle>
             <DialogDescription>
               Confirm your payment to book this ride
@@ -1132,8 +1134,8 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                       {(
                         bookingData.fareEstimate *
                         (bookingData.isRoundTrip ? 2 : 1)
-                      ).toFixed(4)}{" "}
-                      TOKENS
+                      ).toFixed(6)}{" "}
+                      AVAX
                     </span>
                   </div>
                 </div>
@@ -1163,7 +1165,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                 ) : (
                   <>
                     <Wallet className="mr-2 h-4 w-4" />
-                    Pay with TOKENS
+                    Pay with AVAX
                   </>
                 )}
               </Button>

@@ -118,7 +118,17 @@ export default function GoogleMaps({
         }
       } catch (error) {
         console.error("Error loading Google Maps:", error);
-        setIsDemo(true);
+        if (mapRef.current) {
+          mapRef.current.innerHTML = `
+            <div class="flex items-center justify-center h-full bg-red-50 rounded-lg border-2 border-red-200">
+              <div class="text-center p-6">
+                <div class="text-red-500 text-4xl mb-4">⚠️</div>
+                <h3 class="text-lg font-semibold text-red-700 mb-2">Google Maps failed to load</h3>
+                <p class="text-sm text-red-600">Please check your API key and internet connection</p>
+              </div>
+            </div>
+          `;
+        }
       }
     };
 

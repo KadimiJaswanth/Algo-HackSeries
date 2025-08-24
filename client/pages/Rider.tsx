@@ -48,7 +48,7 @@ export default function Rider() {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("book");
   const [activeRideId] = useState("ride-123");
-  const [currentFare] = useState(25.5);
+  const [currentFare] = useState(0.0005); // Default fare within token limits
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");

@@ -59,8 +59,8 @@ export default function GeoapifyStatus() {
                 </span>
               </div>
               <p className="text-xs text-green-700 mt-1">
-                You now have access to interactive maps, routing services,
-                and location-based features powered by Geoapify.
+                You now have access to interactive maps, routing services, and
+                location-based features powered by Geoapify.
               </p>
             </div>
           )}

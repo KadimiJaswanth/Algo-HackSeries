@@ -66,9 +66,12 @@ export default function GeoapifyMaps({
           // Fix for default markers in Leaflet
           delete (leaflet.default.Icon.Default.prototype as any)._getIconUrl;
           leaflet.default.Icon.Default.mergeOptions({
-            iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-            iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+            iconRetinaUrl:
+              "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+            iconUrl:
+              "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+            shadowUrl:
+              "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
           });
 
           // Create map instance
@@ -79,13 +82,16 @@ export default function GeoapifyMaps({
           });
 
           // Add Geoapify tile layer
-          leaflet.default.tileLayer(
-            `https://maps.geoapify.com/v1/tile/carto/{z}/{x}/{y}.png?apiKey=${API_KEY}`,
-            {
-              attribution: '© <a href="https://www.geoapify.com/">Geoapify</a> | © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-              maxZoom: 18,
-            }
-          ).addTo(mapInstance);
+          leaflet.default
+            .tileLayer(
+              `https://maps.geoapify.com/v1/tile/carto/{z}/{x}/{y}.png?apiKey=${API_KEY}`,
+              {
+                attribution:
+                  '© <a href="https://www.geoapify.com/">Geoapify</a> | © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+              },
+            )
+            .addTo(mapInstance);
 
           setMap(mapInstance);
 
@@ -268,7 +274,7 @@ export default function GeoapifyMaps({
       console.log("Fetching route from server proxy...");
 
       const response = await fetch(
-        `/api/routing?start_lat=${start.lat}&start_lng=${start.lng}&end_lat=${end.lat}&end_lng=${end.lng}`
+        `/api/routing?start_lat=${start.lat}&start_lng=${start.lng}&end_lat=${end.lat}&end_lng=${end.lng}`,
       );
 
       if (!response.ok) {
@@ -283,7 +289,9 @@ export default function GeoapifyMaps({
 
       if (data.features && data.features.length > 0) {
         const route = data.features[0];
-        const coordinates = route.geometry.coordinates[0].map((coord: number[]) => [coord[1], coord[0]]);
+        const coordinates = route.geometry.coordinates[0].map(
+          (coord: number[]) => [coord[1], coord[0]],
+        );
 
         const routePolyline = L.polyline(coordinates, {
           color: "#3B82F6",
@@ -294,7 +302,9 @@ export default function GeoapifyMaps({
         setRouteLayer(routePolyline);
         console.log("Route successfully displayed");
       } else {
-        console.warn("No route found in response, falling back to straight line");
+        console.warn(
+          "No route found in response, falling back to straight line",
+        );
         drawStraightLine(start, end);
       }
     } catch (error) {
@@ -311,13 +321,16 @@ export default function GeoapifyMaps({
 
       console.log("Drawing straight line fallback");
       const straightLine = L.polyline(
-        [[start.lat, start.lng], [end.lat, end.lng]],
+        [
+          [start.lat, start.lng],
+          [end.lat, end.lng],
+        ],
         {
           color: "#94A3B8", // Gray color to indicate it's not a real route
           weight: 3,
           opacity: 0.6,
           dashArray: "10, 10", // Dashed line to show it's estimated
-        }
+        },
       ).addTo(map);
 
       setRouteLayer(straightLine);

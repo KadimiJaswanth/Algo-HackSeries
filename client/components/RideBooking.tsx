@@ -126,6 +126,23 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     riderName: string;
   } | null>(null);
 
+  // New booking flow states
+  const [bookingFlowState, setBookingFlowState] = useState<'idle' | 'searching' | 'driver_found' | 'tracking'>('idle');
+  const [searchingData, setSearchingData] = useState<{
+    pickup: Location;
+    dropoff: Location;
+    estimatedFare: number;
+    vehicleName: string;
+  } | null>(null);
+  const [foundDriverData, setFoundDriverData] = useState<{
+    name: string;
+    phone: string;
+    carModel: string;
+    licensePlate: string;
+    rating: number;
+    eta: number;
+  } | null>(null);
+
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: {
       lat: 37.7749,

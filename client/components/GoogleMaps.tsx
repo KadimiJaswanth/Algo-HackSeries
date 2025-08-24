@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FiMapPin as MapPin, FiNavigation as Navigation, FiCrosshair as Crosshair } from "react-icons/fi";
 import { cn } from "@/lib/utils";
+import InteractiveMap from "./InteractiveMap";
 
 interface Location {
   lat: number;

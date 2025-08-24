@@ -125,23 +125,6 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     riderName: string;
   } | null>(null);
 
-  // New booking flow states
-  const [bookingFlowState, setBookingFlowState] = useState<'idle' | 'searching' | 'driver_found' | 'tracking'>('idle');
-  const [searchingData, setSearchingData] = useState<{
-    pickup: Location;
-    dropoff: Location;
-    estimatedFare: number;
-    vehicleName: string;
-  } | null>(null);
-  const [foundDriverData, setFoundDriverData] = useState<{
-    name: string;
-    phone: string;
-    carModel: string;
-    licensePlate: string;
-    rating: number;
-    eta: number;
-  } | null>(null);
-
   const [bookingData, setBookingData] = useState<RideBookingData>({
     pickup: {
       lat: 37.7749,
@@ -235,11 +218,11 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     // Start the enhanced ride booking flow
     setTimeout(() => {
       setQuickBookConfirmation(null);
-      proceedWithEnhancedBooking(fare, vehicleName);
+      proceedWithEnhancedBooking(fare);
     }, 1500);
   };
 
-  const proceedWithEnhancedBooking = async (fare: number, vehicleName: string) => {
+  const proceedWithEnhancedBooking = async (fare: number) => {
     if (!bookingData.pickup || !bookingData.dropoff) {
       alert("Missing pickup or dropoff location");
       return;
@@ -248,39 +231,29 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     setIsLoading(true);
 
     try {
-      // Start with searching state - shows waiting screen
-      const searchData = {
+      // Prepare enhanced ride data for tracking
+      const rideData = {
         pickup: bookingData.pickup!,
         dropoff: bookingData.dropoff!,
         estimatedFare: fare,
-        vehicleName: vehicleName,
+        riderName: "Rider User", // In real app, get from user profile
       };
 
-      setSearchingData(searchData);
-      setBookingFlowState('searching');
+      setEnhancedRideData(rideData);
+      setUseEnhancedTracking(true);
+      onTabChange?.("tracking");
       setIsLoading(false);
 
-      // Simulate searching for driver (3-8 seconds)
-      setTimeout(() => {
-        // Simulate finding a driver
-        const driverData = {
-          name: "Driver Kumar",
-          phone: "6301214658",
-          carModel: vehicleName,
-          licensePlate: "RIDE-" + Math.floor(Math.random() * 1000).toString().padStart(3, '0'),
-          rating: 4.5 + Math.random() * 0.5,
-          eta: Math.floor(Math.random() * 8) + 3,
-        };
-
-        setFoundDriverData(driverData);
-        setBookingFlowState('driver_found');
-      }, 3000 + Math.random() * 5000);
-
+      // Note: The enhanced tracking component will handle:
+      // 1. Sending SMS to 6301214658
+      // 2. 5-minute auto-cancel timer
+      // 3. Live tracking when accepted
+      // 4. Call/message options
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
-      setBookingFlowState('idle');
-      setSearchingData(null);
+      setUseEnhancedTracking(false);
+      setEnhancedRideData(null);
     } finally {
       setIsLoading(false);
     }
@@ -358,17 +331,29 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
     setRideConfirmed(false);
 
     try {
-      // Find vehicle name from bookingData
-      const vehicleName = bookingData.vehicleType || "Standard Car";
+      // Prepare enhanced ride data for tracking
+      const rideData = {
+        pickup: bookingData.pickup!,
+        dropoff: bookingData.dropoff!,
+        estimatedFare: bookingData.fareEstimate,
+        riderName: "Rider User", // In real app, get from user profile
+      };
 
-      // Start the enhanced ride booking flow
-      await proceedWithEnhancedBooking(bookingData.fareEstimate, vehicleName);
+      setEnhancedRideData(rideData);
+      setUseEnhancedTracking(true);
+      onTabChange?.("tracking");
+      setIsLoading(false);
 
+      // Note: The enhanced tracking component will handle:
+      // 1. Sending SMS to 6301214658
+      // 2. 5-minute auto-cancel timer
+      // 3. Live tracking when accepted
+      // 4. Call/message options
     } catch (error) {
       console.error("Error booking ride:", error);
       alert("Error booking ride. Please try again.");
-      setBookingFlowState('idle');
-      setSearchingData(null);
+      setUseEnhancedTracking(false);
+      setEnhancedRideData(null);
     } finally {
       setIsLoading(false);
     }

@@ -44,6 +44,7 @@ import SplitFare from "@/components/SplitFare";
 import OnChainReview from "@/components/OnChainReview";
 import PaymentInfo from "@/components/PaymentInfo";
 import MapConfigInfo from "@/components/MapConfigInfo";
+import GoogleMapsStatus from "@/components/GoogleMapsStatus";
 
 export default function Rider() {
   const [searchParams] = useSearchParams();

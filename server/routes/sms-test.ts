@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import twilio from "twilio";
 
 interface SimulateSmsRequest {
   message: string;

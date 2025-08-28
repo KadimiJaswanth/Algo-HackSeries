@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import GoogleMaps from "@/components/GoogleMaps";
+import GeoapifyMaps from "@/components/GeoapifyMaps";
 import {
   Navigation,
   Clock,
@@ -320,7 +320,7 @@ export default function LiveTracking({
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <GoogleMaps
+          <GeoapifyMaps
             pickup={{ lat: 37.7849, lng: -122.4194, address: "Your Location" }}
             dropoff={{ lat: 37.7649, lng: -122.4094, address: "Destination" }}
             driverLocation={driver.location}

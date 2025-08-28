@@ -13,6 +13,7 @@ import {
   getTestCommands,
   testDirectSms,
 } from "./routes/sms-test";
+import { handleGeoapifyRouting } from "./routes/geoapify-routing";
 
 // Security configuration
 const securityConfig = {
@@ -153,6 +154,7 @@ function csrfProtection(
     req.method === "GET" ||
     req.path.includes("/ping") ||
     req.path.includes("/demo") ||
+    req.path.includes("/routing") ||
     req.path.includes("/csrf-token")
   ) {
     return next();
@@ -281,6 +283,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Geoapify routing proxy
+  app.get("/api/routing", handleGeoapifyRouting);
 
   // SMS notification routes
   app.post("/api/sms/send-notification", sendDriverNotification);

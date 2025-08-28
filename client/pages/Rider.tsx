@@ -44,7 +44,7 @@ import SplitFare from "@/components/SplitFare";
 import OnChainReview from "@/components/OnChainReview";
 import PaymentInfo from "@/components/PaymentInfo";
 import MapConfigInfo from "@/components/MapConfigInfo";
-import GoogleMapsStatus from "@/components/GoogleMapsStatus";
+import GeoapifyStatus from "@/components/GeoapifyStatus";
 
 export default function Rider() {
   const [searchParams] = useSearchParams();
@@ -185,7 +185,7 @@ export default function Rider() {
                   />
                 </div>
                 <div className="md:col-span-2 lg:col-span-1 space-y-4">
-                  <GoogleMapsStatus />
+                  <GeoapifyStatus />
                   <SplitFare totalFare={currentFare} rideId={activeRideId} />
                   <PaymentInfo />
                 </div>

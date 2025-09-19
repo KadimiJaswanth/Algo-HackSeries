@@ -1,5 +1,5 @@
 import algosdk from "algosdk";
-import PeraWalletConnect from "@perawallet/connect";
+import { PeraWalletConnect } from "@perawallet/connect";
 
 export const ALGOD_URL = "https://testnet-api.algonode.cloud"; // TestNet Algod (public)
 export const INDEXER_URL = "https://testnet-idx.algonode.cloud"; // TestNet Indexer (public)

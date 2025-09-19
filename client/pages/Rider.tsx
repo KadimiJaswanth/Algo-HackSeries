@@ -31,6 +31,7 @@ import {
 import { FaCrown as Crown } from "react-icons/fa";
 import WalletConnect from "@/components/WalletConnect";
 import RideBooking from "@/components/RideBooking";
+import EnhancedRideTracking from "@/components/EnhancedRideTracking";
 import RideHistory from "@/components/RideHistory";
 import RewardsSystem from "@/components/RewardsSystem";
 import PoolRides from "@/components/PoolRides";
@@ -51,6 +52,12 @@ export default function Rider() {
   const [activeTab, setActiveTab] = useState("book");
   const [activeRideId] = useState("ride-123");
   const [currentFare] = useState(0.0005); // Default fare within token limits
+  const [trackingData, setTrackingData] = useState<{
+    pickup: { lat: number; lng: number; address: string };
+    dropoff: { lat: number; lng: number; address: string };
+    estimatedFare: number;
+    riderName: string;
+  } | null>(null);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
@@ -170,7 +177,13 @@ export default function Rider() {
           <TabsContent value="book" className="space-y-6 animate-fade-in-up">
             {/* Main Ride Booking */}
             <div className="w-full">
-              <RideBooking onTabChange={setActiveTab} />
+              <RideBooking
+                onTabChange={setActiveTab}
+                onTrackingStart={(data) => {
+                  setTrackingData(data);
+                  setActiveTab("tracking");
+                }}
+              />
             </div>
 
             {/* Centered Wide Containers */}
@@ -224,31 +237,39 @@ export default function Rider() {
             value="tracking"
             className="space-y-0 animate-fade-in-up"
           >
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Navigation className="mr-2 h-5 w-5" />
-                  Live Tracking
-                </CardTitle>
-                <CardDescription>Track your ride in real-time</CardDescription>
-              </CardHeader>
-              <CardContent className="text-center py-8">
-                <Navigation className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground mb-2">
-                  No active ride to track
-                </p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Book a ride first, and tracking will appear here once the
-                  driver accepts via SMS
-                </p>
-                <Button
-                  onClick={() => setActiveTab("book")}
-                  className="bg-primary hover:bg-primary/90"
-                >
-                  Book a Ride
-                </Button>
-              </CardContent>
-            </Card>
+            {trackingData ? (
+              <EnhancedRideTracking
+                rideData={trackingData}
+                onCancel={() => setTrackingData(null)}
+                onComplete={() => setTrackingData(null)}
+              />
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Navigation className="mr-2 h-5 w-5" />
+                    Live Tracking
+                  </CardTitle>
+                  <CardDescription>Track your ride in real-time</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center py-8">
+                  <Navigation className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                  <p className="text-muted-foreground mb-2">
+                    No active ride to track
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Book a ride first, and tracking will appear here once the
+                    driver accepts via SMS
+                  </p>
+                  <Button
+                    onClick={() => setActiveTab("book")}
+                    className="bg-primary hover:bg-primary/90"
+                  >
+                    Book a Ride
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="rewards" className="space-y-0 animate-fade-in-up">

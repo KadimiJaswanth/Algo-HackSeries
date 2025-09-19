@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useAccount, useSignMessage } from "wagmi";
 import { Button } from "@/components/ui/button";
+import { useAlgoWallet } from "@/components/AlgoProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -36,12 +36,11 @@ interface Web3SecurityValidatorProps {
   showDetails?: boolean;
 }
 
-export default function Web3SecurityValidator({ 
-  onSecurityChange, 
-  showDetails = false 
+export default function Web3SecurityValidator({
+  onSecurityChange,
+  showDetails = false
 }: Web3SecurityValidatorProps) {
-  const { address, isConnected, connector } = useAccount();
-  const { signMessage } = useSignMessage();
+  const { address, isConnected, signMessage, rpcUrl } = useAlgoWallet();
   const [securityStatus, setSecurityStatus] = useState<SecurityStatus>({
     walletConnected: false,
     signatureValid: false,
@@ -161,17 +160,15 @@ export default function Web3SecurityValidator({
 
   const validateRPCSecurity = async (): Promise<boolean> => {
     try {
-      // Check RPC endpoint security
-      const rpcUrl = connector?.chains?.[0]?.rpcUrls?.default?.http?.[0];
+      // Check Algorand RPC endpoint security
       if (!rpcUrl) return false;
-      
-      // Check for HTTPS
+
       const isSecure = rpcUrl.startsWith('https://');
-      
-      // Check for known secure providers
-      const secureProviders = ['infura.io', 'alchemy.com', 'moralis.io', 'quicknode.com'];
-      const isKnownProvider = secureProviders.some(provider => rpcUrl.includes(provider));
-      
+
+      // Known secure Algorand providers
+      const secureProviders = ['algonode.cloud', 'algoexplorerapi.io', 'purestake.io'];
+      const isKnownProvider = secureProviders.some((p) => rpcUrl.includes(p));
+
       return isSecure && isKnownProvider;
     } catch (error) {
       SecurityAudit.log('rpc_security_check_failed', 'medium', { error: error.message });

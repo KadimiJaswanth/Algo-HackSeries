@@ -18,7 +18,12 @@ export function encodeNote(message: string): Uint8Array {
   return new TextEncoder().encode(message);
 }
 
-export async function sendAlgoPayment(from: string, to: string, amountAlgo: number, note?: string) {
+export async function sendAlgoPayment(
+  from: string,
+  to: string,
+  amountAlgo: number,
+  note?: string,
+) {
   const params = await getSuggestedParams();
   const amountMicro = Math.round(amountAlgo * 1e6);
   const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({

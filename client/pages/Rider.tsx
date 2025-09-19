@@ -250,7 +250,9 @@ export default function Rider() {
                     <Navigation className="mr-2 h-5 w-5" />
                     Live Tracking
                   </CardTitle>
-                  <CardDescription>Track your ride in real-time</CardDescription>
+                  <CardDescription>
+                    Track your ride in real-time
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center py-8">
                   <Navigation className="mx-auto h-12 w-12 text-muted-foreground mb-4" />

@@ -323,7 +323,7 @@ export default function Rider() {
                           Preferred Payment
                         </label>
                         <p className="text-muted-foreground">
-                          Avalanche Wallet
+                          Pera Wallet (Algorand)
                         </p>
                       </div>
                     </div>

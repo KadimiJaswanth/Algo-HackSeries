@@ -42,7 +42,7 @@ export default function Index() {
             </div>
             <span className="text-xl font-bold text-gradient">RideChain</span>
             <Badge variant="outline" className="ml-2 text-xs glass-hover glow-accent">
-              Avalanche
+              Algorand
             </Badge>
           </div>
           <nav className="flex items-center space-x-6 animate-slide-in-right">
@@ -73,7 +73,7 @@ export default function Index() {
       <section className="relative py-20 px-4 z-10">
         <div className="container mx-auto text-center">
           <Badge className="mb-4 glass glow-accent animate-fade-in-down" variant="secondary">
-            Powered by Avalanche C-Chain
+            Powered by Algorand TestNet
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6 animate-fade-in-up text-glow">
             Decentralized

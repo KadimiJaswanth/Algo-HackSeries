@@ -47,7 +47,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
       name: "You",
       amount: totalFare,
       paymentStatus: "pending",
-      paymentMethod: "Avalanche Wallet",
+      paymentMethod: "Pera Wallet",
     },
   ]);
 
@@ -420,7 +420,7 @@ export default function SplitFare({ totalFare, rideId }: SplitFareProps) {
               <span>Payment Method</span>
               <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
                 <Wallet className="mr-1 h-3 w-3" />
-                Avalanche Wallet
+                Pera Wallet
               </Badge>
             </div>
             <div className="pt-2 border-t border-border/50">

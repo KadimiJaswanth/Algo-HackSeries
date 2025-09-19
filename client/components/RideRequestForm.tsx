@@ -19,9 +19,14 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { FiMapPin as MapPin, FiClock as Clock, FiDollarSign as DollarSign, FiAlertCircle as AlertCircle } from "react-icons/fi";
+import {
+  FiMapPin as MapPin,
+  FiClock as Clock,
+  FiDollarSign as DollarSign,
+  FiAlertCircle as AlertCircle,
+} from "react-icons/fi";
 import { FaCar as Car } from "react-icons/fa";
-import { useAccount } from "wagmi";
+import { useAlgoWallet } from "@/components/AlgoProvider";
 import RideStatus from "./RideStatus";
 
 interface RideRequest {
@@ -49,7 +54,7 @@ interface ActiveRide {
 }
 
 export default function RideRequestForm() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useAlgoWallet();
   const [formData, setFormData] = useState<RideRequest>({
     pickup: "",
     dropoff: "",
@@ -233,9 +238,7 @@ export default function RideRequestForm() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button onClick={enableDemoMode}>
-            🚀 Try Demo Mode
-          </Button>
+          <Button onClick={enableDemoMode}>🚀 Try Demo Mode</Button>
           <p className="text-sm text-muted-foreground">
             Experience ride booking without wallet connection
           </p>

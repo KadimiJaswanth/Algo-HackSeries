@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,6 +58,7 @@ import DriverDashboard from "@/components/DriverDashboard";
 import DriverNotification, {
   useDriverNotifications,
 } from "@/components/DriverNotification";
+import { useEffect, useState } from "react";
 
 export default function Driver() {
   const [activeTab, setActiveTab] = useState("dashboard");

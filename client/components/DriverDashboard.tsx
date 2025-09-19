@@ -24,7 +24,7 @@ import {
   FiStar as Star,
 } from "react-icons/fi";
 import { FaCar as Car, FaBicycle as Bike } from "react-icons/fa";
-import { useAccount } from "wagmi";
+import { useAlgoWallet } from "@/components/AlgoProvider";
 
 interface RideRequest {
   id: string;
@@ -126,7 +126,7 @@ const mockRides: RideRequest[] = [
 ];
 
 export default function DriverDashboard() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useAlgoWallet();
   const [isOnline, setIsOnline] = useState(false);
   const [availableRides, setAvailableRides] =
     useState<RideRequest[]>(mockRides);
@@ -216,15 +216,13 @@ export default function DriverDashboard() {
       <Card>
         <CardHeader className="text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <CardTitle>Connect Wallet or Try Demo</CardTitle>
+          <CardTitle>Connect Pera Wallet or Try Demo</CardTitle>
           <CardDescription>
-            Connect your Web3 wallet to start driving or try our demo mode
+            Connect your Algorand wallet to start driving or try our demo mode
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button onClick={enableDemoMode}>
-            🚀 Try Demo Mode
-          </Button>
+          <Button onClick={enableDemoMode}>🚀 Try Demo Mode</Button>
           <p className="text-sm text-muted-foreground">
             Experience driver features without wallet connection
           </p>
@@ -244,7 +242,7 @@ export default function DriverDashboard() {
                   🚀 Demo Mode
                 </Badge>
                 <span className="text-sm text-muted-foreground">
-                  Try driver features without wallet connection
+                  Try driver features without Pera wallet connection
                 </span>
               </div>
               <Button
@@ -365,7 +363,9 @@ export default function DriverDashboard() {
           <CardContent>
             <div className="bg-driver/10 p-3 rounded-lg text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Connected Wallet:</span>
+                <span className="text-muted-foreground">
+                  Connected Pera Wallet:
+                </span>
                 <code className="bg-background px-2 py-1 rounded text-xs">
                   {address?.slice(0, 6)}...{address?.slice(-4)}
                 </code>

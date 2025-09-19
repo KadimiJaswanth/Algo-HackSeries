@@ -41,7 +41,7 @@ import {
   FiZap as Zap,
 } from "react-icons/fi";
 import { FaCar as Car, FaWallet as Wallet } from "react-icons/fa";
-import { useAccount } from "wagmi";
+import { useAlgoWallet } from "@/components/AlgoProvider";
 import VehicleSelection from "./VehicleSelection";
 import GeoapifyMaps from "./GeoapifyMaps";
 import RideStatus from "./RideStatus";
@@ -98,7 +98,7 @@ interface RideBookingProps {
 }
 
 export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useAlgoWallet();
   const {
     sendNotification,
     pollStatus,
@@ -352,7 +352,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
 
   const handleBookRide = async () => {
     if (!isConnected && !demoMode) {
-      alert("Please connect your Avalanche wallet or try demo mode");
+      alert("Please connect your Pera (Algorand) wallet or try demo mode");
       return;
     }
 
@@ -1104,7 +1104,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <Wallet className="mr-2 h-5 w-5 text-primary" />
-              Pay with AVAX
+              Pay with ALGO
             </DialogTitle>
             <DialogDescription>
               Confirm your payment to book this ride
@@ -1165,7 +1165,7 @@ export default function RideBooking({ onTabChange }: RideBookingProps = {}) {
                 ) : (
                   <>
                     <Wallet className="mr-2 h-4 w-4" />
-                    Pay with Tokens
+                    Pay with ALGO Tokens
                   </>
                 )}
               </Button>

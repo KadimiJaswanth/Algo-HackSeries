@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider } from "wagmi";
-import { config } from "@/lib/wagmi";
 import { ReactNode } from "react";
+import { AlgoProvider } from "@/components/AlgoProvider";
 
 // Configure QueryClient with error handling
 const queryClient = new QueryClient({
@@ -12,10 +11,10 @@ const queryClient = new QueryClient({
         if (error instanceof Error) {
           const errorMessage = error.message.toLowerCase();
           if (
-            errorMessage.includes('user rejected') ||
-            errorMessage.includes('user denied') ||
-            errorMessage.includes('unauthorized') ||
-            errorMessage.includes('failed to fetch')
+            errorMessage.includes("user rejected") ||
+            errorMessage.includes("user denied") ||
+            errorMessage.includes("unauthorized") ||
+            errorMessage.includes("failed to fetch")
           ) {
             return false;
           }
@@ -38,11 +37,8 @@ interface Web3ProviderProps {
 
 export default function Web3Provider({ children }: Web3ProviderProps) {
   return (
-    <WagmiProvider
-      config={config}
-      reconnectOnMount={false} // Prevent auto-reconnect on mount to avoid fetch errors
-    >
+    <AlgoProvider>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
+    </AlgoProvider>
   );
 }

@@ -4,8 +4,6 @@ import { FiLogOut as LogOut } from "react-icons/fi";
 import { FaWallet as Wallet } from "react-icons/fa";
 import { useState } from "react";
 import { useAlgoWallet } from "@/components/AlgoProvider";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 export default function WalletConnect() {
   const { address, isConnected, connect, disconnect } = useAlgoWallet();

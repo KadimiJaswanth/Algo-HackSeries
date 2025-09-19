@@ -1,7 +1,21 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import algosdk from "algosdk";
-import { ALGOD_URL, algod, pera, getSuggestedParams, encodeNote } from "@/lib/algo";
+import {
+  ALGOD_URL,
+  algod,
+  pera,
+  getSuggestedParams,
+  encodeNote,
+} from "@/lib/algo";
 
 interface AlgoWalletContextValue {
   address: string | null;
@@ -12,7 +26,9 @@ interface AlgoWalletContextValue {
   rpcUrl: string;
 }
 
-const AlgoWalletContext = createContext<AlgoWalletContextValue | undefined>(undefined);
+const AlgoWalletContext = createContext<AlgoWalletContextValue | undefined>(
+  undefined,
+);
 
 const queryClient = new QueryClient();
 
@@ -25,7 +41,8 @@ export function AlgoProvider({ children }: { children: React.ReactNode }) {
     if (reconnectTriedRef.current) return;
     reconnectTriedRef.current = true;
 
-    pera.reconnectSession()
+    pera
+      .reconnectSession()
       .then((accounts) => {
         if (accounts && accounts.length > 0) {
           setAddress(accounts[0]);
@@ -55,22 +72,25 @@ export function AlgoProvider({ children }: { children: React.ReactNode }) {
 
   // Sign an off-chain message by signing a 0-ALGO self-payment with the note set to the message.
   // We DO NOT submit the transaction; we just return the signature bytes.
-  const signMessage = useCallback(async (message: string) => {
-    if (!address) return null;
-    const params = await getSuggestedParams();
+  const signMessage = useCallback(
+    async (message: string) => {
+      if (!address) return null;
+      const params = await getSuggestedParams();
 
-    const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: address,
-      to: address,
-      amount: 0,
-      note: encodeNote(message),
-      suggestedParams: params,
-    });
+      const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+        from: address,
+        to: address,
+        amount: 0,
+        note: encodeNote(message),
+        suggestedParams: params,
+      });
 
-    const txnBytes = txn.toByte();
-    const [{ blob }] = await pera.signTransaction([{ txn: txnBytes }]);
-    return blob as Uint8Array;
-  }, [address]);
+      const txnBytes = txn.toByte();
+      const [{ blob }] = await pera.signTransaction([{ txn: txnBytes }]);
+      return blob as Uint8Array;
+    },
+    [address],
+  );
 
   const value = useMemo<AlgoWalletContextValue>(
     () => ({
@@ -81,7 +101,7 @@ export function AlgoProvider({ children }: { children: React.ReactNode }) {
       signMessage,
       rpcUrl: ALGOD_URL,
     }),
-    [address, connect, disconnect, signMessage]
+    [address, connect, disconnect, signMessage],
   );
 
   return (

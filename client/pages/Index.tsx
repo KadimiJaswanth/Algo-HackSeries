@@ -29,7 +29,10 @@ export default function Index() {
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/10"></div>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        <div
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float"
+          style={{ animationDelay: "1s" }}
+        ></div>
         <div className="absolute top-1/2 left-0 w-64 h-64 bg-secondary/15 rounded-full blur-2xl animate-pulse-slow"></div>
       </div>
 
@@ -41,7 +44,10 @@ export default function Index() {
               <Car className="h-5 w-5" />
             </div>
             <span className="text-xl font-bold text-gradient">RideChain</span>
-            <Badge variant="outline" className="ml-2 text-xs glass-hover glow-accent">
+            <Badge
+              variant="outline"
+              className="ml-2 text-xs glass-hover glow-accent"
+            >
               Algorand
             </Badge>
           </div>
@@ -72,7 +78,10 @@ export default function Index() {
       {/* Hero Section */}
       <section className="relative py-20 px-4 z-10">
         <div className="container mx-auto text-center">
-          <Badge className="mb-4 glass glow-accent animate-fade-in-down" variant="secondary">
+          <Badge
+            className="mb-4 glass glow-accent animate-fade-in-down"
+            variant="secondary"
+          >
             Powered by Algorand TestNet
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold text-gradient mb-6 animate-fade-in-up text-glow">
@@ -80,7 +89,10 @@ export default function Index() {
             <br />
             Ride Sharing
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <p
+            className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             The future of transportation is here. Secure, transparent, and
             trustless ride-sharing powered by smart contracts and blockchain
             technology.
@@ -88,13 +100,19 @@ export default function Index() {
 
           {/* User Type Selection */}
           <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
-            <Link to="/rider" className="block animate-slide-in-left" style={{ animationDelay: '0.4s' }}>
+            <Link
+              to="/rider"
+              className="block animate-slide-in-left"
+              style={{ animationDelay: "0.4s" }}
+            >
               <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-rider/20">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-rider to-primary text-white glow group-hover:animate-float">
                     <MapPin className="h-8 w-8" />
                   </div>
-                  <CardTitle className="text-2xl text-gradient">I Need a Ride</CardTitle>
+                  <CardTitle className="text-2xl text-gradient">
+                    I Need a Ride
+                  </CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Book secure rides with crypto payments and on-chain
                     reputation
@@ -123,13 +141,19 @@ export default function Index() {
               </Card>
             </Link>
 
-            <Link to="/driver" className="block animate-slide-in-right" style={{ animationDelay: '0.6s' }}>
+            <Link
+              to="/driver"
+              className="block animate-slide-in-right"
+              style={{ animationDelay: "0.6s" }}
+            >
               <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-driver/20">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-driver to-accent text-white glow group-hover:animate-float">
                     <Car className="h-8 w-8" />
                   </div>
-                  <CardTitle className="text-2xl text-gradient">I Want to Drive</CardTitle>
+                  <CardTitle className="text-2xl text-gradient">
+                    I Want to Drive
+                  </CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Earn crypto by providing rides with guaranteed payments
                   </CardDescription>
@@ -157,13 +181,19 @@ export default function Index() {
               </Card>
             </Link>
 
-            <Link to="/security" className="block animate-slide-in-right" style={{ animationDelay: '0.8s' }}>
+            <Link
+              to="/security"
+              className="block animate-slide-in-right"
+              style={{ animationDelay: "0.8s" }}
+            >
               <Card className="cursor-pointer glass glass-hover glow-hover h-full group border-primary/20">
                 <CardHeader className="text-center">
                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-primary to-accent text-white glow group-hover:animate-float">
                     <Shield className="h-8 w-8" />
                   </div>
-                  <CardTitle className="text-2xl text-gradient">Security Center</CardTitle>
+                  <CardTitle className="text-2xl text-gradient">
+                    Security Center
+                  </CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Enterprise-grade security monitoring and protection
                   </CardDescription>
@@ -208,19 +238,30 @@ export default function Index() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div
+              className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up"
+              style={{ animationDelay: "0.2s" }}
+            >
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white glow animate-float">
                 <Shield className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gradient">Secure Escrow</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gradient">
+                Secure Escrow
+              </h3>
               <p className="text-muted-foreground">
                 Smart contracts hold payments in escrow until ride completion,
                 ensuring security for both parties.
               </p>
             </div>
 
-            <div className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent to-warning text-white glow animate-float" style={{ animationDelay: '1s' }}>
+            <div
+              className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up"
+              style={{ animationDelay: "0.4s" }}
+            >
+              <div
+                className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-accent to-warning text-white glow animate-float"
+                style={{ animationDelay: "1s" }}
+              >
                 <Star className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gradient">
@@ -232,11 +273,19 @@ export default function Index() {
               </p>
             </div>
 
-            <div className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-warning to-primary text-white glow animate-float" style={{ animationDelay: '2s' }}>
+            <div
+              className="text-center glass glass-hover p-6 rounded-xl animate-fade-in-up"
+              style={{ animationDelay: "0.6s" }}
+            >
+              <div
+                className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-warning to-primary text-white glow animate-float"
+                style={{ animationDelay: "2s" }}
+              >
                 <Zap className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gradient">Instant Payments</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gradient">
+                Instant Payments
+              </h3>
               <p className="text-muted-foreground">
                 Automatic crypto payments powered by Avalanche's fast and
                 low-cost transactions.
@@ -260,13 +309,22 @@ export default function Index() {
             Decentralized ride-sharing powered by Avalanche blockchain
           </p>
           <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-            <Link to="/privacy" className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary">
+            <Link
+              to="/privacy"
+              className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary"
+            >
               Privacy
             </Link>
-            <Link to="/terms" className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary">
+            <Link
+              to="/terms"
+              className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary"
+            >
               Terms
             </Link>
-            <Link to="/support" className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary">
+            <Link
+              to="/support"
+              className="glass-hover px-3 py-1 rounded-md transition-all duration-300 hover:text-primary"
+            >
               Support
             </Link>
           </div>

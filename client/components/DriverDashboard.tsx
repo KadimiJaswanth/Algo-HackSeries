@@ -222,9 +222,7 @@ export default function DriverDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <Button onClick={enableDemoMode}>
-            🚀 Try Demo Mode
-          </Button>
+          <Button onClick={enableDemoMode}>🚀 Try Demo Mode</Button>
           <p className="text-sm text-muted-foreground">
             Experience driver features without wallet connection
           </p>
@@ -365,7 +363,9 @@ export default function DriverDashboard() {
           <CardContent>
             <div className="bg-driver/10 p-3 rounded-lg text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Connected Pera Wallet:</span>
+                <span className="text-muted-foreground">
+                  Connected Pera Wallet:
+                </span>
                 <code className="bg-background px-2 py-1 rounded text-xs">
                   {address?.slice(0, 6)}...{address?.slice(-4)}
                 </code>

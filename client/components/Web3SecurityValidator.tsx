@@ -28,7 +28,7 @@ interface SecurityStatus {
   rpcSecure: boolean;
   contractVerified: boolean;
   sessionValid: boolean;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "low" | "medium" | "high" | "critical";
 }
 
 interface Web3SecurityValidatorProps {
@@ -38,7 +38,7 @@ interface Web3SecurityValidatorProps {
 
 export default function Web3SecurityValidator({
   onSecurityChange,
-  showDetails = false
+  showDetails = false,
 }: Web3SecurityValidatorProps) {
   const { address, isConnected, signMessage, rpcUrl } = useAlgoWallet();
   const [securityStatus, setSecurityStatus] = useState<SecurityStatus>({
@@ -48,7 +48,7 @@ export default function Web3SecurityValidator({
     rpcSecure: false,
     contractVerified: false,
     sessionValid: false,
-    riskLevel: 'medium',
+    riskLevel: "medium",
   });
   const [isValidating, setIsValidating] = useState(false);
   const [showSecurityDetails, setShowSecurityDetails] = useState(showDetails);
@@ -62,7 +62,7 @@ export default function Web3SecurityValidator({
 
   const validateSecurity = async () => {
     setIsValidating(true);
-    
+
     try {
       const status: SecurityStatus = {
         walletConnected: isConnected && !!address,
@@ -71,7 +71,7 @@ export default function Web3SecurityValidator({
         rpcSecure: await validateRPCSecurity(),
         contractVerified: await validateContractSecurity(),
         sessionValid: SessionManager.isSessionValid(),
-        riskLevel: 'low',
+        riskLevel: "low",
       };
 
       // Calculate risk level
@@ -83,27 +83,28 @@ export default function Web3SecurityValidator({
         !status.contractVerified,
         !status.sessionValid,
       ];
-      
+
       const riskCount = risks.filter(Boolean).length;
-      if (riskCount === 0) status.riskLevel = 'low';
-      else if (riskCount <= 2) status.riskLevel = 'medium';
-      else if (riskCount <= 4) status.riskLevel = 'high';
-      else status.riskLevel = 'critical';
+      if (riskCount === 0) status.riskLevel = "low";
+      else if (riskCount <= 2) status.riskLevel = "medium";
+      else if (riskCount <= 4) status.riskLevel = "high";
+      else status.riskLevel = "critical";
 
       setSecurityStatus(status);
       setLastValidation(Date.now());
       onSecurityChange?.(status);
 
       // Log security events
-      if (status.riskLevel === 'critical') {
-        SecurityAudit.log('critical_security_risk', 'critical', status);
-      } else if (status.riskLevel === 'high') {
-        SecurityAudit.log('high_security_risk', 'high', status);
+      if (status.riskLevel === "critical") {
+        SecurityAudit.log("critical_security_risk", "critical", status);
+      } else if (status.riskLevel === "high") {
+        SecurityAudit.log("high_security_risk", "high", status);
       }
-
     } catch (error) {
-      console.error('Security validation failed:', error);
-      SecurityAudit.log('security_validation_failed', 'high', { error: error.message });
+      console.error("Security validation failed:", error);
+      SecurityAudit.log("security_validation_failed", "high", {
+        error: error.message,
+      });
     } finally {
       setIsValidating(false);
     }
@@ -111,14 +112,16 @@ export default function Web3SecurityValidator({
 
   const validateSignature = async (): Promise<boolean> => {
     if (!isConnected || !address) return false;
-    
+
     try {
       // In production, this would validate a real signature
       // For demo, we'll simulate validation
       const testMessage = `Security validation for ${address} at ${Date.now()}`;
       return true; // Simplified for demo
     } catch (error) {
-      SecurityAudit.log('signature_validation_failed', 'medium', { error: error.message });
+      SecurityAudit.log("signature_validation_failed", "medium", {
+        error: error.message,
+      });
       return false;
     }
   };
@@ -134,10 +137,12 @@ export default function Web3SecurityValidator({
         // Slippage protection
         await validateSlippageProtection(),
       ];
-      
+
       return checks.every(Boolean);
     } catch (error) {
-      SecurityAudit.log('transaction_safety_check_failed', 'medium', { error: error.message });
+      SecurityAudit.log("transaction_safety_check_failed", "medium", {
+        error: error.message,
+      });
       return false;
     }
   };
@@ -163,15 +168,21 @@ export default function Web3SecurityValidator({
       // Check Algorand RPC endpoint security
       if (!rpcUrl) return false;
 
-      const isSecure = rpcUrl.startsWith('https://');
+      const isSecure = rpcUrl.startsWith("https://");
 
       // Known secure Algorand providers
-      const secureProviders = ['algonode.cloud', 'algoexplorerapi.io', 'purestake.io'];
+      const secureProviders = [
+        "algonode.cloud",
+        "algoexplorerapi.io",
+        "purestake.io",
+      ];
       const isKnownProvider = secureProviders.some((p) => rpcUrl.includes(p));
 
       return isSecure && isKnownProvider;
     } catch (error) {
-      SecurityAudit.log('rpc_security_check_failed', 'medium', { error: error.message });
+      SecurityAudit.log("rpc_security_check_failed", "medium", {
+        error: error.message,
+      });
       return false;
     }
   };
@@ -182,7 +193,9 @@ export default function Web3SecurityValidator({
       // In production, would check if contracts are verified on Etherscan
       return Math.random() > 0.1; // 90% success rate for demo
     } catch (error) {
-      SecurityAudit.log('contract_verification_failed', 'medium', { error: error.message });
+      SecurityAudit.log("contract_verification_failed", "medium", {
+        error: error.message,
+      });
       return false;
     }
   };
@@ -196,32 +209,44 @@ export default function Web3SecurityValidator({
       securityStatus.contractVerified,
       securityStatus.sessionValid,
     ];
-    
+
     return Math.round((checks.filter(Boolean).length / checks.length) * 100);
   };
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'low': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'high': return 'text-orange-500';
-      case 'critical': return 'text-red-500';
-      default: return 'text-gray-500';
+      case "low":
+        return "text-green-500";
+      case "medium":
+        return "text-yellow-500";
+      case "high":
+        return "text-orange-500";
+      case "critical":
+        return "text-red-500";
+      default:
+        return "text-gray-500";
     }
   };
 
   const getRiskBadgeVariant = (level: string) => {
     switch (level) {
-      case 'low': return 'default';
-      case 'medium': return 'secondary';
-      case 'high': return 'destructive';
-      case 'critical': return 'destructive';
-      default: return 'outline';
+      case "low":
+        return "default";
+      case "medium":
+        return "secondary";
+      case "high":
+        return "destructive";
+      case "critical":
+        return "destructive";
+      default:
+        return "outline";
     }
   };
 
   const securityScore = getSecurityScore();
-  const timeAgo = lastValidation ? Math.floor((Date.now() - lastValidation) / 1000) : 0;
+  const timeAgo = lastValidation
+    ? Math.floor((Date.now() - lastValidation) / 1000)
+    : 0;
 
   return (
     <Card className="glass">
@@ -240,16 +265,22 @@ export default function Web3SecurityValidator({
               size="sm"
               onClick={() => setShowSecurityDetails(!showSecurityDetails)}
             >
-              {showSecurityDetails ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showSecurityDetails ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </CardTitle>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Security Score */}
         <div className="text-center">
-          <div className={`text-3xl font-bold ${getRiskColor(securityStatus.riskLevel)}`}>
+          <div
+            className={`text-3xl font-bold ${getRiskColor(securityStatus.riskLevel)}`}
+          >
             {securityScore}%
           </div>
           <div className="text-sm text-muted-foreground">Security Score</div>
@@ -292,14 +323,29 @@ export default function Web3SecurityValidator({
           <div className="space-y-3">
             <div className="grid gap-2">
               {[
-                { key: 'walletConnected', label: 'Wallet Connected', icon: Key },
-                { key: 'signatureValid', label: 'Signature Valid', icon: Lock },
-                { key: 'transactionSafe', label: 'Transaction Safe', icon: Shield },
-                { key: 'rpcSecure', label: 'RPC Secure', icon: Globe },
-                { key: 'contractVerified', label: 'Contract Verified', icon: Database },
-                { key: 'sessionValid', label: 'Session Valid', icon: Clock },
+                {
+                  key: "walletConnected",
+                  label: "Wallet Connected",
+                  icon: Key,
+                },
+                { key: "signatureValid", label: "Signature Valid", icon: Lock },
+                {
+                  key: "transactionSafe",
+                  label: "Transaction Safe",
+                  icon: Shield,
+                },
+                { key: "rpcSecure", label: "RPC Secure", icon: Globe },
+                {
+                  key: "contractVerified",
+                  label: "Contract Verified",
+                  icon: Database,
+                },
+                { key: "sessionValid", label: "Session Valid", icon: Clock },
               ].map(({ key, label, icon: Icon }) => (
-                <div key={key} className="flex items-center justify-between p-2 rounded border">
+                <div
+                  key={key}
+                  className="flex items-center justify-between p-2 rounded border"
+                >
                   <div className="flex items-center space-x-2">
                     <Icon className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">{label}</span>
@@ -316,7 +362,7 @@ export default function Web3SecurityValidator({
         )}
 
         {/* Security Alerts */}
-        {securityStatus.riskLevel === 'critical' && (
+        {securityStatus.riskLevel === "critical" && (
           <Alert className="border-red-500 bg-red-500/10">
             <AlertTriangle className="h-4 w-4 text-red-500" />
             <AlertDescription className="text-red-500">
@@ -325,7 +371,7 @@ export default function Web3SecurityValidator({
           </Alert>
         )}
 
-        {securityStatus.riskLevel === 'high' && (
+        {securityStatus.riskLevel === "high" && (
           <Alert className="border-orange-500 bg-orange-500/10">
             <AlertTriangle className="h-4 w-4 text-orange-500" />
             <AlertDescription className="text-orange-500">
@@ -355,8 +401,8 @@ export default function Web3SecurityValidator({
               </>
             )}
           </Button>
-          
-          {securityStatus.riskLevel !== 'low' && (
+
+          {securityStatus.riskLevel !== "low" && (
             <Button
               variant="destructive"
               size="sm"

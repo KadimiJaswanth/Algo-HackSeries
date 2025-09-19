@@ -11,10 +11,10 @@ const queryClient = new QueryClient({
         if (error instanceof Error) {
           const errorMessage = error.message.toLowerCase();
           if (
-            errorMessage.includes('user rejected') ||
-            errorMessage.includes('user denied') ||
-            errorMessage.includes('unauthorized') ||
-            errorMessage.includes('failed to fetch')
+            errorMessage.includes("user rejected") ||
+            errorMessage.includes("user denied") ||
+            errorMessage.includes("unauthorized") ||
+            errorMessage.includes("failed to fetch")
           ) {
             return false;
           }
